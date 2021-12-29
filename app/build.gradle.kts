@@ -55,6 +55,7 @@ dependencies {
     // Projects
     implementation(project(Project.sharedPresentation))
     implementation(project(Project.mainPresentation))
+    implementation(project(Project.featureFeedPresentation))
 
     // Kotlin
     implementation(Dependencies.kotlinReflect)
