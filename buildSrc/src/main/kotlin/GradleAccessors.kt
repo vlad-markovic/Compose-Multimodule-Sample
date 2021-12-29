@@ -1,3 +1,6 @@
+import com.android.build.gradle.LibraryExtension
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
 /**
@@ -22,3 +25,14 @@ fun DependencyHandler.androidTestImplementation(dependencyNotation: Any) {
     add("androidTestImplementation", dependencyNotation)
 }
 // endregion DependencyHandler extensions
+
+// region Gradle Project extensions
+/** Applies a Gradle plugin with [id], if it has not been applied before. */
+fun Project.applyPlugin(id: String): Plugin<Any> =
+    (plugins.findPlugin(id) ?: plugins.apply(id))
+
+/** Use as android block where not accessible in Gradle utils */
+fun Project.androidLibrary(action: LibraryExtension.() -> Unit) {
+    (extensions.getByName("android") as LibraryExtension).action()
+}
+// endregion Gradle Project extensions

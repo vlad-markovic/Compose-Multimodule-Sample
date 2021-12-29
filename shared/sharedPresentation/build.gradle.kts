@@ -1,0 +1,1 @@
+configurePresentationModule(includeSharedPresentation = false)

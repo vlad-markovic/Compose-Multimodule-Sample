@@ -1,4 +1,4 @@
-package com.vladmarkovic.sample.ui.theme
+package com.vladmarkovic.sample.shared_presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

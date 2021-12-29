@@ -1,4 +1,4 @@
-package com.vladmarkovic.sample
+package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.vladmarkovic.sample.ui.theme.SampleTheme
+import com.vladmarkovic.sample.shared_presentation.ui.theme.SampleTheme
 
 class MainActivity : ComponentActivity() {
 
