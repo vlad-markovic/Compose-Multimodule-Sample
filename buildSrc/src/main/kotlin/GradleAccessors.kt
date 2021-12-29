@@ -24,6 +24,10 @@ fun DependencyHandler.testImplementation(dependencyNotation: Any) {
 fun DependencyHandler.androidTestImplementation(dependencyNotation: Any) {
     add("androidTestImplementation", dependencyNotation)
 }
+
+fun DependencyHandler.kapt(dependencyNotation: Any) {
+    add("kapt", dependencyNotation)
+}
 // endregion DependencyHandler extensions
 
 // region Gradle Project extensions

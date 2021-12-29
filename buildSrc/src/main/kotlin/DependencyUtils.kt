@@ -7,6 +7,8 @@ internal fun DependencyHandler.implementationPresentationBase() {
     implementation(Dependencies.kotlinReflect)
 
     // Android / Google
+    kapt(Dependencies.androidXHiltCompiler)
+    implementation(Dependencies.hiltNavCompose)
     implementation(Dependencies.appCompat)
     implementation(Dependencies.googleMaterial)
     implementation(Dependencies.androidxArchCoreCommon)
@@ -16,21 +18,8 @@ internal fun DependencyHandler.implementationPresentationBase() {
     implementation(Dependencies.lifecycleLiveDataExtensions)
     implementation(Dependencies.fragmentExtensions)
 
-    // Compose
-    implementation(Dependencies.composeCompiler)
-    implementation(Dependencies.composeActivity)
-    implementation(Dependencies.composeUi)
-    implementation(Dependencies.composeUiToolingPreview)
-    implementation(Dependencies.composeMaterial)
-    implementation(Dependencies.composeRuntimeRxJava2)
-    implementation(Dependencies.composeRuntimeLiveData)
-
     // Logging
     implementation(Dependencies.timber)
-
-    // Testing
-    implementationUnitTests()
-    implementationAndroidTests()
 }
 
 fun DependencyHandler.implementationCompose() {
@@ -39,7 +28,6 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.composeMaterial)
-    implementation(Dependencies.composeRuntimeRxJava2)
     implementation(Dependencies.composeRuntimeLiveData)
 }
 

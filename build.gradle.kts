@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath(Dependencies.kotlinGradlePlugin)
         classpath(Dependencies.gradleBuildTools)
+        classpath(Dependencies.hiltPlugin)
     }
 }
 

@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id(Plugins.kotlinKapt)
+    id(Plugins.hilt)
 }
 
 android {
@@ -58,10 +59,28 @@ dependencies {
     // Kotlin
     implementation(Dependencies.kotlinReflect)
 
+    // Injection
+    implementation(Dependencies.hiltAndroid)
+    kapt(Dependencies.hiltAndroidCompiler)
+    kapt(Dependencies.androidXHiltCompiler)
+
+
     // Android / Google
     implementation(Dependencies.appCompat)
     implementation(Dependencies.googleMaterial)
+    implementation(Dependencies.composeActivity)
 
     // Logging
     implementation(Dependencies.timber)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
+// Reduces incremental compilation times by reducing how often
+// an incremental change causes a rebuild of the Dagger components.
+hilt {
+    enableAggregatingTask = true
 }

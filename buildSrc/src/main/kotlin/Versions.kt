@@ -16,7 +16,11 @@ internal object Versions {
     const val kotlin = "1.5.31"
     // endregion Kotlin
 
-    // region Android
+    // region Android / Google
+    const val hilt = "2.38.1"
+    const val androidXHilt = "1.0.0"
+    const val androidXHiltNavCompose = "1.0.0-rc01"
+
     const val googleMaterial = "1.4.0"
     const val appCompat = "1.4.0"
     const val lifecycle = "2.4.0"
@@ -29,7 +33,7 @@ internal object Versions {
     const val composeActivity = "1.4.0"
 
     const val timber = "5.0.1"
-    // endregion Android
+    // endregion Android / Google
 
     // region Tests
     const val junit5 = "5.8.2"

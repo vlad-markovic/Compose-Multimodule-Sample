@@ -10,15 +10,16 @@ import org.gradle.kotlin.dsl.*
 fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean = true) {
     configureAndroidModule()
 
-    configureJavaPluginExtension()
     configureComposeInModule()
 
     dependencies {
         if (includeSharedPresentation) implementation(project(Project.sharedPresentation))
 
         implementationPresentationBase()
+        implementationAndroidTests()
     }
     configureUnitTests()
+
     androidLibrary {
         defaultConfig {
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -33,7 +34,8 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
 fun GradleProject.configureAndroidModule() {
     applyPlugin(Plugins.androidLibrary)
     applyPlugin(Plugins.kotlinKapt)
-    applyPlugin("kotlin-android")
+    applyPlugin(Plugins.kotlinAndroid)
+    applyPlugin(Plugins.hilt)
 
     version = "1.0"
 
@@ -44,6 +46,8 @@ fun GradleProject.configureAndroidModule() {
 
         dependencies {
             implementation(Dependencies.androidxCoreExtensions)
+            implementation(Dependencies.hiltAndroid)
+            kapt(Dependencies.hiltAndroidCompiler)
         }
     }
 }

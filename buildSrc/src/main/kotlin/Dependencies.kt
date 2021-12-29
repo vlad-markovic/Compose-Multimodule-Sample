@@ -8,13 +8,29 @@ object Dependencies {
         dependency("org.jetbrains.kotlin", module, version)
     // endregion Kotlin
 
+    // region Hilt injection
+    val hiltPlugin = hilt("hilt-android-gradle-plugin")
+    val hiltAndroid = hilt("hilt-android")
+    val hiltAndroidCompiler = hilt("hilt-android-compiler")
+    val androidXHiltCompiler = androidxHilt("hilt-compiler", Versions.androidXHilt)
+    val hiltNavCompose = androidxHilt("hilt-navigation-compose", Versions.androidXHiltNavCompose)
+
+    private fun androidxHilt(module: String, version: String) =
+        dependency("androidx.hilt", module, version)
+
+    private fun hilt(module: String, version: String = Versions.hilt) =
+        dagger(module, version)
+
+    private fun dagger(module: String, version: String) =
+        dependency("com.google.dagger", module, version)
+    // endregion Hilt injection
+
     // region Compose
     val composeCompiler = dependency("androidx.compose.compiler", "compiler", Versions.compose)
     val composeActivity = dependency("androidx.activity", "activity-compose", Versions.composeActivity)
     val composeUi = composeUi("ui")
     val composeUiToolingPreview = composeUi("ui-tooling-preview")
     val composeMaterial = dependency("androidx.compose.material", "material", Versions.compose)
-    val composeRuntimeRxJava2 = dependency("androidx.compose.runtime", "runtime-rxjava2", Versions.compose)
     val composeRuntimeLiveData = dependency("androidx.compose.runtime", "runtime-livedata", Versions.compose)
 
     private fun composeUi(module: String, version: String = Versions.compose) =
