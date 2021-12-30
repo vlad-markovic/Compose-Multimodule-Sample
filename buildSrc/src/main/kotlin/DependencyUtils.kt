@@ -31,7 +31,7 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeRuntimeLiveData)
 }
 
-fun DependencyHandler.implementationUnitTests() {
+fun DependencyHandler.testImplementationAll() {
     testImplementation(Dependencies.junitJupiterApi)
     testImplementation(Dependencies.junitJupiterEngine)
     testImplementation(Dependencies.junitJupiterParams)
@@ -45,7 +45,7 @@ fun DependencyHandler.implementationUnitTests() {
     testImplementation(Dependencies.slf4jNop)
 }
 
-fun DependencyHandler.implementationAndroidTests() {
+fun DependencyHandler.androidTestImplementationAll() {
     androidTestImplementation(Dependencies.androidxTestCore)
     androidTestImplementation(Dependencies.androidxTestRunner)
     androidTestImplementation(Dependencies.androidxTestRules)

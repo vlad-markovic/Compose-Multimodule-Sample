@@ -4,5 +4,5 @@ import androidx.fragment.app.FragmentActivity
 
 interface Navigation {
 
-    fun FragmentActivity.toFeed()
+    fun FragmentActivity.toScreen(screen: Screen)
 }

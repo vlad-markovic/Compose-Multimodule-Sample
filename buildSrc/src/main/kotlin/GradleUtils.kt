@@ -16,9 +16,11 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
         if (includeSharedPresentation) implementation(project(Project.sharedPresentation))
 
         implementationPresentationBase()
-        implementationAndroidTests()
+
+        configureUnitTests()
+        testImplementation(project(Project.sharedTest))
+        androidTestImplementationAll()
     }
-    configureUnitTests()
 
     androidLibrary {
         defaultConfig {
@@ -88,7 +90,7 @@ fun GradleProject.configureUnitTests() {
         useJUnitPlatform()
     }
     dependencies {
-        implementationUnitTests()
+        testImplementationAll()
     }
 }
 
