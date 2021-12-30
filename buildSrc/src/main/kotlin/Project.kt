@@ -4,7 +4,7 @@ object Project {
     const val sharedPresentation = ":shared:sharedPresentation"
     const val sharedTest = ":shared:sharedTest"
     const val mainPresentation = ":main:mainPresentation"
-    const val featureFeedData = ":features:feed:feedData"
-    const val featureFeedDomain = ":features:feed:feedDomain"
-    const val featureFeedPresentation = ":features:feed:feedPresentation"
+    const val featureFeedData = ":features:post:postData"
+    const val featureFeedDomain = ":features:post:postDomain"
+    const val featureFeedPresentation = ":features:post:postPresentation"
 }

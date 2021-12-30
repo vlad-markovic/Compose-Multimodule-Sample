@@ -1,7 +1,7 @@
 package com.vladmarkovic.sample.di
 
-import com.vladmarkovic.sample.feed_data.PostApiService
-import com.vladmarkovic.sample.feed_domain.PostRepository
+import com.vladmarkovic.sample.post_data.PostApiService
+import com.vladmarkovic.sample.post_domain.PostRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
