@@ -52,6 +52,7 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeMaterial)
     implementation(Dependencies.composeRuntimeLiveData)
     implementation(Dependencies.composeSwipeRefresh)
+    implementation(Dependencies.composeSystemUiController)
 }
 
 fun DependencyHandler.testImplementationAll() {

@@ -50,13 +50,14 @@ object Dependencies {
     val composeMaterial = dependency("androidx.compose.material", "material", Versions.compose)
     val composeRuntimeLiveData = dependency("androidx.compose.runtime", "runtime-livedata", Versions.compose)
     val composeSwipeRefresh = googleAccompanist("accompanist-swiperefresh")
+    val composeSystemUiController = googleAccompanist("accompanist-systemuicontroller")
 
     private fun composeUi(module: String, version: String = Versions.compose) =
         dependency("androidx.compose.ui", module, version)
 
     private fun googleAccompanist(module: String, version: String = Versions.googleAccompanist) =
         dependency("com.google.accompanist", module, version)
-    // region Compose
+    // endregion Compose
 
     // region Android
     val gradleBuildTools: String = dependency("com.android.tools.build", "gradle", Versions.gradleBuildTools)

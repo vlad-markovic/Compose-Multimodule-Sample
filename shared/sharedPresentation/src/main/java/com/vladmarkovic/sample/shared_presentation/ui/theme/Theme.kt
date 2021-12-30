@@ -1,21 +1,42 @@
 package com.vladmarkovic.sample.shared_presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
+object AppTheme {
+    val shapes = Shapes(
+        small = RoundedCornerShape(Dimens.m / 4),
+        medium = RoundedCornerShape(Dimens.m / 2),
+        large = RoundedCornerShape(Dimens.m)
+    )
+
+    val typography
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.typography.copy(
+            h5 = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium),
+            h6 = MaterialTheme.typography.h6.copy(fontSize = 22.sp)
+        )
+}
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = AppColor.Grey600,
+    primaryVariant = AppColor.Grey900,
+    secondary = AppColor.Teal200
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = AppColor.Grey700,
+    primaryVariant = AppColor.Grey900,
+    secondary = AppColor.Teal200
 
     /* Other default colors to override
     background = Color.White,
@@ -38,8 +59,8 @@ fun AppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() 
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
-        shapes = Shapes,
+        typography = AppTheme.typography,
+        shapes = AppTheme.shapes,
         content = content
     )
 }
