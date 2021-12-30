@@ -1,0 +1,1 @@
+configureDataModule(includeSharedData = false)

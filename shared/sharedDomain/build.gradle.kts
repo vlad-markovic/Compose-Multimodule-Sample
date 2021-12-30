@@ -1,0 +1,1 @@
+configureDomainModule(includeSharedDomain = false)

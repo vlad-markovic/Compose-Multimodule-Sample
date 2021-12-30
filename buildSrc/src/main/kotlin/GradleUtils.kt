@@ -6,6 +6,47 @@ import org.gradle.kotlin.dsl.*
 
 /** Gradle Project extensions, including LibraryExtension extensions. */
 
+/** Common plugins and dependencies for each domain module. */
+fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
+    applyPlugin(Plugins.kotlinSerialization)
+
+    configurePlainKotlinModule()
+
+    dependencies {
+        if (includeSharedDomain) implementation(project(Project.sharedDomain))
+
+        configureUnitTests()
+    }
+}
+
+/** Common plugins and dependencies for any plain kotlin (domain) module. */
+private fun GradleProject.configurePlainKotlinModule() {
+    applyPlugin(Plugins.javaLibrary)
+    applyPlugin(Plugins.kotlin)
+
+    configureJavaPluginExtension()
+
+    dependencies {
+        implementationPlainKotlinBase()
+    }
+}
+
+/** Common plugins and dependencies for each data module. */
+fun GradleProject.configureDataModule(includeSharedData: Boolean = true) {
+    applyPlugin(Plugins.kotlinSerialization)
+
+    configureAndroidModule()
+
+    dependencies {
+        if (includeSharedData) implementation(project(Project.sharedData))
+        implementation(project(Project.sharedDomain))
+
+        implementationDataBase()
+
+        configureUnitTests()
+    }
+}
+
 /** Common plugins and dependencies for each presentation module. */
 fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean = true) {
     configureAndroidModule()
@@ -14,11 +55,12 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
 
     dependencies {
         if (includeSharedPresentation) implementation(project(Project.sharedPresentation))
+        implementation(project(Project.sharedDomain))
+        testImplementation(project(Project.sharedTest))
 
         implementationPresentationBase()
 
         configureUnitTests()
-        testImplementation(project(Project.sharedTest))
         androidTestImplementationAll()
     }
 

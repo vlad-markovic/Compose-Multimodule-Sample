@@ -3,12 +3,29 @@ object Dependencies {
     // region Kotlin
     val kotlinGradlePlugin: String = kotlinDependency("kotlin-gradle-plugin")
     val kotlinReflect = kotlinDependency("kotlin-reflect")
+    val kotlinSerialization = kotlinDependency("kotlin-serialization")
+
+    val kotlinxCoroutinesCore: String = jetbrainsKotlinx("kotlinx-coroutines-core")
+    val kotlinxSerializationCore: String = jetbrainsKotlinx("kotlinx-serialization-core", Versions.kotlinSerialization)
 
     private fun jetbrainsKotlin(module: String, version: String? = null): String =
         dependency("org.jetbrains.kotlin", module, version)
+
+    private fun jetbrainsKotlinx(module: String, version: String = Versions.kotlinCoroutines): String =
+        dependency("org.jetbrains.kotlinx", module, version)
     // endregion Kotlin
 
+    // region Ktor
+    val ktorClientCore = ktor("ktor-client-core")
+    val ktorClientCio = ktor("ktor-client-cio")
+    val ktorClientSerialization = ktor("ktor-client-serialization")
+
+    private fun ktor(module: String, version: String = Versions.ktor): String =
+        dependency("io.ktor", module, version)
+    // endregion Ktor
+
     // region Hilt injection
+    val hiltCore = hilt("hilt-core")
     val hiltPlugin = hilt("hilt-android-gradle-plugin")
     val hiltAndroid = hilt("hilt-android")
     val hiltAndroidCompiler = hilt("hilt-android-compiler")
@@ -32,9 +49,13 @@ object Dependencies {
     val composeUiToolingPreview = composeUi("ui-tooling-preview")
     val composeMaterial = dependency("androidx.compose.material", "material", Versions.compose)
     val composeRuntimeLiveData = dependency("androidx.compose.runtime", "runtime-livedata", Versions.compose)
+    val composeSwipeRefresh = googleAccompanist("accompanist-swiperefresh")
 
     private fun composeUi(module: String, version: String = Versions.compose) =
         dependency("androidx.compose.ui", module, version)
+
+    private fun googleAccompanist(module: String, version: String = Versions.googleAccompanist) =
+        dependency("com.google.accompanist", module, version)
     // region Compose
 
     // region Android
@@ -66,7 +87,9 @@ object Dependencies {
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     val slf4jNop =  dependency("org.slf4j","slf4j-nop", Versions.slf4jNop)
     val archCoreTesting =  dependency("androidx.arch.core", "core-testing", Versions.androidxArchCore)
-    val lifecycleRuntimeTesting = dependency("androidx.lifecycle","lifecycle-runtime-testing", Versions.lifecycle)
+    val lifecycleRuntimeTesting = lifecycle("lifecycle-runtime-testing")
+    val coroutinesTesting = dependency("org.jetbrains.kotlinx","kotlinx-coroutines-test", Versions.coroutinesTesting)
+    val hiltAndroidTesting = hilt("hilt-android-testing")
 
     // UI Tests
     val androidxTestCore = androidxTest("core")

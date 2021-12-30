@@ -8,6 +8,7 @@ buildscript {
         classpath(Dependencies.kotlinGradlePlugin)
         classpath(Dependencies.gradleBuildTools)
         classpath(Dependencies.hiltPlugin)
+        classpath(Dependencies.kotlinSerialization)
     }
 }
 

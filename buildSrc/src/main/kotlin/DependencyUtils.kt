@@ -22,6 +22,28 @@ internal fun DependencyHandler.implementationPresentationBase() {
     implementation(Dependencies.timber)
 }
 
+/** Data layer specific dependencies, not inclusive of [implementationPlainKotlinBase] */
+fun DependencyHandler.implementationDataBase() {
+    implementationKtor()
+    implementationKotlinCoroutines()
+}
+
+fun DependencyHandler.implementationPlainKotlinBase() {
+    implementation(Dependencies.hiltCore)
+    implementation(Dependencies.kotlinxSerializationCore)
+    implementationKotlinCoroutines()
+}
+
+private fun DependencyHandler.implementationKtor() {
+    implementation(Dependencies.ktorClientCore)
+    implementation(Dependencies.ktorClientCio)
+    implementation(Dependencies.ktorClientSerialization)
+}
+
+fun DependencyHandler.implementationKotlinCoroutines() {
+    implementation(Dependencies.kotlinxCoroutinesCore)
+}
+
 fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeCompiler)
     implementation(Dependencies.composeActivity)
@@ -29,6 +51,7 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.composeMaterial)
     implementation(Dependencies.composeRuntimeLiveData)
+    implementation(Dependencies.composeSwipeRefresh)
 }
 
 fun DependencyHandler.testImplementationAll() {
@@ -41,8 +64,10 @@ fun DependencyHandler.testImplementationAll() {
     testImplementation(Dependencies.mockk)
     testImplementation(Dependencies.archCoreTesting)
     testImplementation(Dependencies.lifecycleRuntimeTesting)
+    testImplementation(Dependencies.coroutinesTesting)
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     testImplementation(Dependencies.slf4jNop)
+    testImplementation(Dependencies.hiltAndroidTesting)
 }
 
 fun DependencyHandler.androidTestImplementationAll() {

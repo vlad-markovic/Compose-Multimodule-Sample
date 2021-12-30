@@ -14,6 +14,9 @@ internal object Versions {
 
     // region Kotlin
     const val kotlin = "1.5.31"
+    const val ktor = "1.6.3"
+    const val kotlinCoroutines = "1.5.2"
+    const val kotlinSerialization = "1.2.2"
     // endregion Kotlin
 
     // region Android / Google
@@ -31,6 +34,7 @@ internal object Versions {
     const val compose = "1.0.5"
     const val kotlinCompilerExtension = compose
     const val composeActivity = "1.4.0"
+    const val googleAccompanist = "0.22.0-rc"
 
     const val timber = "5.0.1"
     // endregion Android / Google
@@ -43,6 +47,7 @@ internal object Versions {
     const val kotlinTestRunnerJunit5 = "3.4.2"
     const val mockk = "1.12.1"
     const val slf4jNop = "1.7.32"
+    const val coroutinesTesting = "1.5.1"
 
     const val espresso = "3.4.0"
     // endregion Tests
