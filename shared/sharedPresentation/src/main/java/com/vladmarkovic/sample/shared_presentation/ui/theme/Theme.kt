@@ -22,8 +22,7 @@ object AppTheme {
         @Composable
         @ReadOnlyComposable
         get() = MaterialTheme.typography.copy(
-            h5 = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium),
-            h6 = MaterialTheme.typography.h6.copy(fontSize = 22.sp)
+            h5 = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium)
         )
 }
 

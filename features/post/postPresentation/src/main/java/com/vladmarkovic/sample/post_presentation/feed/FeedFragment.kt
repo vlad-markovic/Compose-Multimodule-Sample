@@ -42,7 +42,7 @@ class FeedFragment : Fragment() {
                     loading = viewModel.loading,
                     posts = viewModel.posts,
                     error = viewModel.error,
-                    onRefresh = viewModel::refreshPosts,
+                    onRefresh = { viewModel.refreshPosts(forceRefresh = true) },
                 )
             }
         }

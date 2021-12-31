@@ -59,6 +59,15 @@ object Dependencies {
         dependency("com.google.accompanist", module, version)
     // endregion Compose
 
+    // region Room
+    val roomRuntime = room("room-runtime")
+    val roomCompiler = room("room-compiler")
+    val roomExtensions = room("room-ktx")
+
+    private fun room(module: String, version: String = Versions.room) =
+        dependency("androidx.room", module, version)
+    // endregion Room
+
     // region Android
     val gradleBuildTools: String = dependency("com.android.tools.build", "gradle", Versions.gradleBuildTools)
     val appCompat = dependency("androidx.appcompat", "appcompat", Versions.appCompat)

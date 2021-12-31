@@ -40,6 +40,7 @@ fun GradleProject.configureDataModule(includeSharedData: Boolean = true) {
     dependencies {
         if (includeSharedData) implementation(project(Project.sharedData))
         implementation(project(Project.sharedDomain))
+        testImplementation(project(Project.sharedTest))
 
         implementationDataBase()
 

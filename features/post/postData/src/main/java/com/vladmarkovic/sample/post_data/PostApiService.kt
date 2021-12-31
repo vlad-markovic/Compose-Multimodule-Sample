@@ -1,18 +1,20 @@
 package com.vladmarkovic.sample.post_data
 
-import com.vladmarkovic.sample.post_data.model.ApiPost
+import com.vladmarkovic.sample.post_data.model.DataPost
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.shared_data.api.KtorApiService
+import dagger.hilt.android.scopes.ViewModelScoped
+import io.ktor.client.*
 import io.ktor.client.request.*
 import javax.inject.Inject
 
 /** [PostRepository] implementation for fetching a list of [Post]s from the api using ktor. */
-class PostApiService @Inject constructor(): KtorApiService(), PostRepository {
+@ViewModelScoped
+class PostApiService @Inject constructor(private val httpClient: HttpClient) : PostApi {
 
     private companion object {
         private const val BASE_URL = "https://jsonplaceholder.typicode.com/posts"
     }
 
-    override suspend fun fetchPosts(): List<Post> = httpApiClient.get<List<ApiPost>>(BASE_URL)
+    override suspend fun fetchAllPosts(): List<DataPost> = httpClient.get(BASE_URL)
 }

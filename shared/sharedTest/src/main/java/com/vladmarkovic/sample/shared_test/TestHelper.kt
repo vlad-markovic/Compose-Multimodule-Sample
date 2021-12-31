@@ -39,7 +39,7 @@ fun instantTaskExecutorRuleFinish() = ArchTaskExecutor.getInstance().setDelegate
  * - LiveData
  *
  * Use example:
- *  @ExtendWith(SomeTest.EachTestSetupExtension::class)
+ *  @ExtendWith(EachTestSetupExtension::class)
  *  internal class SomeTest { ...
  *
  * NOTE: this will run the setup before each test.
@@ -68,7 +68,7 @@ class EachTestSetupExtension : BeforeEachCallback, AfterEachCallback {
 
 /**
  * Use example:
- * @ExtendWith(FullTestSetupExtension::class)
+ * @ExtendWith(AllTestSetupExtension::class)
  * internal class SomeTest { ...
  *
  * NOTE: For @Nested tests, beforeAll and afterAll are called once for each nested class.
@@ -183,9 +183,6 @@ data class CustomizableEachTestSetupExtension(override val dispatcher: Coroutine
 }
 
 // region BeforeAllTestSetupExtension builder functions.
-/**
- * Only pass ViewModel when testing ViewModel in which onCleared function is overridden.
- */
 @ExperimentalCoroutinesApi
 fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = TestCoroutineDispatcher())
         : CustomizableAllTestSetupExtension = copy(dispatcher = dispatcher)
@@ -204,11 +201,7 @@ fun CustomizableAllTestSetupExtension.setupAll(dispatcher: CoroutineDispatcher? 
     copy(dispatcher = dispatcher, setupLiveData = true, setupOnceForAllNested = true)
 // endregion BeforeAllTestSetupExtension builder functions.
 
-
 // region BeforeEachTestSetupExtension builder functions.
-/**
- * Only pass ViewModel when testing ViewModel in which onCleared function is overridden.
- */
 @ExperimentalCoroutinesApi
 fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = TestCoroutineDispatcher())
         : CustomizableEachTestSetupExtension = copy(dispatcher = dispatcher)

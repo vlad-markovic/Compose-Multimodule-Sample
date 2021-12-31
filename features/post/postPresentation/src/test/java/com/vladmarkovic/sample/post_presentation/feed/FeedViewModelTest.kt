@@ -38,12 +38,8 @@ class FeedViewModelTest {
 
     private lateinit var viewModel: FeedViewModel
 
-    private var fakeFetchedPosts = emptyList<Post>()
-
     @BeforeEach
     fun setup() {
-        fakeFetchedPosts = fakeInitialPosts
-
         viewModel = FeedViewModel(fakePostRepository, dispatchers)
     }
 
@@ -71,9 +67,8 @@ class FeedViewModelTest {
     )
     fun testRefreshingPosts() {
         testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
-        fakeFetchedPosts = fakeRefreshedPosts
 
-        viewModel.refreshPosts()
+        viewModel.refreshPosts(forceRefresh = true)
 
         viewModel.loading.assertValueEquals(true)
         viewModel.error.assertValueEquals(null)
@@ -86,10 +81,31 @@ class FeedViewModelTest {
         runBlockingTest { assertEquals(fakeRefreshedFeedPostItems, viewModel.posts.first()) }
     }
 
-    private inner class FakePostRepository : PostRepository {
-        override suspend fun fetchPosts(): List<Post> {
+    @Test
+    @DisplayName(
+        "Given re-fetching saved posts, " +
+                "It shows loading while fetching and shows saved posts after fetched"
+    )
+    fun testReFetchingPosts() {
+        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
+
+        viewModel.refreshPosts(forceRefresh = false)
+
+        viewModel.loading.assertValueEquals(true)
+        viewModel.error.assertValueEquals(null)
+        runBlockingTest { assertEquals(fakeInitialFeedPostItems, viewModel.posts.first()) }
+
+        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
+
+        viewModel.loading.assertValueEquals(false)
+        viewModel.error.assertValueEquals(null)
+        runBlockingTest { assertEquals(fakeInitialFeedPostItems, viewModel.posts.first()) }
+    }
+
+    private class FakePostRepository : PostRepository {
+        override suspend fun fetchAllPosts(forceRefresh: Boolean): List<Post> {
             delay(FAKE_FETCH_DELAY)
-            return fakeFetchedPosts
+            return if (forceRefresh) fakeRefreshedPosts else fakeInitialPosts
         }
     }
 }

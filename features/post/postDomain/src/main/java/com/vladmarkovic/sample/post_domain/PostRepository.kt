@@ -4,5 +4,5 @@ import com.vladmarkovic.sample.post_domain.model.Post
 
 interface PostRepository {
 
-    suspend fun fetchPosts(): List<Post>
+    suspend fun fetchAllPosts(forceRefresh: Boolean): List<Post>
 }

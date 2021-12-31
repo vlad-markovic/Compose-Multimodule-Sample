@@ -1,6 +1,7 @@
 package com.vladmarkovic.sample.post_presentation.feed.compose
 
 import android.graphics.Color
+import androidx.annotation.IntRange
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,8 +64,8 @@ private fun PostList(_posts: State<List<FeedPostItem>>) {
             val r = rememberSaveable { randomRgbInt() }
             val g = rememberSaveable { randomRgbInt() }
             val b = rememberSaveable { randomRgbInt() }
-            val hsp = rememberSaveable { sqrt(0.299 * r.sqr + 0.587 * g.sqr + 0.114 * b.sqr) }
-            val textColor = if (hsp > 130) ComposeColor.Black else ComposeColor.White
+            val isDarkColor = rememberSaveable { isDarkColor(r, g, b) }
+            val textColor = if (isDarkColor) ComposeColor.Black else ComposeColor.White
 
             Card(
                 modifier = Modifier
@@ -84,7 +85,8 @@ private fun PostList(_posts: State<List<FeedPostItem>>) {
                     Text(
                         modifier = Modifier.padding(padding = Dimens.m, top = (Dimens.m / 2)),
                         text = posts[index].content,
-                        color = textColor
+                        color = textColor,
+                        maxLines = 1
                     )
                 }
             }
@@ -93,5 +95,14 @@ private fun PostList(_posts: State<List<FeedPostItem>>) {
 }
 
 private fun randomRgbInt(): Int = Random.nextInt(256)
+
+private fun isDarkColor(
+    @IntRange(from = 0, to = 255) r: Int,
+    @IntRange(from = 0, to = 255) g: Int,
+    @IntRange(from = 0, to = 255) b: Int
+): Boolean {
+    val hsp = sqrt(0.299 * r.sqr + 0.587 * g.sqr + 0.114 * b.sqr)
+    return hsp > 127.5
+}
 
 private val Int.sqr: Int get() = this * this

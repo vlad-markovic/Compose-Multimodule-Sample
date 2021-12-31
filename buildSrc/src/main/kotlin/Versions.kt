@@ -35,6 +35,7 @@ internal object Versions {
     const val kotlinCompilerExtension = compose
     const val composeActivity = "1.4.0"
     const val googleAccompanist = "0.22.0-rc"
+    const val room = "2.4.0"
 
     const val timber = "5.0.1"
     // endregion Android / Google

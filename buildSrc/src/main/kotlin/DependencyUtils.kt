@@ -26,6 +26,7 @@ internal fun DependencyHandler.implementationPresentationBase() {
 fun DependencyHandler.implementationDataBase() {
     implementationKtor()
     implementationKotlinCoroutines()
+    implementationRoom()
 }
 
 fun DependencyHandler.implementationPlainKotlinBase() {
@@ -42,6 +43,12 @@ private fun DependencyHandler.implementationKtor() {
 
 fun DependencyHandler.implementationKotlinCoroutines() {
     implementation(Dependencies.kotlinxCoroutinesCore)
+}
+
+fun DependencyHandler.implementationRoom() {
+    implementation(Dependencies.roomRuntime)
+    kapt(Dependencies.roomCompiler)
+    implementation(Dependencies.roomExtensions)
 }
 
 fun DependencyHandler.implementationCompose() {

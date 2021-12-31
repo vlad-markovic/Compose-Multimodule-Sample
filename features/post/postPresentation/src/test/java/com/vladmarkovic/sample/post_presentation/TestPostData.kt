@@ -4,15 +4,15 @@ import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.feed.model.FeedPostItem
 
 val fakeInitialPostsRange = IntRange(1, 4)
-val fakeFetchedPostsRange = IntRange(5, 9)
+val fakeRefreshedPostsRange = IntRange(5, 9)
 
-val fakeInitialPosts = makePosts(fakeInitialPostsRange)
+val fakeInitialPosts = makeFeedPosts(fakeInitialPostsRange)
 val fakeInitialFeedPostItems = makeFeedPostItems(fakeInitialPostsRange)
 
-val fakeRefreshedPosts = makePosts(fakeFetchedPostsRange)
-val fakeRefreshedFeedPostItems = makeFeedPostItems(fakeFetchedPostsRange)
+val fakeRefreshedPosts = makeFeedPosts(fakeRefreshedPostsRange)
+val fakeRefreshedFeedPostItems = makeFeedPostItems(fakeRefreshedPostsRange)
 
-private fun makePosts(range: IntRange) = (range.first .. range.last).map {
+private fun makeFeedPosts(range: IntRange) = (range.first .. range.last).map {
     TestPost(1, 11 * it , "Post$it", "This is Post $it")
 }
 

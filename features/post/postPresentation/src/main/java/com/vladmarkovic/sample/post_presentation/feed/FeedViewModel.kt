@@ -35,16 +35,16 @@ class FeedViewModel @Inject constructor(
     val posts: Flow<List<FeedPostItem>> = _posts.map { it.items }
 
     init {
-        refreshPosts()
+        refreshPosts(forceRefresh = false)
     }
 
-    fun refreshPosts() {
+    fun refreshPosts(forceRefresh: Boolean) {
         _error.value = null
         _loading.value = true
 
         viewModelScope.launch(dispatchers.io) {
             val (posts, error) = try {
-                Pair(postRepository.fetchPosts(), null)
+                Pair(postRepository.fetchAllPosts(forceRefresh), null)
             } catch (e: Exception) {
                 Timber.e(e, "Error fetching posts")
                 Pair(null, "Failed to fetch posts")
