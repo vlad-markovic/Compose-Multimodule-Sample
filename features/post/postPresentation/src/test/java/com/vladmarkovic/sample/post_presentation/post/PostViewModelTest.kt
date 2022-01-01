@@ -1,11 +1,15 @@
 package com.vladmarkovic.sample.post_presentation.post
 
+import androidx.lifecycle.SavedStateHandle
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.model.Author
+import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.fakeAuthor
 import com.vladmarkovic.sample.post_presentation.fakeAuthorSuccessResult
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.shared_test.*
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import org.junit.jupiter.api.BeforeEach
@@ -32,15 +36,13 @@ class PostViewModelTest {
         private const val FAKE_FETCH_DELAY = 2L
     }
 
-    private lateinit var authorRepository : AuthorRepository
-
-    private lateinit var viewModel: PostViewModel
+    private lateinit var savedStateHandle: SavedStateHandle
 
     @BeforeEach
     fun setup() {
-        authorRepository = FakeAuthorRepository()
+        savedStateHandle = mockk()
 
-        viewModel = PostViewModel(authorRepository, dispatchers)
+        every { savedStateHandle.get<Post>(PostViewModel.POST_ARG_KEY) }.returns(fakePost)
     }
 
     @Test
@@ -49,11 +51,9 @@ class PostViewModelTest {
                 "It shows post info and loading, and shows author info after fetched"
     )
     fun testInitialStateAndSuccessAuthorResult() {
-        viewModel.post.assertValueEquals(null)
+        val authorRepository = FakeAuthorRepository()
+        val viewModel = PostViewModel(authorRepository, dispatchers, savedStateHandle)
 
-        viewModel.getDetails(fakePost)
-
-        viewModel.post.assertValueEquals(fakePost)
         viewModel.authorResult.assertValueEquals(null)
 
         testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
@@ -68,10 +68,8 @@ class PostViewModelTest {
     )
     fun testFailureAuthorResult() {
         val exception = IOException()
-        authorRepository = FakeAuthorRepository(exception)
-        val viewModel = PostViewModel(authorRepository, dispatchers)
-
-        viewModel.getDetails(fakePost)
+        val authorRepository = FakeAuthorRepository(exception)
+        val viewModel = PostViewModel(authorRepository, dispatchers, savedStateHandle)
 
         testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
 

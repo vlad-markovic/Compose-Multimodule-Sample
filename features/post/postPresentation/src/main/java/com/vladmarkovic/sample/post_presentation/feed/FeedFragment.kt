@@ -33,7 +33,7 @@ class FeedFragment : Fragment() {
                 posts = viewModel.posts,
                 error = viewModel.error,
                 onRefresh = { viewModel.refreshPosts(forceRefresh = true) },
-                onPostClick = { viewModel.navigate(ToPostScreen(it)) }
+                onPostClick = { viewModel.navigateToPostDetails(it) }
             )
         }
     }

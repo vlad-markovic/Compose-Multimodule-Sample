@@ -22,9 +22,9 @@ import com.vladmarkovic.sample.shared_presentation.util.padding
 
 @Composable
 fun PostScreen(
-    _post: State<Post?>,
+    post: Post,
     _authorResult: State<Result<Author>?>,
-    onFetchAuthor: (Post) -> Unit
+    onFetchAuthor: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -33,27 +33,21 @@ fun PostScreen(
             .padding(Dimens.m)
             .verticalScroll(scrollState)
     ) {
-        val post by _post
+        val authorResult by _authorResult
 
-        if (post == null) {
+        PostInfo(post)
+
+        if (authorResult == null) {
             LoadingIndicator()
         } else {
-            val authorResult by _authorResult
-
-            PostInfo(post!!)
-
-            if (authorResult == null) {
-                LoadingIndicator()
-            } else {
-                when {
-                    authorResult?.isFailure == true -> {
-                        Error(stringResource(R.string.error_on_author_fetch)) {
-                            onFetchAuthor(post!!)
-                        }
+            when {
+                authorResult?.isFailure == true -> {
+                    Error(stringResource(R.string.error_on_author_fetch)) {
+                        onFetchAuthor()
                     }
-                    authorResult?.isSuccess == true -> {
-                        AuthorInfo(authorResult!!.getOrNull()!!)
-                    }
+                }
+                authorResult?.isSuccess == true -> {
+                    AuthorInfo(authorResult!!.getOrNull()!!)
                 }
             }
         }

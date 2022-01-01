@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
+import com.vladmarkovic.sample.post_presentation.post.PostViewModel.Companion.POST_ARG_KEY
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AppScreen
 import composeContent
@@ -18,8 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class PostFragment : Fragment() {
 
     companion object {
-        private const val POST_ARG_KEY = "POST_ARG_KEY"
-
         fun newInstance(post: Post) = PostFragment().apply {
             arguments = Bundle().apply { putSerializable(POST_ARG_KEY, post) }
         }
@@ -35,11 +34,5 @@ class PostFragment : Fragment() {
         AppScreen(stringResource(R.string.post_screen_title)) {
             PostScreen(viewModel.post, viewModel.authorResult, viewModel::getDetails)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getDetails(requireArguments().getSerializable(POST_ARG_KEY) as Post)
     }
 }
