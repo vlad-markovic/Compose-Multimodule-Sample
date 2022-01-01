@@ -3,17 +3,12 @@ package com.vladmarkovic.sample.post_presentation.feed
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.feed.model.FeedPostItem
-import com.vladmarkovic.sample.post_presentation.feed.model.items
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -23,23 +18,23 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     private val postRepository: PostRepository,
     private val dispatchers: DispatcherProvider
-): ViewModel() {
+): BriefActionViewModel() {
 
     private val _loading: MutableState<Boolean> = mutableStateOf(false)
     val loading: State<Boolean> = _loading
 
-    private val _error: MutableState<String?> = mutableStateOf(null)
-    val error: State<String?> = _error
+    private val _error: MutableState<Boolean> = mutableStateOf(false)
+    val error: State<Boolean> = _error
 
-    private val _posts: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
-    val posts: Flow<List<FeedPostItem>> = _posts.map { it.items }
+    private val _posts: MutableState<List<Post>> = mutableStateOf(emptyList())
+    val posts: State<List<Post>> = _posts
 
     init {
         refreshPosts(forceRefresh = false)
     }
 
     fun refreshPosts(forceRefresh: Boolean) {
-        _error.value = null
+        _error.value = false
         _loading.value = true
 
         viewModelScope.launch(dispatchers.io) {
@@ -47,7 +42,7 @@ class FeedViewModel @Inject constructor(
                 Pair(postRepository.fetchAllPosts(forceRefresh), null)
             } catch (e: Exception) {
                 Timber.e(e, "Error fetching posts")
-                Pair(null, "Failed to fetch posts")
+                Pair(null, true)
             }
 
             withContext(dispatchers.main) {

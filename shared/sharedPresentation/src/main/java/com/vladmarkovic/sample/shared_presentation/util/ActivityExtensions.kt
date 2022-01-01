@@ -6,7 +6,7 @@ import com.vladmarkovic.sample.shared_presentation.R
 import com.vladmarkovic.sample.shared_presentation.navigation.Navigation
 
 /** Helper function for navigating from [Activity] with `navigate { somewhere() }`. */
-inline fun Activity.navigate(crossinline destination: Navigation.() -> Unit) {
+inline fun Activity.withNavigation(crossinline destination: Navigation.() -> Unit) {
     navigation.destination()
 }
 

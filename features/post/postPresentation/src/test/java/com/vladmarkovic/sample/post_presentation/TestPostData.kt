@@ -1,24 +1,21 @@
 package com.vladmarkovic.sample.post_presentation
 
+import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.feed.model.FeedPostItem
 
+// region feed
 val fakeInitialPostsRange = IntRange(1, 4)
 val fakeRefreshedPostsRange = IntRange(5, 9)
 
-val fakeInitialPosts = makeFeedPosts(fakeInitialPostsRange)
-val fakeInitialFeedPostItems = makeFeedPostItems(fakeInitialPostsRange)
+val fakeInitialPosts = makeFakePosts(fakeInitialPostsRange)
+val fakeRefreshedPosts = makeFakePosts(fakeRefreshedPostsRange)
 
-val fakeRefreshedPosts = makeFeedPosts(fakeRefreshedPostsRange)
-val fakeRefreshedFeedPostItems = makeFeedPostItems(fakeRefreshedPostsRange)
-
-private fun makeFeedPosts(range: IntRange) = (range.first .. range.last).map {
-    TestPost(1, 11 * it , "Post$it", "This is Post $it")
+private fun makeFakePosts(range: IntRange) = (range.first .. range.last).map {
+    makeFakePost(it)
 }
 
-private fun makeFeedPostItems(range: IntRange) = (range.first .. range.last).map {
-    FeedPostItem("Post$it", "This is Post $it")
-}
+private fun makeFakePost(id: Int) =
+    TestPost(id, 11 * id , "Post$id", "This is Post $id")
 
 data class TestPost(
     override val id: Int,
@@ -26,3 +23,17 @@ data class TestPost(
     override val title: String,
     override val content: String,
 ) : Post
+// region feed
+
+// region post
+val fakeAuthor = TestAuthor(100, "David", "Dave", "dave@email.com")
+val fakePost = makeFakePost(123)
+val fakeAuthorSuccessResult = Result.success(fakeAuthor)
+
+data class TestAuthor(
+    override val id: Int,
+    override val name: String,
+    override val username: String,
+    override val email: String,
+) : Author
+// region post

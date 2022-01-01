@@ -2,20 +2,19 @@ package com.vladmarkovic.sample.post_presentation.feed
 
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.fakeInitialFeedPostItems
 import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
-import com.vladmarkovic.sample.post_presentation.fakeRefreshedFeedPostItems
 import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
 import com.vladmarkovic.sample.shared_test.*
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 class FeedViewModelTest {
@@ -34,12 +33,14 @@ class FeedViewModelTest {
         private const val FAKE_FETCH_DELAY = 2L
     }
 
-    private val fakePostRepository = FakePostRepository()
+    private lateinit var fakePostRepository: PostRepository
 
     private lateinit var viewModel: FeedViewModel
 
     @BeforeEach
     fun setup() {
+        fakePostRepository = FakePostRepository()
+
         viewModel = FeedViewModel(fakePostRepository, dispatchers)
     }
 
@@ -50,14 +51,14 @@ class FeedViewModelTest {
     )
     fun testInitialState() {
         viewModel.loading.assertValueEquals(true)
-        viewModel.error.assertValueEquals(null)
-        runBlockingTest { assertEquals(0, viewModel.posts.first().count()) }
+        viewModel.error.assertValueEquals(false)
+        runBlockingTest { assertEquals(0, viewModel.posts.value.count()) }
 
-        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY * 2)
+        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.loading.assertValueEquals(false)
-        viewModel.error.assertValueEquals(null)
-        runBlockingTest { assertEquals(fakeInitialFeedPostItems, viewModel.posts.first()) }
+        viewModel.error.assertValueEquals(false)
+        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
     }
 
     @Test
@@ -71,14 +72,14 @@ class FeedViewModelTest {
         viewModel.refreshPosts(forceRefresh = true)
 
         viewModel.loading.assertValueEquals(true)
-        viewModel.error.assertValueEquals(null)
-        runBlockingTest { assertEquals(fakeInitialFeedPostItems, viewModel.posts.first()) }
+        viewModel.error.assertValueEquals(false)
+        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
 
         testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.loading.assertValueEquals(false)
-        viewModel.error.assertValueEquals(null)
-        runBlockingTest { assertEquals(fakeRefreshedFeedPostItems, viewModel.posts.first()) }
+        viewModel.error.assertValueEquals(false)
+        runBlockingTest { assertEquals(fakeRefreshedPosts, viewModel.posts.value) }
     }
 
     @Test
@@ -92,15 +93,29 @@ class FeedViewModelTest {
         viewModel.refreshPosts(forceRefresh = false)
 
         viewModel.loading.assertValueEquals(true)
-        viewModel.error.assertValueEquals(null)
-        runBlockingTest { assertEquals(fakeInitialFeedPostItems, viewModel.posts.first()) }
+        viewModel.error.assertValueEquals(false)
+        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
 
         testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.loading.assertValueEquals(false)
-        viewModel.error.assertValueEquals(null)
-        runBlockingTest { assertEquals(fakeInitialFeedPostItems, viewModel.posts.first()) }
+        viewModel.error.assertValueEquals(false)
+        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
     }
+
+    @Test
+    @DisplayName("Given loading posts, When an error occurs, It shows an error message")
+    fun testFailureToFetchPosts() {
+        fakePostRepository = mockk()
+        val viewModel = FeedViewModel(fakePostRepository, dispatchers)
+
+        viewModel.refreshPosts(forceRefresh = true)
+
+        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
+
+        assertTrue(viewModel.error.value)
+    }
+
 
     private class FakePostRepository : PostRepository {
         override suspend fun fetchAllPosts(forceRefresh: Boolean): List<Post> {

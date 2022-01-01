@@ -17,7 +17,7 @@ interface BriefActionable {
         actioner.action(action)
     }
 
-    fun navigateTo(action: NavigationAction) {
+    fun navigate(action: NavigationAction) {
         actioner.action(action)
     }
 

@@ -3,7 +3,6 @@ package com.vladmarkovic.sample.main_presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.navigation.HomeScreen
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModels
 import com.vladmarkovic.sample.shared_presentation.util.setContainerContentView
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContainerContentView()
 
         if (savedInstanceState == null) {
-            viewModel.navigateTo(HomeScreen.FEED)
+            viewModel.navigate(ToFeedScreen)
         }
     }
 }
