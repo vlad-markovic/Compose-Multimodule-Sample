@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel.Companion.POST_ARG_KEY
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AppScreen
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import composeContent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,12 +28,19 @@ class PostFragment : Fragment() {
 
     private val viewModel: PostViewModel by viewModels()
 
+    private val upButton by lazy {
+        mutableStateOf(UpButton.BackButton(parentFragmentManager::popBackStack))
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = composeContent {
-        AppScreen(stringResource(R.string.post_screen_title)) {
+        AppScreen(
+            title = stringResource(R.string.post_screen_title),
+            up = upButton
+        ) {
             PostScreen(viewModel.post, viewModel.authorResult, viewModel::getDetails)
         }
     }

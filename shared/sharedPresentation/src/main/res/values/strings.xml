@@ -2,4 +2,6 @@
     <string name="app_name">Sample</string>
 
     <string name="button_retry_label">Retry</string>
+    <string name="button_back_label">Back</string>
+    <string name="button_drawer_label">Drawer</string>
 </resources>
