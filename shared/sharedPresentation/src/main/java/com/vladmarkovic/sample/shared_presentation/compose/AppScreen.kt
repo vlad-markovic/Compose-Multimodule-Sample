@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
@@ -64,4 +65,10 @@ fun Up(_upButton: State<UpButton>) {
     IconButton(upButton.action) {
         Icon(upButton.icon, contentDescription = stringResource(upButton.contentDescriptionRes))
     }
+}
+
+@Preview
+@Composable
+private fun PreviewTopBar() {
+    TopBar("Top Title")
 }

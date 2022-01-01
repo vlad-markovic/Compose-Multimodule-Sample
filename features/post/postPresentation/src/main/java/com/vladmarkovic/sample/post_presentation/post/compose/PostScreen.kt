@@ -9,9 +9,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
@@ -19,6 +21,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.Error
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.shared_presentation.util.padding
+import java.io.IOException
 
 @Composable
 fun PostScreen(
@@ -88,3 +91,47 @@ private fun ColumnScope.LoadingIndicator() {
             .align(Alignment.CenterHorizontally)
     )
 }
+
+// region preview
+private val successAuthorResult = mutableStateOf(
+    Result.success(
+        object : Author {
+            override val id: Int = 3
+            override val name: String = "Author"
+            override val username: String = "Auth"
+            override val email: String = "auth@email.com"
+        }
+    )
+)
+
+private val post = object: Post {
+    override val id: Int = 1
+    override val userId: Int = 2
+    override val title: String = "Title"
+    override val content: String = "Content"
+}
+
+@Preview
+@Composable
+private fun PreviewSuccessPostScreen() {
+    PostScreen(post, successAuthorResult) {}
+}
+
+private val failureAuthorResult = mutableStateOf(
+    Result.failure<Author>(IOException())
+)
+
+@Preview
+@Composable
+private fun PreviewFailurePostScreen() {
+    PostScreen(post, failureAuthorResult) {}
+}
+
+private val loadingAuthorResult = mutableStateOf(null)
+
+@Preview
+@Composable
+private fun PreviewLoadingPostScreen() {
+    PostScreen(post, loadingAuthorResult) {}
+}
+// endregion preview
