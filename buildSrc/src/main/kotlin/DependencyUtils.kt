@@ -17,9 +17,6 @@ internal fun DependencyHandler.implementationPresentationBase() {
     implementation(Dependencies.lifecycleViewModel)
     implementation(Dependencies.lifecycleLiveDataExtensions)
     implementation(Dependencies.fragmentExtensions)
-
-    // Logging
-    implementation(Dependencies.timber)
 }
 
 /** Data layer specific dependencies, not inclusive of [implementationPlainKotlinBase] */

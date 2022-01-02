@@ -11,11 +11,11 @@ import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,7 +53,7 @@ class PostViewModel @Inject constructor(
                 val author = authorRepository.fetchAuthor(post.userId)
                 Result.success(author)
             } catch (e: Exception) {
-                Timber.e(e, "Error fetching author")
+                Lumber.e(e, "Error fetching author")
                 Result.failure(e)
             }
 

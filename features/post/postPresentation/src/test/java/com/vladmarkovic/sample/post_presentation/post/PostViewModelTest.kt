@@ -37,6 +37,7 @@ class PostViewModelTest {
             CustomizableAllTestSetupExtension()
                 .setupCoroutines(testDispatcher)
                 .setupLiveData()
+                .setupLogger()
 
         private const val FAKE_FETCH_DELAY = 2L
     }

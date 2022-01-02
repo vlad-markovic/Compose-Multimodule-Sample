@@ -3,6 +3,11 @@ package com.vladmarkovic.sample.shared_test
 import android.annotation.SuppressLint
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor
+import com.vladmarkovic.sample.shared_domain.di.AppEntryPointAccessor
+import com.vladmarkovic.sample.shared_domain.di.EntryPoint
+import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
+import com.vladmarkovic.sample.shared_domain.log.Logger
+import com.vladmarkovic.sample.shared_domain.log.LoggerEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -135,10 +140,12 @@ sealed class BaseCustomizableTestSetupExtension(
 
 /** Has to be setup in the companion Object. */
 @ExperimentalCoroutinesApi
-data class CustomizableAllTestSetupExtension(override val dispatcher: CoroutineDispatcher? = null,
-                                             private val setupLiveData: Boolean = false,
-                                             private val setupOnceForAllNested: Boolean = true)
-    : BaseCustomizableTestSetupExtension(dispatcher, setupLiveData), BeforeAllCallback, AfterAllCallback {
+data class CustomizableAllTestSetupExtension(
+    override val dispatcher: CoroutineDispatcher? = null,
+    private val setupLiveData: Boolean = false,
+    private val setupOnceForAllNested: Boolean = true
+) : BaseCustomizableTestSetupExtension(dispatcher, setupLiveData), BeforeAllCallback,
+    AfterAllCallback {
 
     private var setupCounter = 0
 
@@ -168,9 +175,11 @@ data class CustomizableAllTestSetupExtension(override val dispatcher: CoroutineD
  * Can be setup either in the class or in the companion Object.
  */
 @ExperimentalCoroutinesApi
-data class CustomizableEachTestSetupExtension(override val dispatcher: CoroutineDispatcher? = null,
-                                              private val setupLiveData: Boolean = false)
-    : BaseCustomizableTestSetupExtension(dispatcher, setupLiveData), BeforeEachCallback, AfterEachCallback {
+data class CustomizableEachTestSetupExtension(
+    override val dispatcher: CoroutineDispatcher? = null,
+    private val setupLiveData: Boolean = false
+) : BaseCustomizableTestSetupExtension(dispatcher, setupLiveData), BeforeEachCallback,
+    AfterEachCallback {
 
     override fun beforeEach(context: ExtensionContext?) {
         tearDown()
@@ -188,17 +197,34 @@ fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispa
         : CustomizableAllTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
-fun CustomizableAllTestSetupExtension.setupLiveData(): CustomizableAllTestSetupExtension = copy(setupLiveData = true)
+fun CustomizableAllTestSetupExtension.setupLiveData(): CustomizableAllTestSetupExtension =
+    copy(setupLiveData = true)
 
 @ExperimentalCoroutinesApi
-fun CustomizableAllTestSetupExtension.setupOnceForAllNested(): CustomizableAllTestSetupExtension = copy(setupOnceForAllNested = true)
+fun CustomizableAllTestSetupExtension.setupOnceForAllNested(): CustomizableAllTestSetupExtension =
+    copy(setupOnceForAllNested = true)
 
 @ExperimentalCoroutinesApi
-fun CustomizableAllTestSetupExtension.setupSeparateForEachNested(): CustomizableAllTestSetupExtension = copy(setupOnceForAllNested = false)
+fun CustomizableAllTestSetupExtension.setupSeparateForEachNested(): CustomizableAllTestSetupExtension =
+    copy(setupOnceForAllNested = false)
 
 @ExperimentalCoroutinesApi
 fun CustomizableAllTestSetupExtension.setupAll(dispatcher: CoroutineDispatcher? = null): CustomizableAllTestSetupExtension =
     copy(dispatcher = dispatcher, setupLiveData = true, setupOnceForAllNested = true)
+
+@ExperimentalCoroutinesApi
+fun CustomizableAllTestSetupExtension.setupLogger(): CustomizableAllTestSetupExtension {
+    val loggerEntryPoint = object : LoggerEntryPoint {
+        override fun logger(): Logger = TestLogger()
+    }
+    val appEntryPointAccessor = object : AppEntryPointAccessor {
+        @Suppress("unchecked_cast")
+        override fun <T : EntryPoint> fromApplication(entryPoint: Class<T>): T =
+            loggerEntryPoint as T
+    }
+    EntryPointAccessor.setupWith(appEntryPointAccessor)
+    return this
+}
 // endregion BeforeAllTestSetupExtension builder functions.
 
 // region BeforeEachTestSetupExtension builder functions.
@@ -207,5 +233,24 @@ fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDisp
         : CustomizableEachTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
-fun CustomizableEachTestSetupExtension.setupLiveData(): CustomizableEachTestSetupExtension = copy(setupLiveData = true)
+fun CustomizableEachTestSetupExtension.setupLiveData(): CustomizableEachTestSetupExtension =
+    copy(setupLiveData = true)
+
+@ExperimentalCoroutinesApi
+fun CustomizableEachTestSetupExtension.setupLogger(): CustomizableEachTestSetupExtension {
+    setupTestLogger()
+    return this
+}
+
+fun setupTestLogger() {
+    val loggerEntryPoint = object : LoggerEntryPoint {
+        override fun logger(): Logger = TestLogger()
+    }
+    val appEntryPointAccessor = object : AppEntryPointAccessor {
+        @Suppress("unchecked_cast")
+        override fun <T : EntryPoint> fromApplication(entryPoint: Class<T>): T =
+            loggerEntryPoint as T
+    }
+    EntryPointAccessor.setupWith(appEntryPointAccessor)
+}
 // endregion BeforeEachTestSetupExtension builder functions.

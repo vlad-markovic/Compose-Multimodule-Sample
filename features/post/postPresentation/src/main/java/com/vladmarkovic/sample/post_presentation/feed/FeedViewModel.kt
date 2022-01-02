@@ -11,12 +11,12 @@ import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel.Companion.POST_ARG_KEY
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.io.IOException
 import java.nio.channels.UnresolvedAddressException
 import javax.inject.Inject
@@ -56,7 +56,7 @@ class FeedViewModel @Inject constructor(
             val (posts, error) = try {
                 Pair(postRepository.fetchAllPosts(forceFetch), null)
             } catch (exception: Exception) {
-                Timber.e(exception, "Error fetching posts")
+                Lumber.e(exception, "Error fetching posts")
                 when (exception) {
                     is UnresolvedAddressException, is IOException -> {
                         val cachedPosts = postRepository.fetchAllPosts(DataSource.CACHE)
