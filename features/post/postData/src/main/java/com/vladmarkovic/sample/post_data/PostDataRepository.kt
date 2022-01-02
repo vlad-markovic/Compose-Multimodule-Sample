@@ -1,5 +1,8 @@
 package com.vladmarkovic.sample.post_data
 
+import androidx.annotation.VisibleForTesting
+import com.vladmarkovic.sample.post_data.PostDatabase.Companion.AUTHORS_TABLE
+import com.vladmarkovic.sample.post_data.PostDatabase.Companion.POSTS_TABLE
 import com.vladmarkovic.sample.post_data.model.DataAuthor
 import com.vladmarkovic.sample.post_data.model.DataPost
 import com.vladmarkovic.sample.post_domain.AuthorRepository
@@ -8,6 +11,7 @@ import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_data.model.LastSaved
 import com.vladmarkovic.sample.shared_domain.AppSystem
+import com.vladmarkovic.sample.shared_domain.model.DataSource
 import dagger.hilt.android.scopes.ViewModelScoped
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -24,17 +28,27 @@ class PostDataRepository @Inject constructor(
     }
 
     // region posts
-    override suspend fun fetchAllPosts(forceRefresh: Boolean): List<Post> =
-        if (forceRefresh || cacheExpired()) fetchAllPostsFromApi()
-        else postDao.getAllPosts()
+    override suspend fun fetchAllPosts(forceFetch: DataSource): List<Post> =
+        when (forceFetch) {
+            DataSource.REMOTE -> fetchAllPostsFromRemote()
+            DataSource.CACHE -> fetchAllPostsFromCache()
+            DataSource.UNSPECIFIED -> {
+                if (cacheExpired(POSTS_TABLE)) fetchAllPostsFromRemote()
+                else fetchAllPostsFromCache()
+            }
+        }
 
-    private suspend fun cacheExpired(): Boolean =
-        lastSaved() <= system.currentMillis - CACHE_EXPIRY_MILLIS
+    @VisibleForTesting
+    suspend fun cacheExpired(tableName: String): Boolean =
+        lastSaved(tableName) <= system.currentMillis - CACHE_EXPIRY_MILLIS
 
-    private suspend fun lastSaved(): Long =
-        postDao.getLastSaved(PostDatabase.POSTS_TABLE)?.time ?: 0L
+    private suspend fun lastSaved(tableName: String): Long =
+        postDao.getLastSaved(tableName)?.time ?: 0L
 
-    private suspend fun fetchAllPostsFromApi(): List<DataPost> =
+    private suspend fun fetchAllPostsFromCache(): List<DataPost> =
+        postDao.getAllPosts() ?: emptyList()
+
+    private suspend fun fetchAllPostsFromRemote(): List<DataPost> =
         postApi.fetchAllPosts().also { posts ->
             updateDatabase(posts)
         }
@@ -42,10 +56,11 @@ class PostDataRepository @Inject constructor(
     private suspend fun updateDatabase(posts: List<DataPost>) {
         postDao.deleteAllPosts()
         postDao.deleteAllAuthors()
+        postDao.deleteAllLastSaved()
         postDao.insertPosts(posts)
         postDao.updateLastSaved(
             LastSaved(
-                what = PostDatabase.POSTS_TABLE,
+                what = POSTS_TABLE,
                 time = system.currentMillis
             )
         )
@@ -54,7 +69,7 @@ class PostDataRepository @Inject constructor(
 
     // region author
     override suspend fun fetchAuthor(id: Int): Author =
-        if (cacheExpired()) fetchAuthorFromApi(id)
+        if (cacheExpired(AUTHORS_TABLE)) fetchAuthorFromApi(id)
         else postDao.getAuthor(id) ?: fetchAuthorFromApi(id)
 
     private suspend fun fetchAuthorFromApi(id: Int): DataAuthor =
@@ -66,7 +81,7 @@ class PostDataRepository @Inject constructor(
         postDao.insertAuthor(author)
         postDao.updateLastSaved(
             LastSaved(
-                what = PostDatabase.AUTHORS_TABLE,
+                what = AUTHORS_TABLE,
                 time = system.currentMillis
             )
         )

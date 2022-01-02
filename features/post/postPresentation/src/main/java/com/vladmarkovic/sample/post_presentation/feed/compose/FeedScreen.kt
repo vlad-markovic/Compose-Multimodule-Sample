@@ -48,6 +48,7 @@ fun FeedScreen(
 @Composable
 private fun PostList(_posts: State<List<Post>>, onPostClick: (Post) -> Unit) {
     val posts by _posts
+
     LazyColumn(
         contentPadding = PaddingValues(vertical = Dimens.m)
     ) {
@@ -71,7 +72,10 @@ private fun PostList(_posts: State<List<Post>>, onPostClick: (Post) -> Unit) {
             ) {
                 Column {
                     Text(
-                        modifier = Modifier.padding(padding = Dimens.m, bottom = (Dimens.m / 2)),
+                        modifier = Modifier.padding(
+                            padding = Dimens.m,
+                            bottom = (Dimens.m / 2)
+                        ),
                         text = post.title,
                         style = AppTheme.typography.h6,
                         color = textColor

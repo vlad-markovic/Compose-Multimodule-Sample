@@ -6,21 +6,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.post_domain.PostRepository
+import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel.Companion.POST_ARG_KEY
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
+import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
+import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.IOException
+import java.nio.channels.UnresolvedAddressException
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val postRepository: PostRepository,
     private val dispatchers: DispatcherProvider,
-    private val state: SavedStateHandle
+    private val state: SavedStateHandle,
+    connection: NetworkConnectivity
 ): BriefActionViewModel() {
 
     private val _loading: MutableState<Boolean> = mutableStateOf(false)
@@ -33,19 +39,34 @@ class FeedViewModel @Inject constructor(
     val posts: State<List<Post>> = _posts
 
     init {
-        refreshPosts(forceRefresh = false)
+        connection.doOnMainOnConnectionChange(viewModelScope, dispatchers) { connected ->
+            if (connected && _error.value) {
+                refreshPosts(DataSource.REMOTE)
+            }
+        }
+
+        refreshPosts()
     }
 
-    fun refreshPosts(forceRefresh: Boolean) {
+    fun refreshPosts(forceFetch: DataSource = DataSource.UNSPECIFIED) {
         _error.value = false
         _loading.value = true
 
         viewModelScope.launch(dispatchers.io) {
             val (posts, error) = try {
-                Pair(postRepository.fetchAllPosts(forceRefresh), null)
-            } catch (e: Exception) {
-                Timber.e(e, "Error fetching posts")
-                Pair(null, true)
+                Pair(postRepository.fetchAllPosts(forceFetch), null)
+            } catch (exception: Exception) {
+                Timber.e(exception, "Error fetching posts")
+                when (exception) {
+                    is UnresolvedAddressException, is IOException -> {
+                        val cachedPosts = postRepository.fetchAllPosts(DataSource.CACHE)
+                        if (cachedPosts.isEmpty()) Pair(null, true)
+                        else Pair(cachedPosts, null)
+                    }
+                    else -> {
+                        throw exception
+                    }
+                }
             }
 
             withContext(dispatchers.main) {

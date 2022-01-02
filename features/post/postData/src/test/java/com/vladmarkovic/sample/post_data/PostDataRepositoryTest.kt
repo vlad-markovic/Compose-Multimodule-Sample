@@ -1,19 +1,17 @@
 package com.vladmarkovic.sample.post_data
 
-import com.vladmarkovic.sample.post_data.model.DataAuthor
 import com.vladmarkovic.sample.post_data.model.DataPost
 import com.vladmarkovic.sample.shared_data.model.LastSaved
+import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_test.CustomizableAllTestSetupExtension
 import com.vladmarkovic.sample.shared_test.TestSystem
-import com.vladmarkovic.sample.shared_test.setupCoroutines
 import io.mockk.coVerify
 import io.mockk.slot
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -21,22 +19,34 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
+@Suppress("ClassName")
 @ExperimentalCoroutinesApi
 class PostDataRepositoryTest {
 
     companion object {
+        private val testDispatcher = TestCoroutineDispatcher()
+
         @JvmField
         @RegisterExtension
-        @Suppress("unused")
-        val testSetupExtension = CustomizableAllTestSetupExtension()
-            .setupCoroutines()
+        @Suppress("Unused")
+        val testSetupExtension = CustomizableAllTestSetupExtension(testDispatcher)
 
         @JvmStatic
         @Suppress("Unused")
-        fun args(): Stream<Arguments> = listOf(
-            Arguments.of(true, "api", Pair(1, 0), fakeApiPosts),
-            Arguments.of(false, "database", Pair(0, 1), fakeDbPosts)
+        fun postArgs(): Stream<Arguments> = listOf(
+            Arguments.of(DataSource.UNSPECIFIED, "Remote", Pair(1, 0), fakeApiPosts),
+            Arguments.of(DataSource.REMOTE, "Remote", Pair(1, 0), fakeApiPosts),
+            Arguments.of(DataSource.CACHE, "Cache", Pair(0, 1), fakeDbPosts)
+        ).stream()
+
+        @JvmStatic
+        @Suppress("Unused")
+        fun authorArgs(): Stream<Arguments> = listOf(
+            Arguments.of(true, "Remote"),
+            Arguments.of(false, "Cache")
         ).stream()
     }
 
@@ -61,170 +71,305 @@ class PostDataRepositoryTest {
         repo = PostDataRepository(spyApi, spyDao, testSystem)
     }
 
-    @ValueSource(booleans = [false, true])
-    @ParameterizedTest(name = "When force refresh is ''{0}'', Then it fetches from the api")
-    @DisplayName("Given initially fetching posts, no matter the cache expiry")
-    fun testInitiallyFetchingPosts(forceRefresh: Boolean) {
-        advanceTimeBy(PostDataRepository.CACHE_EXPIRY_MILLIS)
+    @Nested
+    inner class FetchingPostsTests {
 
-        runBlockingTest {
-            repo.fetchAllPosts(forceRefresh)
+        @MethodSource("com.vladmarkovic.sample.post_data.PostDataRepositoryTest#postArgs")
+        @ParameterizedTest(name = "When force fetch source is ''{0}'', posts are fetched from the ''{1}''")
+        @DisplayName("Given fetching posts after initially saved and cache time expired")
+        fun testFetchingPostsAfterSavedAndCacheExpiredAndForceRefresh(
+            forceFetch: DataSource,
+            source: String,
+            times: Pair<Int, Int>,
+            posts: List<DataPost>
+        ) {
+            testDispatcher.runBlockingTest {
+                spyDao.insertPosts(fakeDbPosts)
+                spyDao.updateLastSaved(getLastSaved(PostDatabase.POSTS_TABLE))
 
-            coVerify(exactly = 1) { spyApi.fetchAllPosts() }
-            coVerify(exactly = 0) { spyDao.getAllPosts() }
+                setExpiredCache(PostDatabase.POSTS_TABLE)
+
+                repo.fetchAllPosts(forceFetch)
+
+                coVerify(exactly = times.first) { spyApi.fetchAllPosts() }
+                coVerify(exactly = times.second) { spyDao.getAllPosts() }
+                assertEquals(posts, spyDao.getAllPosts())
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
+        inner class Given_fetching_posts_with_source_unspecified {
+
+            @Nested
+            @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
+            @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
+            inner class When_cache_time_has_expired {
+
+                @BeforeEach
+                fun setup() {
+                    setExpiredCache(PostDatabase.POSTS_TABLE)
+                    testDispatcher.runBlockingTest {
+                        repo.fetchAllPosts(DataSource.UNSPECIFIED)
+                    }
+                }
+
+                @Test
+                @Order(1)
+                @DisplayName("Then it fetches posts from remote")
+                fun thenItFetchesPostsFromRemote() {
+                    testDispatcher.runBlockingTest {
+                        coVerify(exactly = 1) { spyApi.fetchAllPosts() }
+                    }
+                }
+
+                @Test
+                @Order(2)
+                @DisplayName("And it does NOT fetch posts from cache")
+                fun andItDoesNotFetchPostsFromCache() {
+                    testDispatcher.runBlockingTest {
+                        coVerify(exactly = 0) { spyDao.getAllPosts() }
+                    }
+                }
+            }
+
+            @Nested
+            @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
+            inner class When_cache_time_has_NOT_expired {
+
+                @BeforeEach
+                fun setup() {
+                    setNotExpiredCache(PostDatabase.POSTS_TABLE)
+                    testDispatcher.runBlockingTest {
+                        repo.fetchAllPosts(DataSource.UNSPECIFIED)
+                    }
+                }
+
+                @Test
+                @DisplayName("Then it fetches posts from the cache")
+                fun thenItFetchesPostsFromRemote() {
+                    testDispatcher.runBlockingTest {
+                        coVerify(exactly = 1) { spyDao.getAllPosts() }
+                    }
+                }
+
+                @Test
+                @DisplayName("And it does not fetch posts from the remote")
+                fun andItDoesNotFetchPostsFromCache() {
+                    testDispatcher.runBlockingTest {
+                        coVerify(exactly = 0) { spyApi.fetchAllPosts() }
+                    }
+                }
+            }
+        }
+
+        @Nested
+        @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
+        inner class Given_force_fetching_posts_from_cache {
+
+            @BeforeEach
+            fun setup() {
+                testDispatcher.runBlockingTest {
+                    repo.fetchAllPosts(DataSource.CACHE)
+                }
+            }
+
+            @Order(1)
+            @ValueSource(strings = ["has", "has NOT"])
+            @ParameterizedTest(name = "If time ''{0}'' passed cache expiry")
+            @DisplayName("Then it fetches posts from cache, no mater the time elapsed")
+            fun thenItAlwaysFetchesPostsFromRemote(expired: String) {
+                if (expired == "has") setExpiredCache(PostDatabase.POSTS_TABLE)
+                else setNotExpiredCache(PostDatabase.POSTS_TABLE)
+
+                testDispatcher.runBlockingTest {
+                    repo.fetchAllPosts(DataSource.CACHE)
+                }
+
+                coVerify(exactly = 2) { spyDao.getAllPosts() }
+            }
+
+            @Test
+            @Order(2)
+            @DisplayName("And it does not fetch posts from remote")
+            fun andItDoesNotFetchPostsFromCache() {
+                testDispatcher.runBlockingTest {
+                    coVerify(exactly = 0) { spyApi.fetchAllPosts() }
+                }
+            }
+        }
+
+        @Nested
+        @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
+        inner class Given_force_refreshing_posts_from_remote {
+
+            @BeforeEach
+            fun setup() {
+                testDispatcher.runBlockingTest {
+                    repo.fetchAllPosts(DataSource.REMOTE)
+                }
+            }
+
+            @Order(1)
+            @ValueSource(strings = ["has", "has NOT"])
+            @ParameterizedTest(name = "If time ''{0}'' passed cache expiry")
+            @DisplayName("Then it fetches posts from remote, no mater the time elapsed")
+            fun thenItAlwaysFetchesPostsFromRemote(expired: String) {
+                if (expired == "has") setExpiredCache(PostDatabase.POSTS_TABLE)
+                else setNotExpiredCache(PostDatabase.POSTS_TABLE)
+
+                testDispatcher.runBlockingTest {
+                    repo.fetchAllPosts(DataSource.REMOTE)
+                }
+
+                coVerify(exactly = 2) { spyApi.fetchAllPosts() }
+            }
+
+            @Test
+            @Order(2)
+            @DisplayName("And it does not fetch posts from the cache")
+            fun andItDoesNotFetchPostsFromCache() {
+                testDispatcher.runBlockingTest {
+                    coVerify(exactly = 0) { spyDao.getAllPosts() }
+                }
+            }
+
+            @Test
+            @Order(3)
+            @DisplayName("And it clears current posts cache")
+            fun andItClearsCurrentPostsCache() {
+                testDispatcher.runBlockingTest {
+                    coVerify(exactly = 1) { spyDao.deleteAllPosts() }
+                }
+            }
+
+            @Test
+            @Order(4)
+            @DisplayName("And it clears current authors cache")
+            fun andItClearsCurrentAuthorsCache() {
+                testDispatcher.runBlockingTest {
+                    coVerify(exactly = 1) { spyDao.deleteAllAuthors() }
+                }
+            }
+
+            @Test
+            @Order(5)
+            @DisplayName("And it clears current last saved cache")
+            fun andItClearsCurrentLastSavedCache() {
+                testDispatcher.runBlockingTest {
+                    coVerify(exactly = 1) { spyDao.deleteAllLastSaved() }
+                }
+            }
+
+            @Test
+            @Order(6)
+            @DisplayName("And it caches newly fetched posts")
+            fun andItCachesNewlyFetchedPosts() {
+                testDispatcher.runBlockingTest {
+                    coVerify(exactly = 1) { spyDao.insertPosts(fakeApiPosts) }
+                    assertEquals(fakeApiPosts, spyDao.getAllPosts())
+                }
+            }
+
+            @Test
+            @Order(7)
+            @DisplayName("And saves time posts were last cached")
+            fun andItSavesTimePostsWereLastCached() {
+                testDispatcher.runBlockingTest {
+                    val lastSaved = getLastSaved(PostDatabase.POSTS_TABLE)
+                    val lastSavedSlot = slot<LastSaved>()
+                    coVerify(exactly = 1) { spyDao.updateLastSaved(capture(lastSavedSlot)) }
+                    assertEquals(lastSaved, lastSavedSlot.captured)
+                    assertEquals(lastSaved, spyDao.getLastSaved(PostDatabase.POSTS_TABLE))
+                }
+            }
         }
     }
 
-    @ValueSource(booleans = [false, true])
-    @ParameterizedTest(name = "When force refresh is ''{0}'', posts are saved to the database")
-    @DisplayName("Given fetching posts from api")
-    fun testCachingPostsAndForceRefresh(forceRefresh: Boolean) {
-        runBlockingTest {
-            repo.fetchAllPosts(forceRefresh)
+    @Nested
+    inner class FetchingAuthorTests {
 
-            coVerify(exactly = 1) { spyApi.fetchAllPosts() }
+        @Test
+        @DisplayName(
+            "Given initially fetching author, " +
+                    "When the posts have not yet been saved to database, " +
+                    "It fetches from the api, no matter the cache expiry"
+        )
+        fun testInitiallyFetchingAuthor() {
+            setExpiredCache(PostDatabase.AUTHORS_TABLE)
 
-            coVerify(exactly = 1) { spyDao.deleteAllPosts() }
-            coVerify(exactly = 1) { spyDao.deleteAllAuthors() }
-            coVerify(exactly = 1) { spyDao.insertPosts(fakeApiPosts) }
-            // Verify last saved
-            val lastSaved = getLastSaved(PostDatabase.POSTS_TABLE)
-            val lastSavedSlot = slot<LastSaved>()
-            coVerify(exactly = 1) { spyDao.updateLastSaved(capture(lastSavedSlot)) }
-            assertEquals(lastSaved, lastSavedSlot.captured)
-            assertEquals(lastSaved, spyDao.getLastSaved(PostDatabase.POSTS_TABLE))
-            // Verify saved posts
-            assertEquals(fakeApiPosts, spyDao.getAllPosts())
+            testDispatcher.runBlockingTest {
+                repo.fetchAuthor(fakeApiAuthor.id)
+
+                coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
+                coVerify(exactly = 0) { spyDao.getAuthor(fakeApiAuthor.id) }
+            }
+        }
+
+        @Test
+        @DisplayName("Given fetching author from api, It gets saved into database.")
+        fun testCachingAuthor() {
+            testDispatcher.runBlockingTest {
+                repo.fetchAuthor(fakeApiAuthor.id)
+
+                coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
+
+                coVerify(exactly = 1) { spyDao.insertAuthor(fakeApiAuthor) }
+                // Verify saved author
+                assertEquals(fakeApiAuthor, spyDao.getAuthor(fakeApiAuthor.id))
+                // Verify last saved
+                val lastSaved = getLastSaved(PostDatabase.AUTHORS_TABLE)
+                val lastSavedSlot = slot<LastSaved>()
+                coVerify(exactly = 1) { spyDao.updateLastSaved(capture(lastSavedSlot)) }
+                assertEquals(lastSaved, lastSavedSlot.captured)
+                assertEquals(lastSaved, spyDao.getLastSaved(PostDatabase.AUTHORS_TABLE))
+            }
+        }
+
+        @MethodSource("com.vladmarkovic.sample.post_data.PostDataRepositoryTest#authorArgs")
+        @ParameterizedTest(name = "When cache expired is ''{0}'', author is fetched from the ''{1}''")
+        @DisplayName("Given fetching author, after initially saved before")
+        fun testFetchingAuthorAfterSavedAndCacheExpired(expireCache: Boolean, source: String) {
+            testDispatcher.runBlockingTest {
+                spyDao.insertAuthor(fakeDbAuthor)
+                spyDao.updateLastSaved(getLastSaved(PostDatabase.AUTHORS_TABLE))
+
+                if (expireCache) {
+                    setExpiredCache(PostDatabase.AUTHORS_TABLE)
+                }
+
+                repo.fetchAuthor(fakeDbAuthor.id)
+
+                val remoteTimes = if (expireCache) 1 else 0
+                val cacheTimes = if (expireCache) 0 else 1
+
+                coVerify(exactly = remoteTimes) { spyApi.fetchAuthor(any()) }
+                coVerify(exactly = cacheTimes) { spyDao.getAuthor(fakeDbAuthor.id) }
+                assertEquals(fakeDbAuthor, spyDao.getAuthor(fakeDbAuthor.id))
+            }
         }
     }
 
-    @MethodSource("args")
-    @ParameterizedTest(name = "When force refresh is ''{0}'', posts are fetched from the ''{1}''")
-    @DisplayName("Given fetching posts after initially saved and cache time expired")
-    fun testFetchingPostsAfterSavedAndCacheExpiredAndForceRefresh(
-        forceRefresh: Boolean,
-        apiOrDb: String,
-        times: Pair<Int, Int>,
-        posts: List<DataPost>
-    ) {
-        runBlockingTest {
-            spyDao.insertPosts(fakeDbPosts)
-            spyDao.updateLastSaved(getLastSaved(PostDatabase.POSTS_TABLE))
+    private fun getLastSaved(tableName: String, millis: Long = testSystem.currentMillis):
+            LastSaved = LastSaved(tableName, millis)
 
-            advanceTimeBy(PostDataRepository.CACHE_EXPIRY_MILLIS)
-
-            repo.fetchAllPosts(forceRefresh)
-
-            coVerify(exactly = times.first) { spyApi.fetchAllPosts() }
-            coVerify(exactly = times.second) { spyDao.getAllPosts() }
-            assertEquals(posts, spyDao.getAllPosts())
+    private fun setExpiredCache(tableName: String) {
+        testDispatcher.runBlockingTest {
+            spyDao.updateLastSaved(getLastSaved(tableName, 0))
+            println(spyDao.getLastSaved(tableName)?.time?.toString())
+            assertEquals(0, spyDao.getLastSaved(tableName)?.time)
+            assertTrue(repo.cacheExpired(tableName))
         }
     }
 
-    @Test
-    @DisplayName(
-        "Given initially fetching author, " +
-                "When the posts have not yet been saved to database, " +
-                "It fetches from the api, no matter the cache expiry"
-    )
-    fun testInitiallyFetchingAuthor() {
-        advanceTimeBy(PostDataRepository.CACHE_EXPIRY_MILLIS)
-
-        runBlockingTest {
-            repo.fetchAuthor(fakeApiAuthor.id)
-
-            coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
-            coVerify(exactly = 0) { spyDao.getAuthor(fakeApiAuthor.id) }
+    @Suppress("SameParameterValue")
+    private fun setNotExpiredCache(tableName: String) {
+        testDispatcher.runBlockingTest {
+            spyDao.updateLastSaved(getLastSaved(tableName))
+            assertEquals(testSystem.currentMillis, spyDao.getLastSaved(tableName)?.time)
+            assertFalse(repo.cacheExpired(tableName))
         }
-    }
-
-    @Test
-    @DisplayName("Given fetching author from api, It gets saved into database.")
-    fun testCachingAuthor() {
-        runBlockingTest {
-            repo.fetchAuthor(fakeApiAuthor.id)
-
-            coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
-
-            coVerify(exactly = 1) { spyDao.insertAuthor(fakeApiAuthor) }
-            // Verify last saved
-            val lastSaved = getLastSaved(PostDatabase.AUTHORS_TABLE)
-            val lastSavedSlot = slot<LastSaved>()
-            coVerify(exactly = 1) { spyDao.updateLastSaved(capture(lastSavedSlot)) }
-            assertEquals(lastSaved, lastSavedSlot.captured)
-            assertEquals(lastSaved, spyDao.getLastSaved(PostDatabase.AUTHORS_TABLE))
-            // Verify saved author
-            assertEquals(fakeApiAuthor, spyDao.getAuthor(fakeApiAuthor.id))
-        }
-    }
-
-    @MethodSource("args")
-    @ParameterizedTest(name = "When force refresh is ''{0}'', posts are fetched from the ''{1}''")
-    @DisplayName("Given fetching author, after initially saved before,\n" +
-            "When cache time expired, It wetches author from the database"
-    )
-    fun testFetchingAuthorAfterSavedAndCacheExpired() {
-        runBlockingTest {
-            spyDao.insertAuthor(fakeDbAuthor)
-            spyDao.updateLastSaved(getLastSaved(PostDatabase.POSTS_TABLE))
-
-            advanceTimeBy(PostDataRepository.CACHE_EXPIRY_MILLIS)
-
-            repo.fetchAuthor(fakeDbAuthor.id)
-
-            coVerify(exactly = 0) { spyApi.fetchAuthor(any()) }
-            coVerify(exactly = 1) { spyDao.getAuthor(fakeDbAuthor.id) }
-            assertEquals(fakeDbAuthor, spyDao.getAuthor(fakeDbAuthor.id))
-        }
-    }
-
-
-    private fun advanceTimeBy(millis: Long) {
-        testSystem.currentMillis = testSystem.currentMillis + millis
-    }
-
-    private fun getLastSaved(tableName: String): LastSaved =
-        LastSaved(tableName, testSystem.currentMillis)
-
-    class FakePostApi : PostApi {
-        override suspend fun fetchAllPosts(): List<DataPost> = fakeApiPosts
-        override suspend fun fetchAuthor(id: Int): DataAuthor = fakeApiAuthor
-    }
-
-    class FakePostDao : PostDao {
-        // region posts
-        private var posts: MutableList<DataPost> = mutableListOf()
-
-        private var lastSaved: LastSaved? = null
-
-        override suspend fun getAllPosts(): List<DataPost> = posts
-
-        override suspend fun insertPosts(posts: List<DataPost>) {
-            this.posts.addAll(posts)
-        }
-
-        override suspend fun deleteAllPosts() = posts.clear()
-
-        override suspend fun getLastSaved(what: String): LastSaved? =
-            if (what == lastSaved?.what) lastSaved else null
-
-        override suspend fun updateLastSaved(lastSaved: LastSaved) {
-            this.lastSaved = lastSaved
-        }
-        // endregion posts
-
-        // region author
-        private var authors: MutableList<DataAuthor> = mutableListOf()
-
-        override suspend fun getAuthor(id: Int): DataAuthor? = authors.find { it.id == id }
-
-        override suspend fun insertAuthor(author: DataAuthor) {
-            if (!authors.contains(author)) authors.add(author)
-        }
-
-        override suspend fun deleteAllAuthors() {
-            authors.clear()
-        }
-        // endregion author
     }
 }

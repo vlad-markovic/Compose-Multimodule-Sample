@@ -1,9 +1,13 @@
 package com.vladmarkovic.sample.di
 
+import android.content.Context
+import com.vladmarkovic.sample.connectivity.AppNetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.AppSystem
+import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,4 +20,9 @@ object AppModule {
     fun provideSystem(): AppSystem = object : AppSystem {
         override val currentMillis: Long = System.currentTimeMillis()
     }
+
+    @Singleton
+    @Provides
+    fun provideNetworkConnectivity(@ApplicationContext appContext: Context): NetworkConnectivity =
+        AppNetworkConnectivity(appContext)
 }

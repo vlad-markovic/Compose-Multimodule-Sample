@@ -72,6 +72,7 @@ fun DependencyHandler.testImplementationAll() {
     testImplementation(Dependencies.mockk)
     testImplementation(Dependencies.archCoreTesting)
     testImplementation(Dependencies.lifecycleRuntimeTesting)
+    testImplementation(Dependencies.kotlinxCoroutinesCore)
     testImplementation(Dependencies.coroutinesTesting)
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     testImplementation(Dependencies.slf4jNop)

@@ -8,41 +8,59 @@ import com.vladmarkovic.sample.post_presentation.fakeAuthor
 import com.vladmarkovic.sample.post_presentation.fakeAuthorSuccessResult
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.shared_test.*
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.io.IOException
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @ExperimentalCoroutinesApi
 class PostViewModelTest {
 
     companion object {
-        private val dispatchers = TestDispatcherProvider()
+        private val testDispatcher = TestCoroutineDispatcher()
+        private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
         @RegisterExtension
         @Suppress("Unused")
         val testSetupExtension: CustomizableAllTestSetupExtension =
             CustomizableAllTestSetupExtension()
-                .setupCoroutines(dispatchers.main)
+                .setupCoroutines(testDispatcher)
                 .setupLiveData()
 
         private const val FAKE_FETCH_DELAY = 2L
     }
 
-    private lateinit var savedStateHandle: SavedStateHandle
+    private lateinit var fakeAuthorRepository: FakeAuthorRepository
+    private lateinit var mockSavedStateHandle: SavedStateHandle
+    private lateinit var testNetworkConnectivity: TestNetworkConnectivity
+
+    private lateinit var viewModel: PostViewModel
 
     @BeforeEach
     fun setup() {
-        savedStateHandle = mockk()
+        fakeAuthorRepository = FakeAuthorRepository()
+        mockSavedStateHandle = mockk()
+        testNetworkConnectivity = TestNetworkConnectivity()
 
-        every { savedStateHandle.get<Post>(PostViewModel.POST_ARG_KEY) }.returns(fakePost)
+        every { mockSavedStateHandle.get<Post>(PostViewModel.POST_ARG_KEY) }.returns(fakePost)
+
+        viewModel = PostViewModel(
+            fakeAuthorRepository,
+            testDispatchers,
+            mockSavedStateHandle,
+            testNetworkConnectivity
+        )
     }
 
     @Test
@@ -51,12 +69,10 @@ class PostViewModelTest {
                 "It shows post info and loading, and shows author info after fetched"
     )
     fun testInitialStateAndSuccessAuthorResult() {
-        val authorRepository = FakeAuthorRepository()
-        val viewModel = PostViewModel(authorRepository, dispatchers, savedStateHandle)
-
+        assertEquals(fakePost, viewModel.post)
         viewModel.authorResult.assertValueEquals(null)
 
-        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.authorResult.assertValueEquals(fakeAuthorSuccessResult)
     }
@@ -68,12 +84,45 @@ class PostViewModelTest {
     )
     fun testFailureAuthorResult() {
         val exception = IOException()
-        val authorRepository = FakeAuthorRepository(exception)
-        val viewModel = PostViewModel(authorRepository, dispatchers, savedStateHandle)
+        val fakeAuthorRepository = FakeAuthorRepository(exception)
 
-        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
+        val viewModel = PostViewModel(
+            fakeAuthorRepository,
+            testDispatchers,
+            mockSavedStateHandle,
+            testNetworkConnectivity
+        )
+
+        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
 
         assertEquals(exception, viewModel.authorResult.value!!.exceptionOrNull()!!)
+    }
+
+    @Test
+    @DisplayName(
+        "Given internet is disconnected and author info is not fetched, " +
+                "When internet reconnects, It tries to fetch author details"
+    )
+    fun testAutoReloadOnConnected() {
+        val mockAuthorRepository = mockk<AuthorRepository>()
+        coEvery { mockAuthorRepository.fetchAuthor(any()) }.throws(IOException())
+
+        PostViewModel(
+            mockAuthorRepository,
+            testDispatchers,
+            mockSavedStateHandle,
+            testNetworkConnectivity
+        )
+
+        assertFalse(testNetworkConnectivity.isConnected)
+        // One initial call
+        coVerify(exactly = 1) { mockAuthorRepository.fetchAuthor(any()) }
+
+        testNetworkConnectivity.state.value = true
+
+        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        // Another call after connected
+        coVerify(exactly = 2) { mockAuthorRepository.fetchAuthor(any()) }
     }
 
     private class FakeAuthorRepository(private val t: Throwable? = null) : AuthorRepository {

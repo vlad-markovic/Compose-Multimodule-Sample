@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.feed.compose.FeedScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AppScreen
@@ -32,7 +33,7 @@ class FeedFragment : Fragment() {
                 loading = viewModel.loading,
                 posts = viewModel.posts,
                 error = viewModel.error,
-                onRefresh = { viewModel.refreshPosts(forceRefresh = true) },
+                onRefresh = { viewModel.refreshPosts(DataSource.REMOTE) },
                 onPostClick = { viewModel.navigateToPostDetails(it) }
             )
         }

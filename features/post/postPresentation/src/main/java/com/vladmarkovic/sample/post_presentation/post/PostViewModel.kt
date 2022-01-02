@@ -10,6 +10,8 @@ import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
+import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
+import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class PostViewModel @Inject constructor(
     private val authorRepository: AuthorRepository,
     private val dispatchers: DispatcherProvider,
-    private val state: SavedStateHandle
+    private val state: SavedStateHandle,
+    connection: NetworkConnectivity
 ) : ViewModel() {
 
     companion object {
@@ -35,10 +38,16 @@ class PostViewModel @Inject constructor(
     val authorResult: State<Result<Author>?> = _authorResult
 
     init {
+        connection.doOnMainOnConnectionChange(viewModelScope, dispatchers) { connected ->
+            if (connected && _authorResult.value?.isFailure != false) getDetails()
+        }
+
         getDetails()
     }
 
     fun getDetails() {
+        _authorResult.value = null
+
         viewModelScope.launch(dispatchers.io) {
             val authorResult = try {
                 val author = authorRepository.fetchAuthor(post.userId)
