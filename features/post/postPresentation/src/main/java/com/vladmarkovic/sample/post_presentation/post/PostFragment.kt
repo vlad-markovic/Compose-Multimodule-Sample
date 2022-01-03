@@ -14,7 +14,6 @@ import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel.Companion.POST_ARG_KEY
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AppScreen
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModels
 import composeContent
@@ -32,7 +31,7 @@ class PostFragment : Fragment() {
     private val viewModel: PostViewModel by actionViewModels()
 
     private val upButton by lazy {
-        mutableStateOf(UpButton.BackButton { viewModel.navigate(Back) })
+        mutableStateOf(UpButton.BackButton(viewModel))
     }
 
     override fun onCreateView(
