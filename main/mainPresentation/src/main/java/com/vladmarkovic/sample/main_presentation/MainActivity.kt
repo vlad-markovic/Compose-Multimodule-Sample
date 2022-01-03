@@ -4,24 +4,45 @@ package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.util.actionViewModels
-import com.vladmarkovic.sample.shared_presentation.util.setContainerContentView
+import androidx.compose.material.ScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
+import com.vladmarkovic.sample.shared_presentation.navigation.NavigableComposeHolder
+import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen
+import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.FEED_SCREEN
+import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-/** Main holder activity, holding feature fragments within R.id.container. */
+/** Main holder activity, holding composers for Composable-s. */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigableComposeHolder {
 
-    private val viewModel : BriefActionViewModel by actionViewModels()
+    override val startDestination: String = FEED_SCREEN.name
+
+    @Inject
+    lateinit var postsScreenHolderComposer: ScreenHolderComposer<PostsScreen>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContainerContentView()
+        setComposeContentView {
+            MainContent()
+        }
+    }
 
-        if (savedInstanceState == null) {
-            viewModel.navigate(ToFeedScreen)
+    override fun NavGraphBuilder.navGraph(navController: NavHostController) {
+        with(postsScreenHolderComposer) {
+            composeNavGraph(navController)
+        }
+    }
+
+    @Composable
+    override fun TopBar(scaffoldState: ScaffoldState) {
+        with(postsScreenHolderComposer) {
+            ComposeTopBar()
         }
     }
 }

@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.post_presentation
 
 import com.vladmarkovic.sample.post_domain.model.Author
-import com.vladmarkovic.sample.post_domain.model.Post
+import com.vladmarkovic.sample.post_presentation.model.PostArg
 
 // region feed
 val fakeInitialPostsRange = IntRange(1, 4)
@@ -17,19 +17,16 @@ private fun makeFakePosts(range: IntRange) = (range.first .. range.last).map {
 }
 
 private fun makeFakePost(id: Int) =
-    TestPost(id, 11 * id , "Post$id", "This is Post $id")
-
-data class TestPost(
-    override val id: Int,
-    override val userId: Int,
-    override val title: String,
-    override val content: String,
-) : Post
+    PostArg(id, 11 * id , "Post$id", "This is Post $id")
 // region feed
 
 // region post
 val fakeAuthor = TestAuthor(100, "David", "Dave", "dave@email.com")
-val fakePost = makeFakePost(123)
+const val fakePostId = 123
+const val fakePostUserId = 456
+const val fakePostTitle = "Fake post title"
+const val fakePostContent = "Fake post content"
+val fakePost = PostArg(fakePostId, fakePostUserId, fakePostTitle, fakePostContent)
 val fakeAuthorSuccessResult = Result.success(fakeAuthor)
 
 data class TestAuthor(

@@ -13,6 +13,8 @@ import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.post_presentation.feed.FeedViewModelTest.FakePostRepository
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
+import com.vladmarkovic.sample.post_presentation.*
+import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,7 +61,9 @@ class PostViewModelTest {
         mockSavedStateHandle = mockk()
         testNetworkConnectivity = TestNetworkConnectivity()
 
-        every { mockSavedStateHandle.get<Post>(PostViewModel.POST_ARG_KEY) }.returns(fakePost)
+        val mockJsonString = "{\"id\":$fakePostId,\"userId\":$fakePostUserId,\"title\":\"" +
+                "$fakePostTitle\",\"content\":\"$fakePostContent\"}"
+        every { mockSavedStateHandle.get<String>(ArgKeys.POST.name) }.returns(mockJsonString)
 
         viewModel = PostViewModel(
             fakePostRepository,

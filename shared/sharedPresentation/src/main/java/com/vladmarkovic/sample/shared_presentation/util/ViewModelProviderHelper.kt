@@ -2,14 +2,26 @@
 
 package com.vladmarkovic.sample.shared_presentation.util
 
+import android.content.Context
 import androidx.annotation.MainThread
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActioner
+import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 import kotlin.reflect.KClass
 
+// region Activity
 /**
  * After initialization, the [BriefActionViewModel] is setup with observing common [BriefAction]s.
  *
@@ -35,19 +47,21 @@ import kotlin.reflect.KClass
  * and access prior to that will result in IllegalArgumentException.
  */
 @MainThread
-inline fun <reified VM: BriefActionViewModel> FragmentActivity.actionViewModels(
+inline fun <reified VM : BriefActionViewModel> FragmentActivity.actionViewModels(
     noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ): Lazy<VM> = ViewModelLazy(
     viewModelClass = VM::class,
     storeProducer = { viewModelStore },
     factoryProducer = factoryProducer ?: { defaultViewModelProviderFactory },
-    setup = {  viewModel ->
+    setup = { viewModel ->
         viewModel.action.observeNonNull(this) { action ->
             handleBriefAction(action)
         }
     }
 )
+// endregion Activity
 
+// region Fragment
 /**
  * After initialization, the [BriefActionViewModel] is setup with observing common [BriefAction]s.
  *
@@ -77,7 +91,7 @@ inline fun <reified VM: BriefActionViewModel> FragmentActivity.actionViewModels(
  * [Fragment.onAttach()], and access prior to that will result in IllegalArgumentException.
  */
 @MainThread
-inline fun <reified VM: BriefActionViewModel> Fragment.actionViewModels(
+inline fun <reified VM : BriefActionViewModel> Fragment.actionViewModels(
     noinline ownerProducer: () -> ViewModelStoreOwner = { this },
     noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ): Lazy<VM> = createViewModelLazy(
@@ -150,7 +164,7 @@ fun <VM : ViewModel> Fragment.createViewModelLazy(
  * [setup] is a lambda that will be called after initialization, passing the [ViewModel]
  * to be able to apply some setup on in, like setting up observing actions.
  */
-class ViewModelLazy<VM : ViewModel> (
+class ViewModelLazy<VM : ViewModel>(
     private val viewModelClass: KClass<VM>,
     private val storeProducer: () -> ViewModelStore,
     private val factoryProducer: () -> ViewModelProvider.Factory,
@@ -175,3 +189,44 @@ class ViewModelLazy<VM : ViewModel> (
 
     override fun isInitialized(): Boolean = cached != null
 }
+// endregion Fragment
+
+// region Compose
+fun hiltViewModelFactory(
+    context: Context,
+    navBackStackEntry: NavBackStackEntry,
+    factory: ViewModelProvider.Factory = navBackStackEntry.defaultViewModelProviderFactory
+): ViewModelProvider.Factory = HiltViewModelFactory.createInternal(
+    context.asActivity,
+    navBackStackEntry,
+    navBackStackEntry.arguments,
+    factory,
+)
+
+@Composable
+inline fun <reified VM : ViewModel> hiltViewModel(
+    navBackStackEntry: NavBackStackEntry,
+    factory: ViewModelProvider.Factory = navBackStackEntry.defaultViewModelProviderFactory
+): VM = viewModel(
+    viewModelStoreOwner = navBackStackEntry,
+    factory = hiltViewModelFactory(LocalContext.current, navBackStackEntry, factory)
+)
+
+@Composable
+inline fun <reified VM : BriefActionViewModel> actionViewModel(navController: NavHostController): VM =
+    androidx.hilt.navigation.compose.hiltViewModel<VM>().apply { actioner.setupWith(navController) }
+
+@Composable
+inline fun <reified VM : BriefActionViewModel> actionViewModel(
+    navController: NavHostController,
+    factory: ViewModelProvider.Factory
+): VM = hiltViewModel<VM>(navController.currentBackStackEntry!!, factory)
+    .apply { actioner.setupWith(navController) }
+
+/** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
+fun BriefActioner.setupWith(navController: NavHostController) {
+    action.observeNonNull(navController.context as FragmentActivity) { action ->
+        navController.handleBriefAction(action)
+    }
+}
+// endregion Compose

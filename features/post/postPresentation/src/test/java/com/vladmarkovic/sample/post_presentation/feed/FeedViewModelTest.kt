@@ -8,10 +8,13 @@ import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
-import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.shared_domain.model.DataSource
+import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -58,12 +61,11 @@ class FeedViewModelTest {
         mockSavedStateHandle = mockk()
         testNetworkConnectivity = TestNetworkConnectivity()
 
-        every { mockSavedStateHandle.set<Post>(PostViewModel.POST_ARG_KEY, fakePost) }.answers { }
+        every { mockSavedStateHandle.set<Post>(ArgKeys.POST.name, fakePost) }.answers { }
 
         viewModel = FeedViewModel(
             fakePostRepository,
             testDispatchers,
-            mockSavedStateHandle,
             testNetworkConnectivity
         )
     }
@@ -138,7 +140,6 @@ class FeedViewModelTest {
         val viewModel = FeedViewModel(
             fakePostRepository,
             testDispatchers,
-            mockSavedStateHandle,
             testNetworkConnectivity
         )
 
@@ -148,22 +149,6 @@ class FeedViewModelTest {
 
         assertTrue(viewModel.error.value)
     }
-
-    @Test
-    @DisplayName(
-        "Given on a post on feed screen, " +
-                "When navigating to post details for a post, " +
-                "It saves the post to SavedStateHandle, " +
-                "and navigates to that post details screen"
-    )
-    fun testNavigatingToPostDetails() {
-        val spyViewModel = spyk(viewModel)
-        spyViewModel.navigateToPostDetails(fakePost)
-
-        verify { mockSavedStateHandle.set(PostViewModel.POST_ARG_KEY, fakePost) }
-        verify { spyViewModel.navigate(ToPostScreen(fakePost)) }
-    }
-
 
     @Test
     @DisplayName(
@@ -179,7 +164,6 @@ class FeedViewModelTest {
         FeedViewModel(
             mockPostRepository,
             testDispatchers,
-            mockSavedStateHandle,
             testNetworkConnectivity
         )
 

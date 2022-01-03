@@ -11,15 +11,19 @@ import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
+import com.vladmarkovic.sample.post_presentation.model.PostArg
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,11 +35,7 @@ class PostViewModel @Inject constructor(
     connection: NetworkConnectivity
 ) : BriefActionViewModel() {
 
-    companion object {
-        const val POST_ARG_KEY = "POST_ARG_KEY"
-    }
-
-    val post: Post = state.get<Post>(POST_ARG_KEY)!!
+    val post: Post = Json.decodeFromString<PostArg>(state.get<String>(ArgKeys.POST.name)!!)
 
     private val _authorResult: MutableState<Result<Author>?> = mutableStateOf(null)
 
@@ -81,6 +81,6 @@ class PostViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
 
-        state.set<Post>(POST_ARG_KEY, null)
+        state.set(ArgKeys.POST.name, null)
     }
 }

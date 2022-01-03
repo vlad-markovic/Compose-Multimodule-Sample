@@ -2,7 +2,7 @@
 
 import org.gradle.api.JavaVersion
 
-internal object Versions {
+internal object  Versions {
 
     // region Global
     val java = JavaVersion.VERSION_11

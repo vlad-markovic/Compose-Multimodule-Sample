@@ -6,6 +6,8 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 
 internal fun DependencyHandler.implementationPresentationBase() {
     // Kotlin
+    implementation(Dependencies.kotlinxSerializationCore)
+    implementation(Dependencies.ktorClientSerialization)
     implementation(Dependencies.kotlinReflect)
 
     // Android / Google

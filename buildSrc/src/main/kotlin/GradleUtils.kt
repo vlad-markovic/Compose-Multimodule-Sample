@@ -10,8 +10,6 @@ import org.gradle.kotlin.dsl.*
 
 /** Common plugins and dependencies for each domain module. */
 fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
-    applyPlugin(Plugins.kotlinSerialization)
-
     configurePlainKotlinModule()
 
     dependencies {
@@ -25,6 +23,7 @@ fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
 
 /** Common plugins and dependencies for any plain kotlin (domain) module. */
 private fun GradleProject.configurePlainKotlinModule() {
+    applyPlugin(Plugins.kotlinSerialization)
     applyPlugin(Plugins.javaLibrary)
     applyPlugin(Plugins.kotlin)
 
@@ -37,8 +36,6 @@ private fun GradleProject.configurePlainKotlinModule() {
 
 /** Common plugins and dependencies for each data module. */
 fun GradleProject.configureDataModule(includeSharedData: Boolean = true) {
-    applyPlugin(Plugins.kotlinSerialization)
-
     configureAndroidModule()
 
     dependencies {
@@ -57,7 +54,6 @@ fun GradleProject.configureDataModule(includeSharedData: Boolean = true) {
 /** Common plugins and dependencies for each presentation module. */
 fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean = true) {
     configureAndroidModule()
-
     configureComposeInModule()
 
     dependencies {
@@ -88,6 +84,7 @@ fun GradleProject.configureAndroidModule() {
     applyPlugin(Plugins.androidLibrary)
     applyPlugin(Plugins.kotlinKapt)
     applyPlugin(Plugins.kotlinAndroid)
+    applyPlugin(Plugins.kotlinSerialization)
     applyPlugin(Plugins.hilt)
 
     version = "1.0"

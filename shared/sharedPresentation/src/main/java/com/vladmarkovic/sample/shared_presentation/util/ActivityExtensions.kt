@@ -3,20 +3,13 @@
 package com.vladmarkovic.sample.shared_presentation.util
 
 import android.app.Activity
-import android.widget.FrameLayout
-import com.vladmarkovic.sample.shared_presentation.R
-import com.vladmarkovic.sample.shared_presentation.navigation.Navigation
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 
-/** Helper function for navigating from [Activity] with `navigate { somewhere() }`. */
-inline fun Activity.withNavigation(crossinline destination: Navigation.() -> Unit) {
-    navigation.destination()
-}
-
-/** Set simple FrameLayout view for a container Activity which simply holds Fragments. */
-fun Activity.setContainerContentView() {
-    setContentView(FrameLayout(this).apply {
-        val matchParent = FrameLayout.LayoutParams.MATCH_PARENT
-        layoutParams = FrameLayout.LayoutParams(matchParent, matchParent)
-        id = R.id.container
-    })
+inline fun Activity.setComposeContentView(crossinline content: @Composable () -> Unit) {
+    setContentView(
+        ComposeView(this).apply {
+            setContent { content() }
+        }
+    )
 }

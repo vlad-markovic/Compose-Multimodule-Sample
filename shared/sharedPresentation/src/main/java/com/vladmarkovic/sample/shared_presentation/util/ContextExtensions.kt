@@ -2,8 +2,17 @@
 
 package com.vladmarkovic.sample.shared_presentation.util
 
+import android.app.Activity
 import android.content.Context
-import com.vladmarkovic.sample.shared_presentation.navigation.NavigationProvider
+import android.content.ContextWrapper
 
-val Context.navigation get() = (applicationContext as NavigationProvider).navigation
+val Context.asActivity: Activity
+    get() = this.let {
+        var context = it
+        while (context is ContextWrapper) {
+            if (context is Activity) return@let context
+            context = context.baseContext
+        }
+        throw IllegalStateException("Expected an activity context but instead found: $context")
+    }
 

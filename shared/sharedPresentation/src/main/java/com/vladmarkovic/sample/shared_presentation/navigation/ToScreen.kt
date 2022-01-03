@@ -3,6 +3,12 @@
 package com.vladmarkovic.sample.shared_presentation.navigation
 
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
+import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.screen.routeArgs
 
-/** For scoping screen navigation actions. */
-interface ToScreen : NavigationAction
+/** For typing and scoping screen navigation actions for navigating to [Screen]. */
+abstract class ToScreen(val screen: Screen, val jsonArgs: List<String>? = null) : NavigationAction
+
+val ToScreen.route: String get() = screen.name + (jsonArgs?.let {
+    screen.routeArgs(it)
+} ?: "")

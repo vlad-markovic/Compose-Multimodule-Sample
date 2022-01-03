@@ -6,16 +6,16 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
@@ -23,20 +23,20 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 
 @Composable
 fun AppScreen(
-    title: String,
-    up: State<UpButton>? = null,
+    title: State<StrOrRes>,
+    up: State<UpButton?>? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
     AppTheme {
         Scaffold(
-            topBar = { TopBar(title, up = up) },
+            topBar = { DefaultTopBar(title, up = up) },
         ) { paddingValues ->
             val systemUiController = rememberSystemUiController()
             systemUiController.setSystemBarsColor(Color.Black)
 
-            if (up?.value is BackButton) {
+            (up?.value as? BackButton)?.let { backButton ->
                 BackHandler {
-                    up.value.action()
+                    backButton.action()
                 }
             }
 
@@ -46,12 +46,14 @@ fun AppScreen(
 }
 
 @Composable
-fun TopBar(
-    text: String,
+fun DefaultTopBar(
+    _title: State<StrOrRes>,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
-    up: State<UpButton>? = null
+    up: State<UpButton?>? = null
 ) {
+    val title by _title
+
     TopAppBar(
         modifier = modifier,
         backgroundColor = AppColor.Grey900,
@@ -59,7 +61,7 @@ fun TopBar(
         title = {
             Text(
                 modifier = modifier.then(Modifier.fillMaxWidth()),
-                text = text,
+                text = title.get(LocalContext.current),
                 textAlign = textAlign,
                 style = AppTheme.typography.h5,
                 fontWeight = FontWeight.Bold,
@@ -70,15 +72,17 @@ fun TopBar(
 }
 
 @Composable
-fun Up(_upButton: State<UpButton>) {
+fun Up(_upButton: State<UpButton?>) {
     val upButton by _upButton
-    IconButton(upButton.action) {
-        Icon(upButton.icon, contentDescription = stringResource(upButton.contentDescriptionRes))
+    upButton?.let {
+        IconButton(it.action) {
+            Icon(it.icon, contentDescription = stringResource(it.contentDescriptionRes))
+        }
     }
 }
 
 @Preview
 @Composable
 private fun PreviewTopBar() {
-    TopBar("Top Title")
+    DefaultTopBar(remember { mutableStateOf(StrOrRes.str("Top Title")) })
 }
