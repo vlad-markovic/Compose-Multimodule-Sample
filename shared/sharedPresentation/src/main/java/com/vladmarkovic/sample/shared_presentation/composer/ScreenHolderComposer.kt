@@ -49,9 +49,9 @@ abstract class ScreenHolderComposer<S: Screen> {
     }
 
     @Composable
-    fun ComposeTopBar() {
+    fun ComposeTopBar(navController: NavHostController) {
         val screen by this@ScreenHolderComposer.screen
-        composer(screen).TopBar()
+        composer(screen).TopBar(navController)
     }
 
     @Composable

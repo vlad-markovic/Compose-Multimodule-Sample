@@ -2,10 +2,11 @@
 
 package com.vladmarkovic.sample.shared_presentation.compose
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,36 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
-
-@Composable
-fun AppScreen(
-    title: State<StrOrRes>,
-    up: State<UpButton?>? = null,
-    content: @Composable (PaddingValues) -> Unit
-) {
-    AppTheme {
-        Scaffold(
-            topBar = { DefaultTopBar(title, up = up) },
-        ) { paddingValues ->
-            val systemUiController = rememberSystemUiController()
-            systemUiController.setSystemBarsColor(Color.Black)
-
-            (up?.value as? BackButton)?.let { backButton ->
-                BackHandler {
-                    backButton.action()
-                }
-            }
-
-            content(paddingValues)
-        }
-    }
-}
 
 @Composable
 fun DefaultTopBar(

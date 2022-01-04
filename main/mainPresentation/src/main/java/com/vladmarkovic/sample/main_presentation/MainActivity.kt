@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity(), NavigableComposeHolder {
     }
 
     @Composable
-    override fun TopBar(scaffoldState: ScaffoldState) {
+    override fun TopBar(scaffoldState: ScaffoldState, navController: NavHostController) {
         with(postsScreenHolderComposer) {
-            ComposeTopBar()
+            ComposeTopBar(navController)
         }
     }
 }

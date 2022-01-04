@@ -25,7 +25,7 @@ interface BaseComposeHolder {
         AppTheme {
             Scaffold(
                 scaffoldState = scaffoldState,
-                topBar = { TopBar(scaffoldState) },
+                topBar = { TopBar(scaffoldState, navController) },
             ) {
                 val systemUiController = rememberSystemUiController()
                 systemUiController.setSystemBarsColor(Color.Black)
@@ -36,7 +36,7 @@ interface BaseComposeHolder {
     }
 
     @Composable
-    fun TopBar(scaffoldState: ScaffoldState) {
+    fun TopBar(scaffoldState: ScaffoldState, navController: NavHostController) {
         // No op
     }
 
