@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 /**
  * This class also represents a document for the project structure.
  *

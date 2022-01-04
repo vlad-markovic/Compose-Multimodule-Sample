@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 package com.vladmarkovic.sample.shared_domain.log
 
 /** Abstraction for common logging functions, enabling logging in plain Kotlin modules. */

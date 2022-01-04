@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 object Plugins {
     const val hilt =  "dagger.hilt.android.plugin"
     const val androidLibrary =  "com.android.library"

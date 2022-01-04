@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.lifecycle.SavedStateHandle

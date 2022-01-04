@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 /** Versions which also need access outside of buildSrc - in app module. */
 object GlobalVersions {
     val java = Versions.java

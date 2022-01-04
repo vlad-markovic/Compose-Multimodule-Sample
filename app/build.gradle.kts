@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 plugins {
     id("com.android.application")
     kotlin("android")

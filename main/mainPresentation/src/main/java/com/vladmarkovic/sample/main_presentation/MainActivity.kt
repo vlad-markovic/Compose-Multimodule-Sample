@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle

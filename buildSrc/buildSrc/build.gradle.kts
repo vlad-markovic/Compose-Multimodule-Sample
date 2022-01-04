@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 // For exposing Dependencies for use in buildSrc/build.gradle.kts
 
 plugins {

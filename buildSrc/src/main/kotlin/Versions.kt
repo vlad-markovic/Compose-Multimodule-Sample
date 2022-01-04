@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 import org.gradle.api.JavaVersion
 
 internal object Versions {

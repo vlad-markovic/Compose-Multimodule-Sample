@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
 /** [DependencyHandler] extensions for combined [implementation] and similar calls. */

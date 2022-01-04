@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 import com.android.build.gradle.LibraryExtension
 import org.gradle.kotlin.dsl.*
 import org.gradle.api.Plugin
