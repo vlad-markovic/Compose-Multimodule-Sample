@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 package com.vladmarkovic.sample.di
 
 import com.vladmarkovic.sample.post_presentation.PostsScreenHolderComposer

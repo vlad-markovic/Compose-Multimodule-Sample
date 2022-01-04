@@ -7,13 +7,9 @@ import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.fakeAuthor
-import com.vladmarkovic.sample.post_presentation.fakeAuthorSuccessResult
-import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
-import com.vladmarkovic.sample.post_presentation.fakePost
+import com.vladmarkovic.sample.post_presentation.*
 import com.vladmarkovic.sample.post_presentation.feed.FeedViewModelTest.FakePostRepository
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
-import com.vladmarkovic.sample.post_presentation.*
 import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*

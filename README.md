@@ -1,6 +1,6 @@
 # Hilt Compose Sample App
 
-## _Sample project, sampling Hilt injection with Compose navigation_
+## _Sample project, sampling Hilt injection with Compose views and Hilt-Compose navigation_
 
 ## Project Structure
 
