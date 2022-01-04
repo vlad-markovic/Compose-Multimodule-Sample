@@ -4,16 +4,17 @@ package com.vladmarkovic.sample.post_presentation.post
 
 import androidx.lifecycle.SavedStateHandle
 import com.vladmarkovic.sample.post_domain.AuthorRepository
+import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.fakeAuthor
 import com.vladmarkovic.sample.post_presentation.fakeAuthorSuccessResult
+import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
 import com.vladmarkovic.sample.post_presentation.fakePost
+import com.vladmarkovic.sample.post_presentation.feed.FeedViewModelTest.FakePostRepository
+import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_test.*
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -44,6 +45,7 @@ class PostViewModelTest {
         private const val FAKE_FETCH_DELAY = 2L
     }
 
+    private lateinit var fakePostRepository: FakePostRepository
     private lateinit var fakeAuthorRepository: FakeAuthorRepository
     private lateinit var mockSavedStateHandle: SavedStateHandle
     private lateinit var testNetworkConnectivity: TestNetworkConnectivity
@@ -52,6 +54,7 @@ class PostViewModelTest {
 
     @BeforeEach
     fun setup() {
+        fakePostRepository = FakePostRepository()
         fakeAuthorRepository = FakeAuthorRepository()
         mockSavedStateHandle = mockk()
         testNetworkConnectivity = TestNetworkConnectivity()
@@ -59,6 +62,7 @@ class PostViewModelTest {
         every { mockSavedStateHandle.get<Post>(PostViewModel.POST_ARG_KEY) }.returns(fakePost)
 
         viewModel = PostViewModel(
+            fakePostRepository,
             fakeAuthorRepository,
             testDispatchers,
             mockSavedStateHandle,
@@ -90,6 +94,7 @@ class PostViewModelTest {
         val fakeAuthorRepository = FakeAuthorRepository(exception)
 
         val viewModel = PostViewModel(
+            fakePostRepository,
             fakeAuthorRepository,
             testDispatchers,
             mockSavedStateHandle,
@@ -111,6 +116,7 @@ class PostViewModelTest {
         coEvery { mockAuthorRepository.fetchAuthor(any()) }.throws(IOException())
 
         PostViewModel(
+            fakePostRepository,
             mockAuthorRepository,
             testDispatchers,
             mockSavedStateHandle,
@@ -126,6 +132,34 @@ class PostViewModelTest {
         testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
         // Another call after connected
         coVerify(exactly = 2) { mockAuthorRepository.fetchAuthor(any()) }
+    }
+
+    @Test
+    @DisplayName("Given delete post, It removes post from cache, And navigates back")
+    fun testDeletingPost() {
+        val mockPostRepository = mockk<PostRepository>()
+        coEvery { mockPostRepository.deletePost(any()) }.answers {  }
+
+        val viewModel = PostViewModel(
+            mockPostRepository,
+            fakeAuthorRepository,
+            testDispatchers,
+            mockSavedStateHandle,
+            testNetworkConnectivity
+        )
+
+        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+
+        val post = fakeInitialPosts.first()
+
+        val spyViewModel = spyk(viewModel)
+
+        spyViewModel.deletePost(post)
+
+        val postSlot = slot<Post>()
+        coVerify(exactly = 1) { mockPostRepository.deletePost(capture(postSlot)) }
+        assertEquals(post, postSlot.captured)
+        coVerify(exactly = 1) { spyViewModel.navigate(Back) }
     }
 
     private class FakeAuthorRepository(private val t: Throwable? = null) : AuthorRepository {

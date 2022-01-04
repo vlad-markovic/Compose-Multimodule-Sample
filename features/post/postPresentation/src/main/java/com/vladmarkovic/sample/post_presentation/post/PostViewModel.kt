@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.post_domain.AuthorRepository
+import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
@@ -15,6 +16,7 @@ import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
+    private val postRepository: PostRepository,
     private val authorRepository: AuthorRepository,
     private val dispatchers: DispatcherProvider,
     private val state: SavedStateHandle,
@@ -61,6 +64,16 @@ class PostViewModel @Inject constructor(
 
             withContext(dispatchers.main) {
                 _authorResult.value = authorResult
+            }
+        }
+    }
+
+    fun deletePost(post: Post) {
+        viewModelScope.launch(dispatchers.io) {
+            postRepository.deletePost(post)
+
+            withContext(dispatchers.main) {
+                navigate(Back)
             }
         }
     }

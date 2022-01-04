@@ -6,5 +6,6 @@
 
     <string name="post_screen_title">Post</string>
     <string name="error_on_author_fetch">Failed to fetch author info.</string>
+    <string name="delete_post_button_label">Delete Post</string>
 
 </resources>

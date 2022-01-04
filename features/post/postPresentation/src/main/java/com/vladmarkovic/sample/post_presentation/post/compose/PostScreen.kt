@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +30,8 @@ import java.io.IOException
 fun PostScreen(
     post: Post,
     _authorResult: State<Result<Author>?>,
-    onFetchAuthor: () -> Unit
+    onFetchAuthor: () -> Unit,
+    onDeletePost: (Post) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -54,6 +56,13 @@ fun PostScreen(
                 authorResult?.isSuccess == true -> {
                     AuthorInfo(authorResult!!.getOrNull()!!)
                 }
+            }
+
+            Button(
+                modifier = Modifier.padding(Dimens.m),
+                onClick = { onDeletePost(post) }
+            ) {
+                Text(stringResource(R.string.delete_post_button_label))
             }
         }
     }
@@ -116,7 +125,7 @@ private val post = object: Post {
 @Preview
 @Composable
 private fun PreviewSuccessPostScreen() {
-    PostScreen(post, successAuthorResult) {}
+    PostScreen(post, successAuthorResult, {}, {})
 }
 
 private val failureAuthorResult = mutableStateOf(
@@ -126,7 +135,7 @@ private val failureAuthorResult = mutableStateOf(
 @Preview
 @Composable
 private fun PreviewFailurePostScreen() {
-    PostScreen(post, failureAuthorResult) {}
+    PostScreen(post, failureAuthorResult, {}, {})
 }
 
 private val loadingAuthorResult = mutableStateOf(null)
@@ -134,6 +143,6 @@ private val loadingAuthorResult = mutableStateOf(null)
 @Preview
 @Composable
 private fun PreviewLoadingPostScreen() {
-    PostScreen(post, loadingAuthorResult) {}
+    PostScreen(post, loadingAuthorResult, {}, {})
 }
 // endregion preview

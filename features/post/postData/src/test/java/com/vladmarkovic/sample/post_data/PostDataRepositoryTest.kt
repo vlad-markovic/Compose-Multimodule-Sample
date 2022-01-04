@@ -60,7 +60,8 @@ class PostDataRepositoryTest {
     private lateinit var spyApi: PostApi
     private lateinit var spyDao: PostDao
 
-    private lateinit var repo: PostDataRepository
+    private lateinit var postRepo: PostDataRepository
+    private lateinit var authorRepo: AuthorDataRepository
 
     @BeforeEach
     fun setup() {
@@ -70,7 +71,8 @@ class PostDataRepositoryTest {
         spyApi = spyk(fakeApi)
         spyDao = spyk(fakeDao)
 
-        repo = PostDataRepository(spyApi, spyDao, testSystem)
+        postRepo = PostDataRepository(spyApi, spyDao, testSystem)
+        authorRepo = AuthorDataRepository(spyApi, spyDao, testSystem)
     }
 
     @Nested
@@ -91,7 +93,7 @@ class PostDataRepositoryTest {
 
                 setExpiredCache(PostDatabase.POSTS_TABLE)
 
-                repo.fetchAllPosts(forceFetch)
+                postRepo.fetchAllPosts(forceFetch)
 
                 coVerify(exactly = times.first) { spyApi.fetchAllPosts() }
                 coVerify(exactly = times.second) { spyDao.getAllPosts() }
@@ -112,7 +114,7 @@ class PostDataRepositoryTest {
                 fun setup() {
                     setExpiredCache(PostDatabase.POSTS_TABLE)
                     testDispatcher.runBlockingTest {
-                        repo.fetchAllPosts(DataSource.UNSPECIFIED)
+                        postRepo.fetchAllPosts(DataSource.UNSPECIFIED)
                     }
                 }
 
@@ -143,7 +145,7 @@ class PostDataRepositoryTest {
                 fun setup() {
                     setNotExpiredCache(PostDatabase.POSTS_TABLE)
                     testDispatcher.runBlockingTest {
-                        repo.fetchAllPosts(DataSource.UNSPECIFIED)
+                        postRepo.fetchAllPosts(DataSource.UNSPECIFIED)
                     }
                 }
 
@@ -173,7 +175,7 @@ class PostDataRepositoryTest {
             @BeforeEach
             fun setup() {
                 testDispatcher.runBlockingTest {
-                    repo.fetchAllPosts(DataSource.CACHE)
+                    postRepo.fetchAllPosts(DataSource.CACHE)
                 }
             }
 
@@ -186,7 +188,7 @@ class PostDataRepositoryTest {
                 else setNotExpiredCache(PostDatabase.POSTS_TABLE)
 
                 testDispatcher.runBlockingTest {
-                    repo.fetchAllPosts(DataSource.CACHE)
+                    postRepo.fetchAllPosts(DataSource.CACHE)
                 }
 
                 coVerify(exactly = 2) { spyDao.getAllPosts() }
@@ -210,7 +212,7 @@ class PostDataRepositoryTest {
             @BeforeEach
             fun setup() {
                 testDispatcher.runBlockingTest {
-                    repo.fetchAllPosts(DataSource.REMOTE)
+                    postRepo.fetchAllPosts(DataSource.REMOTE)
                 }
             }
 
@@ -223,7 +225,7 @@ class PostDataRepositoryTest {
                 else setNotExpiredCache(PostDatabase.POSTS_TABLE)
 
                 testDispatcher.runBlockingTest {
-                    repo.fetchAllPosts(DataSource.REMOTE)
+                    postRepo.fetchAllPosts(DataSource.REMOTE)
                 }
 
                 coVerify(exactly = 2) { spyApi.fetchAllPosts() }
@@ -303,7 +305,7 @@ class PostDataRepositoryTest {
             setExpiredCache(PostDatabase.AUTHORS_TABLE)
 
             testDispatcher.runBlockingTest {
-                repo.fetchAuthor(fakeApiAuthor.id)
+                authorRepo.fetchAuthor(fakeApiAuthor.id)
 
                 coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
                 coVerify(exactly = 0) { spyDao.getAuthor(fakeApiAuthor.id) }
@@ -314,7 +316,7 @@ class PostDataRepositoryTest {
         @DisplayName("Given fetching author from api, It gets saved into database.")
         fun testCachingAuthor() {
             testDispatcher.runBlockingTest {
-                repo.fetchAuthor(fakeApiAuthor.id)
+                authorRepo.fetchAuthor(fakeApiAuthor.id)
 
                 coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
 
@@ -342,7 +344,7 @@ class PostDataRepositoryTest {
                     setExpiredCache(PostDatabase.AUTHORS_TABLE)
                 }
 
-                repo.fetchAuthor(fakeDbAuthor.id)
+                authorRepo.fetchAuthor(fakeDbAuthor.id)
 
                 val remoteTimes = if (expireCache) 1 else 0
                 val cacheTimes = if (expireCache) 0 else 1
@@ -362,7 +364,7 @@ class PostDataRepositoryTest {
             spyDao.updateLastSaved(getLastSaved(tableName, 0))
             println(spyDao.getLastSaved(tableName)?.time?.toString())
             assertEquals(0, spyDao.getLastSaved(tableName)?.time)
-            assertTrue(repo.cacheExpired(tableName))
+            assertTrue(postRepo.cacheExpired(tableName))
         }
     }
 
@@ -371,7 +373,7 @@ class PostDataRepositoryTest {
         testDispatcher.runBlockingTest {
             spyDao.updateLastSaved(getLastSaved(tableName))
             assertEquals(testSystem.currentMillis, spyDao.getLastSaved(tableName)?.time)
-            assertFalse(repo.cacheExpired(tableName))
+            assertFalse(postRepo.cacheExpired(tableName))
         }
     }
 }

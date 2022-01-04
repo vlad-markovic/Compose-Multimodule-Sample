@@ -17,6 +17,7 @@ import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -48,11 +49,22 @@ class FeedViewModel @Inject constructor(
         }
 
         refreshPosts()
+
+        viewModelScope.launch(dispatchers.io) {
+            postRepository.observePostsCache().collect { posts ->
+                withContext(dispatchers.main) {
+                    _posts.value = posts
+                }
+            }
+        }
     }
 
     fun refreshPosts(forceFetch: DataSource = DataSource.UNSPECIFIED) {
         _error.value = false
         _loading.value = true
+        if (forceFetch == DataSource.CACHE) {
+            _posts.value = emptyList()
+        }
 
         viewModelScope.launch(dispatchers.io) {
             val (posts, error) = try {

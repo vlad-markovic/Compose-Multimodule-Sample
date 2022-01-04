@@ -4,16 +4,18 @@ package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.lifecycle.SavedStateHandle
 import com.vladmarkovic.sample.post_domain.PostRepository
-import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
+import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -116,7 +118,7 @@ class FeedViewModelTest {
 
         viewModel.loading.assertValueEquals(true)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        runBlockingTest { assertEquals(emptyList(), viewModel.posts.value) }
 
         testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
 
@@ -197,10 +199,18 @@ class FeedViewModelTest {
         coVerify(exactly = 2) { mockPostRepository.fetchAllPosts(DataSource.CACHE)  }
     }
 
-    private class FakePostRepository : PostRepository {
+    class FakePostRepository : PostRepository {
+        private var initialPosts = fakeInitialPosts.toMutableList()
+
         override suspend fun fetchAllPosts(forceFetch: DataSource): List<Post> {
             delay(FAKE_FETCH_DELAY)
-            return if (forceFetch == DataSource.REMOTE) fakeRefreshedPosts else fakeInitialPosts
+            return if (forceFetch == DataSource.REMOTE) fakeRefreshedPosts else initialPosts
+        }
+
+        override fun observePostsCache(): Flow<List<Post>> = flowOf(emptyList())
+
+        override suspend fun deletePost(post: Post) {
+            initialPosts.remove(post)
         }
     }
 }

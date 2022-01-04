@@ -44,7 +44,12 @@ class PostFragment : Fragment() {
             title = stringResource(R.string.post_screen_title),
             up = upButton
         ) {
-            PostScreen(viewModel.post, viewModel.authorResult, viewModel::getDetails)
+            PostScreen(
+                viewModel.post,
+                viewModel.authorResult,
+                viewModel::getDetails,
+                viewModel::deletePost
+            )
         }
     }
 }

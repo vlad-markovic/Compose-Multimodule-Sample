@@ -6,6 +6,7 @@ import androidx.room.*
 import com.vladmarkovic.sample.post_data.model.DataAuthor
 import com.vladmarkovic.sample.post_data.model.DataPost
 import com.vladmarkovic.sample.shared_data.model.LastSaved
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PostDao {
@@ -14,11 +15,17 @@ interface PostDao {
     @Query("SELECT * FROM posts")
     suspend fun getAllPosts(): List<DataPost>?
 
+    @Query("SELECT * FROM posts")
+    fun observePosts(): Flow<List<DataPost>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPosts(posts: List<DataPost>)
 
     @Query("DELETE FROM posts")
     suspend fun deleteAllPosts()
+
+    @Query("DELETE FROM posts WHERE id = :id")
+    suspend fun deletePost(id: Int)
     // endregion table posts
 
     // region table authors

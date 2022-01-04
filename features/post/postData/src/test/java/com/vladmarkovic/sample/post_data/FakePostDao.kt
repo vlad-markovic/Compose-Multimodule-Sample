@@ -5,11 +5,12 @@ package com.vladmarkovic.sample.post_data
 import com.vladmarkovic.sample.post_data.model.DataAuthor
 import com.vladmarkovic.sample.post_data.model.DataPost
 import com.vladmarkovic.sample.shared_data.model.LastSaved
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakePostDao : PostDao {
     // region posts
     private var posts: MutableList<DataPost> = mutableListOf()
-
 
     override suspend fun getAllPosts(): List<DataPost> = posts
 
@@ -18,6 +19,12 @@ class FakePostDao : PostDao {
     }
 
     override suspend fun deleteAllPosts() = posts.clear()
+
+    override suspend fun deletePost(id: Int) {
+        posts.removeIf { it.id == id }
+    }
+
+    override fun observePosts(): Flow<List<DataPost>> = flowOf(emptyList())
     // endregion posts
 
     // region author

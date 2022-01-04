@@ -2,6 +2,7 @@
 
 package com.vladmarkovic.sample.di
 
+import com.vladmarkovic.sample.post_data.AuthorDataRepository
 import com.vladmarkovic.sample.post_data.PostDataRepository
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
@@ -18,5 +19,5 @@ interface ViewModelModule {
     fun bindPostRepository(repo: PostDataRepository): PostRepository
 
     @Binds
-    fun bindAuthorRepository(repo: PostDataRepository): AuthorRepository
+    fun bindAuthorRepository(repo: AuthorDataRepository): AuthorRepository
 }
