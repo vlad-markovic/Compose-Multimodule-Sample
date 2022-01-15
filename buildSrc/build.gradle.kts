@@ -11,3 +11,15 @@ dependencies {
     implementation(Dependencies.gradleBuildTools)
     implementation(Dependencies.kotlinGradlePlugin)
 }
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-XXLanguage:+TopLevelSealedInheritance",
+                "-XXLanguage:+AllowSealedInheritorsInDifferentFilesOfSamePackage",
+                "-XXLanguage:+SealedInterfaces"
+            )
+        }
+    }
+}

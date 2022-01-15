@@ -1,5 +1,5 @@
 configureDataModule()
 
 dependencies {
-    implementation(project(Project.featureFeedDomain))
+    implementationProject(Project.Feature.Post.domain)
 }

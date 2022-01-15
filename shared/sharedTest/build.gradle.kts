@@ -2,7 +2,7 @@ configureAndroidModule()
 configureJavaPluginExtension()
 
 dependencies {
-    implementation(project(Project.sharedDomain))
+    implementationProject(Project.Shared.domain)
     implementation(Dependencies.junitJupiterApi)
     implementation(Dependencies.androidxArchCoreCommon)
     implementation(Dependencies.archCoreTesting)

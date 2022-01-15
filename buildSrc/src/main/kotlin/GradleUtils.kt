@@ -13,7 +13,9 @@ fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
     configurePlainKotlinModule()
 
     dependencies {
-        if (includeSharedDomain) implementation(project(Project.sharedDomain))
+        if (includeSharedDomain) {
+            implementationProject(Project.Shared.domain)
+        }
 
         configureUnitTests()
     }
@@ -38,9 +40,11 @@ fun GradleProject.configureDataModule(includeSharedData: Boolean = true) {
     configureAndroidModule()
 
     dependencies {
-        if (includeSharedData) implementation(project(Project.sharedData))
-        implementation(project(Project.sharedDomain))
-        testImplementation(project(Project.sharedTest))
+        if (includeSharedData) {
+            implementationProject(Project.Shared.data)
+        }
+        implementationProject(Project.Shared.domain)
+        testImplementationProject(Project.SharedTest)
 
         implementationDataBase()
 
@@ -55,9 +59,11 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
     configureComposeInModule()
 
     dependencies {
-        if (includeSharedPresentation) implementation(project(Project.sharedPresentation))
-        implementation(project(Project.sharedDomain))
-        testImplementation(project(Project.sharedTest))
+        if (includeSharedPresentation) {
+            implementationProject(Project.Shared.presentation)
+        }
+        implementationProject(Project.Shared.domain)
+        testImplementationProject(Project.SharedTest)
 
         implementationPresentationBase()
 
@@ -138,5 +144,23 @@ fun GradleProject.configureUnitTests() {
 }
 
 val excludePackagingOptions = listOf(
-    "/META-INF/{AL2.0,LGPL2.1}"
+    "/META-INF/{AL2.0,LGPL2.1}",
+    "META-INF/proguard/androidx-annotations.pro",
+    "META-INF/gradle/incremental.annotation.processors",
+    "META-INF/DEPENDENCIES",
+    "META-INF/LICENSE",
+    "META-INF/LICENSE.txt",
+    "META-INF/license.txt",
+    "META-INF/LICENSE-notice.txt",
+    "META-INF/license-notice.txt",
+    "META-INF/LICENSE.md",
+    "META-INF/license.md",
+    "META-INF/LICENSE-notice.md",
+    "META-INF/license-notice.md",
+    "META-INF/NOTICE",
+    "META-INF/NOTICE.txt",
+    "META-INF/notice.txt",
+    "META-INF/ASL2.0",
+    "META-INF/{AL2.0,LGPL2.1}",
+    "META-INF/*.kotlin_module"
 )

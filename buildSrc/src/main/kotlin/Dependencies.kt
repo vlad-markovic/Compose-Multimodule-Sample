@@ -97,7 +97,7 @@ object Dependencies {
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     val slf4jNop =  dependency("org.slf4j","slf4j-nop", Versions.slf4jNop)
     val archCoreTesting =  dependency("androidx.arch.core", "core-testing", Versions.androidxArchCore)
-    val lifecycleRuntimeTesting = lifecycle("lifecycle-runtime-testing")
+    val lifecycleRuntimeTesting = lifecycle("lifecycle-runtime-testing", "2.3.0-alpha01")
     val coroutinesTesting = dependency("org.jetbrains.kotlinx","kotlinx-coroutines-test", Versions.coroutinesTesting)
     val hiltAndroidTesting = hilt("hilt-android-testing")
 

@@ -53,13 +53,9 @@ android {
 
 dependencies {
     // Projects
-    implementation(project(Project.sharedData))
-    implementation(project(Project.sharedDomain))
-    implementation(project(Project.sharedPresentation))
-    implementation(project(Project.mainPresentation))
-    implementation(project(Project.featureFeedData))
-    implementation(project(Project.featureFeedDomain))
-    implementation(project(Project.featureFeedPresentation))
+    implementationProject(Project.Shared)
+    implementationProject(Project.Main)
+    implementationProject(Project.Feature.Post)
 
     // Kotlin
     implementation(Dependencies.kotlinReflect)
