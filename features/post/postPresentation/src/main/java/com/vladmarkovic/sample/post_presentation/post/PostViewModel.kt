@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.model.Author
@@ -13,6 +12,7 @@ import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +24,7 @@ class PostViewModel @Inject constructor(
     private val dispatchers: DispatcherProvider,
     private val state: SavedStateHandle,
     connection: NetworkConnectivity
-) : ViewModel() {
+) : BriefActionViewModel() {
 
     companion object {
         const val POST_ARG_KEY = "POST_ARG_KEY"

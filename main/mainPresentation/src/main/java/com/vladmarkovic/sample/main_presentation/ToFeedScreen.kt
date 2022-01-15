@@ -1,5 +1,5 @@
 package com.vladmarkovic.sample.main_presentation
 
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
+import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 
-object ToFeedScreen : NavigationAction
+object ToFeedScreen : ToScreen

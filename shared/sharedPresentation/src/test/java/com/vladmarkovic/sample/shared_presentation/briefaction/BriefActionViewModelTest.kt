@@ -1,6 +1,7 @@
 package com.vladmarkovic.sample.shared_presentation.briefaction
 
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
+import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_test.AllTestSetupExtension
 import com.vladmarkovic.sample.shared_test.assertValueEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,18 +18,16 @@ import java.util.stream.Stream
 class BriefActionViewModelTest {
 
     companion object {
-        object ToSomeScreen : NavigationAction
-
         @JvmStatic
         @Suppress("Unused")
         fun actionArgs(): Stream<Arguments> = Stream.of(
-            Arguments.of(ToSomeScreen)
+            Arguments.of(CommonNavigationAction.Back)
         )
 
         @JvmStatic
         @Suppress("Unused")
         fun navArgs(): Stream<Arguments> = Stream.of(
-            Arguments.of(ToSomeScreen)
+            Arguments.of(CommonNavigationAction.Back)
         )
     }
 

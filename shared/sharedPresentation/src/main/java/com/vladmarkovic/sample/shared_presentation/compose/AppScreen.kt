@@ -1,5 +1,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 
@@ -29,6 +31,12 @@ fun AppScreen(
         ) { paddingValues ->
             val systemUiController = rememberSystemUiController()
             systemUiController.setSystemBarsColor(Color.Black)
+
+            if (up?.value is BackButton) {
+                BackHandler {
+                    up.value.action()
+                }
+            }
 
             content(paddingValues)
         }
