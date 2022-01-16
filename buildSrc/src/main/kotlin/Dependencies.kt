@@ -96,6 +96,7 @@ object Dependencies {
     val kotlinTestJunit5 =  jetbrainsKotlin("kotlin-test-junit5", Versions.kotlin)
     val kotlinTestRunnerJunit5 =  dependency("io.kotlintest","kotlintest-runner-junit5", Versions.kotlinTestRunnerJunit5)
     val mockk =  dependency("io.mockk","mockk", Versions.mockk)
+    val mockkAndroid =  dependency("io.mockk","mockk-android", Versions.mockk)
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     val slf4jNop =  dependency("org.slf4j","slf4j-nop", Versions.slf4jNop)
     val archCoreTesting =  dependency("androidx.arch.core", "core-testing", Versions.androidxArchCore)
@@ -109,11 +110,11 @@ object Dependencies {
     val androidxTestRules = androidxTest("rules")
     val androidxTestExtJunit = androidxTestExt("junit", Versions.androidxTestJunit)
     val androidxTestExtTruth = androidxTestExt("truth")
-    val googleTruth = dependency("com.google.truth","truth", Versions.googleTruth)
     val composeUiTest = composeUi("ui-test-junit4")
     // Needed for createComposeRule
     val composeUiTestManifest = composeUi("ui-test-manifest")
     val composeUiTooling = composeUi("ui-tooling")
+    val fragmentTesting = dependency("androidx.fragment","fragment-testing", Versions.fragmentVersion)
     // Espresso
     val espressoCore = androidxTestEspresso("espresso-core")
     val espressoContrib = androidxTestEspresso("espresso-contrib")

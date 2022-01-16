@@ -3,6 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.util
 
 import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.annotation.MainThread
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -225,7 +226,7 @@ inline fun <reified VM : BriefActionViewModel> actionViewModel(
 
 /** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
 fun BriefActioner.setupWith(navController: NavHostController) {
-    action.observeNonNull(navController.context as FragmentActivity) { action ->
+    action.observeNonNull(navController.context as ComponentActivity) { action ->
         navController.handleBriefAction(action)
     }
 }

@@ -32,6 +32,10 @@ fun DependencyHandler.androidTestImplementation(dependencyNotation: Any) {
 fun DependencyHandler.kapt(dependencyNotation: Any) {
     add("kapt", dependencyNotation)
 }
+
+fun DependencyHandler.kaptAndroidTest(dependencyNotation: Any) {
+    add("kaptAndroidTest", dependencyNotation)
+}
 // endregion DependencyHandler extensions
 
 // region Gradle Project extensions
@@ -70,6 +74,14 @@ fun GradleProject.testImplementationProject(project: Project, configuration: Str
     dependencies {
         project.modules.forEach { module ->
             testImplementation(project(module, configuration))
+        }
+    }
+}
+
+fun GradleProject.androidTestImplementationProject(project: Project, configuration: String? = null) {
+    dependencies {
+        project.modules.forEach { module ->
+            androidTestImplementation(project(module, configuration))
         }
     }
 }

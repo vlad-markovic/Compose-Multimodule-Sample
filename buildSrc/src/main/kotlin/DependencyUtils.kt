@@ -81,17 +81,21 @@ fun DependencyHandler.testImplementationAll() {
 }
 
 fun DependencyHandler.androidTestImplementationAll() {
+    androidTestImplementation(Dependencies.mockkAndroid)
     androidTestImplementation(Dependencies.androidxTestCore)
     androidTestImplementation(Dependencies.androidxTestRunner)
     androidTestImplementation(Dependencies.androidxTestRules)
     // Assertions
     androidTestImplementation(Dependencies.androidxTestExtJunit)
     androidTestImplementation(Dependencies.androidxTestExtTruth)
-    androidTestImplementation(Dependencies.googleTruth)
     androidTestImplementation(Dependencies.composeUiTest)
+    androidTestImplementation(Dependencies.hiltAndroidTesting)
     // Needed for createComposeRule
     debugImplementation(Dependencies.composeUiTestManifest)
     debugImplementation(Dependencies.composeUiTooling)
+    debugImplementation(Dependencies.fragmentTesting)
+    kaptAndroidTest(Dependencies.hiltAndroidCompiler)
+    kaptAndroidTest(Dependencies.androidXHiltCompiler)
     // Espresso
     androidTestImplementation(Dependencies.espressoCore)
     androidTestImplementation(Dependencies.espressoContrib)

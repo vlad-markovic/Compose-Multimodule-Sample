@@ -13,4 +13,4 @@ class TestDispatcherProvider(
     override val default: CoroutineDispatcher = main,
     override val io: CoroutineDispatcher = main,
     override val unconfined: CoroutineDispatcher = main
-) : DispatcherProvider()
+) : DispatcherProvider

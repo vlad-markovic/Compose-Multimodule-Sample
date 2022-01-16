@@ -62,6 +62,7 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
         }
         implementationProject(Project.Shared.domain)
         testImplementationProject(Project.SharedTest)
+        androidTestImplementationProject(Project.SharedTest)
 
         implementationPresentationBase()
 

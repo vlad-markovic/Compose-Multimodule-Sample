@@ -6,6 +6,7 @@ import android.content.Context
 import com.vladmarkovic.sample.connectivity.AppNetworkConnectivity
 import com.vladmarkovic.sample.log.TimberLogger
 import com.vladmarkovic.sample.shared_domain.AppSystem
+import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Logger
 import dagger.Module
@@ -13,6 +14,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -30,8 +33,16 @@ object AppModule {
     fun provideNetworkConnectivity(@ApplicationContext appContext: Context): NetworkConnectivity =
         AppNetworkConnectivity(appContext)
 
-
     @Singleton
     @Provides
     fun provideLogger(logger: TimberLogger): Logger = logger
+
+    @Singleton
+    @Provides
+    fun provideDispatcherProvider(): DispatcherProvider = object: DispatcherProvider {
+        override val main: CoroutineDispatcher = Dispatchers.Main
+        override val default = Dispatchers.Default
+        override val io = Dispatchers.IO
+        override val unconfined = Dispatchers.Unconfined
+    }
 }

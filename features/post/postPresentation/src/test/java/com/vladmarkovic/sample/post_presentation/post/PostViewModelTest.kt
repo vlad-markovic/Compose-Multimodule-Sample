@@ -3,18 +3,16 @@
 package com.vladmarkovic.sample.post_presentation.post
 
 import androidx.lifecycle.SavedStateHandle
+import com.vladmarkovic.sample.post_presentation.*
+import com.vladmarkovic.sample.post_presentation.FakeAuthorRepository.Companion.FAKE_FETCH_DELAY
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
-import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.*
-import com.vladmarkovic.sample.post_presentation.feed.FeedViewModelTest.FakePostRepository
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -39,8 +37,6 @@ class PostViewModelTest {
                 .setupCoroutines(testDispatcher)
                 .setupLiveData()
                 .setupLogger()
-
-        private const val FAKE_FETCH_DELAY = 2L
     }
 
     private lateinit var fakePostRepository: FakePostRepository
@@ -160,12 +156,5 @@ class PostViewModelTest {
         coVerify(exactly = 1) { mockPostRepository.deletePost(capture(postSlot)) }
         assertEquals(post, postSlot.captured)
         coVerify(exactly = 1) { spyViewModel.navigate(Back) }
-    }
-
-    private class FakeAuthorRepository(private val t: Throwable? = null) : AuthorRepository {
-        override suspend fun fetchAuthor(id: Int): Author {
-            t?.let { throw it } ?: delay(FAKE_FETCH_DELAY)
-            return fakeAuthor
-        }
     }
 }

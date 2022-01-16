@@ -1,5 +1,3 @@
-/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
-
 package com.vladmarkovic.sample.post_presentation
 
 import com.vladmarkovic.sample.post_domain.model.Author
@@ -22,12 +20,21 @@ private fun makeFakePost(id: Int) =
 
 // region post
 val fakeAuthor = TestAuthor(100, "David", "Dave", "dave@email.com")
-const val fakePostId = 123
-const val fakePostUserId = 456
-const val fakePostTitle = "Fake post title"
-const val fakePostContent = "Fake post content"
+const val fakePostId = 1
+const val fakePostUserId = 11
+const val fakePostTitle = "Post1"
+const val fakePostContent = "This is Post 1"
 val fakePost = PostArg(fakePostId, fakePostUserId, fakePostTitle, fakePostContent)
 val fakeAuthorSuccessResult = Result.success(fakeAuthor)
+
+val postJson = """
+    {
+    "id":$fakePostId,
+    "userId":$fakePostUserId,
+    "title":"$fakePostTitle",
+    "content":"$fakePostContent"
+    }
+""".trimIndent()
 
 data class TestAuthor(
     override val id: Int,

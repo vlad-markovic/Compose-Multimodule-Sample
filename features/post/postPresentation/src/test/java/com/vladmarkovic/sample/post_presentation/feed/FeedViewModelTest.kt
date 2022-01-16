@@ -3,11 +3,13 @@
 package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.lifecycle.SavedStateHandle
-import com.vladmarkovic.sample.post_domain.PostRepository
-import com.vladmarkovic.sample.post_domain.model.Post
+import com.vladmarkovic.sample.post_presentation.FakePostRepository
+import com.vladmarkovic.sample.post_presentation.FakePostRepository.Companion.FAKE_FETCH_DELAY
 import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
+import com.vladmarkovic.sample.post_domain.PostRepository
+import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
@@ -16,9 +18,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -45,8 +44,6 @@ class FeedViewModelTest {
                 .setupCoroutines(testDispatcher)
                 .setupLiveData()
                 .setupLogger()
-
-        private const val FAKE_FETCH_DELAY = 2L
     }
 
     private lateinit var fakePostRepository: PostRepository
@@ -169,32 +166,17 @@ class FeedViewModelTest {
 
         assertFalse(testNetworkConnectivity.isConnected)
         // One initial call
-        coVerify(exactly = 1) { mockPostRepository.fetchAllPosts()  }
+        coVerify(exactly = 1) { mockPostRepository.fetchAllPosts() }
         // First fallback to cache on error
-        coVerify(exactly = 1) { mockPostRepository.fetchAllPosts(DataSource.CACHE)  }
+        coVerify(exactly = 1) { mockPostRepository.fetchAllPosts(DataSource.CACHE) }
 
         testNetworkConnectivity.state.value = true
 
         testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
 
         // Another call after connected
-        coVerify(exactly = 1) { mockPostRepository.fetchAllPosts(DataSource.REMOTE)  }
+        coVerify(exactly = 1) { mockPostRepository.fetchAllPosts(DataSource.REMOTE) }
         // Second fallback to cache on error
-        coVerify(exactly = 2) { mockPostRepository.fetchAllPosts(DataSource.CACHE)  }
-    }
-
-    class FakePostRepository : PostRepository {
-        private var initialPosts = fakeInitialPosts.toMutableList()
-
-        override suspend fun fetchAllPosts(forceFetch: DataSource): List<Post> {
-            delay(FAKE_FETCH_DELAY)
-            return if (forceFetch == DataSource.REMOTE) fakeRefreshedPosts else initialPosts
-        }
-
-        override fun observePostsCache(): Flow<List<Post>> = flowOf(emptyList())
-
-        override suspend fun deletePost(post: Post) {
-            initialPosts.remove(post)
-        }
+        coVerify(exactly = 2) { mockPostRepository.fetchAllPosts(DataSource.CACHE) }
     }
 }
