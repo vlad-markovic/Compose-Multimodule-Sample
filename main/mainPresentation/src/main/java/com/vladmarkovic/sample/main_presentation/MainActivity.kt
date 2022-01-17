@@ -9,6 +9,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewM
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigableComposeHolder
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.FEED_SCREEN
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity(), TabNavigableComposeHolder<MainScreen, 
     @Inject
     lateinit var postsScreenHolderComposer: ScreenHolderComposer<PostsScreen>
 
+    @Inject
+    lateinit var covidTabComposer: ScreenHolderComposer<CovidScreen>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,5 +49,6 @@ class MainActivity : AppCompatActivity(), TabNavigableComposeHolder<MainScreen, 
     override fun tabComposer(tab: MainBottomTab): ScreenHolderComposer<MainScreen> =
         when (tab) {
             MainBottomTab.POSTS_TAB -> postsScreenHolderComposer as ScreenHolderComposer<MainScreen>
+            MainBottomTab.COVID_TAB -> covidTabComposer as ScreenHolderComposer<MainScreen>
         }
 }

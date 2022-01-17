@@ -2,6 +2,8 @@
 
 package com.vladmarkovic.sample.di
 
+import com.vladmarkovic.sample.covid_data.CovidInfoApiService
+import com.vladmarkovic.sample.covid_domain.CovidInfoRepo
 import com.vladmarkovic.sample.post_data.AuthorDataRepository
 import com.vladmarkovic.sample.post_data.PostDataRepository
 import com.vladmarkovic.sample.post_domain.AuthorRepository
@@ -20,4 +22,7 @@ interface ViewModelModule {
 
     @Binds
     fun bindAuthorRepository(repo: AuthorDataRepository): AuthorRepository
+
+    @Binds
+    fun bindCovidRepository(api: CovidInfoApiService): CovidInfoRepo
 }

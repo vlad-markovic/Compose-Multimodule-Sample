@@ -11,7 +11,7 @@ import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_domain.model.DataSource
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.ArgKeys
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.coEvery
 import io.mockk.coVerify

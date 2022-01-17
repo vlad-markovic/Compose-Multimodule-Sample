@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="country_comparison_screen_title">Country Comparison</string>
+
+    <!-- menu -->
+    <string name="menu_group_by_continent_checked">Ungroup by Continent</string>
+    <string name="menu_group_by_continent_unchecked">Group by Continent</string>
+    <string name="menu_sort_asc">Sort Ascending</string>
+    <string name="menu_sort_desc">Sort Descending</string>
+
+</resources>

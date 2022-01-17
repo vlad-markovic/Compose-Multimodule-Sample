@@ -29,3 +29,10 @@ inline fun NetworkConnectivity.doOnMainOnConnectionChange(
         }
     }
 }
+
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedBy(
+    ascending: Boolean,
+    crossinline selector: (T) -> R?
+): List<T> =
+    if (ascending) sortedBy { selector(it) }
+    else sortedByDescending { selector(it) }

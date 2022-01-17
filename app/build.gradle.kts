@@ -58,6 +58,7 @@ dependencies {
     implementationProject(Project.Shared)
     implementationProject(Project.Main)
     implementationProject(Project.Feature.Post)
+    implementationProject(Project.Feature.Covid)
 
     // Kotlin
     implementation(Dependencies.kotlinReflect)

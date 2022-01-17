@@ -78,6 +78,7 @@ sealed interface Project: Named {
         override val dirs: List<String> = listOf("features")
 
         object Post : Feature("post"), Layered
+        object Covid : Feature("covid"), Layered
     }
     // endregion specific project modules
 

@@ -13,12 +13,12 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class PostsScreenHolderComposer @Inject constructor(
+class PostsTabComposer @Inject constructor(
     private val feedScreenComposer: FeedScreenComposer,
     private val postScreenComposer: PostScreenComposer
 ) : ScreenHolderComposer<PostsScreen>() {
 
-    override val type: ScreenHolderType = ScreenHolderType.STANDALONE
+    override val type: ScreenHolderType = ScreenHolderType.INITIAL_TAB
 
     override val allScreens: Array<PostsScreen> = PostsScreen.values()
 

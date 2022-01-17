@@ -16,6 +16,7 @@ import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
+import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -24,15 +25,17 @@ import kotlinx.coroutines.launch
 @Suppress("FunctionName")
 abstract class ScreenComposer {
 
+    abstract val screen: Screen
+
     /** Override to specify screen title. Use [titleFromRes] if using string resource. */
     abstract val screenTitle: State<StrOrRes>
-
-    abstract val screen: Screen
 
     /** Override to specify up button icon and behaviour action. */
     open val upButton: State<UpButton?>? = null
 
     open val drawerItems: State<List<DrawerItem>>? get() = null
+
+    open val menuItems: State<Array<MenuItem>>? get() = null
 
     /** Override to specify a [Composable] content for this screen. */
     @Composable
@@ -41,7 +44,7 @@ abstract class ScreenComposer {
     @Composable
     fun TopBar(navController: NavHostController) {
         AnimateFade(navController.isScreenVisible) {
-            DefaultTopBar(screenTitle, up = upButton)
+            DefaultTopBar(screenTitle, up = upButton, menuItems = menuItems)
         }
     }
 
@@ -56,6 +59,9 @@ abstract class ScreenComposer {
 
     protected fun titleFromRes(@StringRes res: Int): MutableState<StrOrRes> =
         mutableStateOf(StrOrRes.res(res))
+
+    protected fun titleFromStr(str: String): MutableState<StrOrRes> =
+        mutableStateOf(StrOrRes.str(str))
 
     val NavController.isScreenVisible: Boolean get() =
         currentDestination?.route?.contains(screen.name) ?: true

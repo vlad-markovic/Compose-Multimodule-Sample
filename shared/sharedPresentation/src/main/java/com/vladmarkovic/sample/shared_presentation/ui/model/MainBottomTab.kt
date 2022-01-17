@@ -1,7 +1,10 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 package com.vladmarkovic.sample.shared_presentation.ui.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
@@ -19,5 +22,10 @@ enum class MainBottomTab(
         MainScreen.PostsScreen.values() as Array<MainScreen>,
         Icons.Filled.List,
         R.string.bottom_tab_posts
+    ),
+    COVID_TAB(
+        MainScreen.CovidScreen.values() as Array<MainScreen>,
+        Icons.Filled.Info,
+        R.string.bottom_tab_covid
     )
 }

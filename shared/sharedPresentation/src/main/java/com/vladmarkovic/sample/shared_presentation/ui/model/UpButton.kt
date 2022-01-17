@@ -27,7 +27,7 @@ sealed class UpButton(open val icon: ImageVector,
         }
 
     data class DrawerButton(override val action: () -> Unit) :
-        UpButton(Icons.Filled.Menu, R.string.button_drawer_label, action) {
+        UpButton(Icons.Filled.Menu, R.string.button_open_drawer_label, action) {
             constructor(vm: BriefActionViewModel) : this({ vm.display(OpenDrawer) })
         }
 }

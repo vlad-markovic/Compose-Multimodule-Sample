@@ -14,7 +14,6 @@ import com.vladmarkovic.sample.shared_domain.model.DataSource.REMOTE
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
-import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -41,9 +40,7 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer() {
     override fun Content(contentArgs: ContentArgs) {
         val viewModel: FeedViewModel = actionViewModel(contentArgs)
 
-        upButton.value = UpButton.DrawerButton {
-            viewModel.display(CommonDisplayAction.OpenDrawer)
-        }
+        upButton.value = UpButton.DrawerButton(viewModel)
 
         _drawerItems.value = rememberSaveable { defaultDrawerItems(viewModel) }
 

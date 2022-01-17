@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +46,7 @@ abstract class ScreenHolderComposer<S: Screen> {
         allScreens.forEach { screen ->
             composable(
                 route = screen.route,
-                arguments = screen.args ?: emptyList(),
+                arguments = screen.namedArgs,
             ) { backStackEntry ->
                 val contentArgs = ContentArgs(type, navController, scaffoldState, mainScope, backStackEntry)
 

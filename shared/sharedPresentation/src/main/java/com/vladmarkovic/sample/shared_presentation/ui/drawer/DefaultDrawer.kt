@@ -1,3 +1,5 @@
+/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
+
 @file:Suppress("FunctionName")
 
 package com.vladmarkovic.sample.shared_presentation.ui.drawer

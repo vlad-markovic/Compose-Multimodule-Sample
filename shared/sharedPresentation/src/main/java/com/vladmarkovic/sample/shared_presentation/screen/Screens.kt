@@ -6,30 +6,44 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
+/**
+ * A representation of a screen with defined [name] for navigation,
+ * and defined [argNames] for arguments it expects, if any.
+ */
 sealed interface Screen {
     val name: String
-    val args: List<NamedNavArgument>? get() = null
+    val argNames: List<String>? get() = null
 }
 
+/** i.e. POSTS?POST={post-json} */
 val Screen.route: String get() = name + routeArgs
 
-val Screen.routeArgsFormat: String get() = args
-    ?.joinToString("&") { "${it.name}=%s" }
-    ?.let { "?$it" } ?: ""
+/** i.e. ?POST=%s */
+val Screen.routeArgsFormat: String
+    get() = argNames
+        ?.joinToString("&") { "${it}=%s" }
+        ?.let { "?$it" } ?: ""
 
-val Screen.routeArgs: String get() = args?.let { arguments ->
-    String.format(routeArgsFormat, *arguments.map { "{${it.name}}" }.toTypedArray())
-} ?: ""
+/** i.e. ?POST={POST} */
+val Screen.routeArgs: String
+    get() = argNames?.let { arguments ->
+        String.format(routeArgsFormat, *arguments.map { "{${it}}" }.toTypedArray())
+    } ?: ""
 
+/** i.e. ?POST=[post-json] */
 fun Screen.routeArgs(args: List<String>): String {
     if (args.isEmpty()) return ""
-    if (args.size != this.args?.size ?: 0) throw IllegalArgumentException()
+    if (args.size != this.argNames?.size ?: 0) throw IllegalArgumentException()
     return String.format(routeArgsFormat, *args.toTypedArray())
 }
 
+/** Builds a [NamedNavArgument] of type String for a given [argName]. */
 fun stringArg(argName: String) =
     navArgument(argName) {
         type = NavType.StringType
         nullable = false
         defaultValue = ""
     }
+
+val Screen.namedArgs: List<NamedNavArgument>
+    get() = argNames?.map { stringArg(it) } ?: emptyList()
