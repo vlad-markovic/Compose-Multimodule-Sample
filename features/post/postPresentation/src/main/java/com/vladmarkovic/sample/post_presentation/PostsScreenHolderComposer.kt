@@ -6,8 +6,9 @@ import com.vladmarkovic.sample.post_presentation.feed.FeedScreenComposer
 import com.vladmarkovic.sample.post_presentation.post.PostScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.*
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.*
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
@@ -16,6 +17,8 @@ class PostsScreenHolderComposer @Inject constructor(
     private val feedScreenComposer: FeedScreenComposer,
     private val postScreenComposer: PostScreenComposer
 ) : ScreenHolderComposer<PostsScreen>() {
+
+    override val type: ScreenHolderType = ScreenHolderType.STANDALONE
 
     override val allScreens: Array<PostsScreen> = PostsScreen.values()
 

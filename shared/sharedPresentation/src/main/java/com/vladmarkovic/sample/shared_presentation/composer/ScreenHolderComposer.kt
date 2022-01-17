@@ -2,6 +2,7 @@
 
 package com.vladmarkovic.sample.shared_presentation.composer
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.*
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -11,6 +12,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAc
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.route
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Holds a number of scoped screens specifying all it holds, and serves as a screen selector.
@@ -18,6 +20,8 @@ import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
  */
 @Suppress("FunctionName")
 abstract class ScreenHolderComposer<S: Screen> {
+
+    abstract val type: ScreenHolderType
 
     /** Override providing values() of the scoped screens enum */
     abstract val allScreens: Array<S>
@@ -33,18 +37,24 @@ abstract class ScreenHolderComposer<S: Screen> {
     abstract fun composer(screen: S): ScreenComposer
 
     /** Composes screens and a "navigation branch" with "composable" function for each screen. */
-    fun NavGraphBuilder.composeNavGraph(navController: NavHostController) {
+    fun NavGraphBuilder.composeNavGraph(
+        navController: NavHostController,
+        scaffoldState: ScaffoldState,
+        mainScope: CoroutineScope
+    ) {
         allScreens.forEach { screen ->
             composable(
                 route = screen.route,
                 arguments = screen.args ?: emptyList(),
-            ) {
-                BackHandler(navController)
+            ) { backStackEntry ->
+                val contentArgs = ContentArgs(type, navController, scaffoldState, mainScope, backStackEntry)
+
+                BackHandler(contentArgs)
 
                 this@ScreenHolderComposer.screen.value = screen
 
                 with(composer(screen)) {
-                    Content(navController)
+                    Content(contentArgs)
                 }
             }
         }
@@ -57,9 +67,15 @@ abstract class ScreenHolderComposer<S: Screen> {
     }
 
     @Composable
-    fun BackHandler(navController: NavHostController) {
-        navController.enableOnBackPressed(false)
-        val actionViewModel = actionViewModel<BriefActionViewModel>(navController)
+    fun ComposeDrawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope) {
+        val screen by currentScreen
+        composer(screen).Drawer(scaffoldState, mainScope)
+    }
+
+    @Composable
+    fun BackHandler(contentArgs: ContentArgs) {
+        contentArgs.navController.enableOnBackPressed(false)
+        val actionViewModel = actionViewModel<BriefActionViewModel>(contentArgs)
         androidx.activity.compose.BackHandler { actionViewModel.navigate(Back) }
     }
 }

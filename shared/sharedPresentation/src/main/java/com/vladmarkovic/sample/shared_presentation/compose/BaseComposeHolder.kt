@@ -6,11 +6,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * For decorating Activity, to provide base Compose Scaffold structure,
@@ -23,25 +25,42 @@ interface BaseComposeHolder {
     fun MainContent() {
         val navController = rememberNavController()
         val scaffoldState = rememberScaffoldState()
+        val mainScope = rememberCoroutineScope()
 
         AppTheme {
             Scaffold(
                 scaffoldState = scaffoldState,
-                topBar = { TopBar(scaffoldState, navController) },
+                topBar = { TopBar(navController) },
+                bottomBar = { BottomBar() },
+                drawerContent = { Drawer(scaffoldState, mainScope) }
             ) {
                 val systemUiController = rememberSystemUiController()
                 systemUiController.setSystemBarsColor(Color.Black)
 
-                ScaffoldContent(navController)
+                ScaffoldContent(navController, scaffoldState, mainScope)
             }
         }
     }
 
     @Composable
-    fun TopBar(scaffoldState: ScaffoldState, navController: NavHostController) {
+    fun TopBar(navController: NavHostController) {
         // No op
     }
 
     @Composable
-    fun ScaffoldContent(navController: NavHostController)
+    fun BottomBar() {
+        // No op
+    }
+
+    @Composable
+    fun Drawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope) {
+        // No op
+    }
+
+    @Composable
+    fun ScaffoldContent(
+        navController: NavHostController,
+        scaffoldState: ScaffoldState,
+        mainScope: CoroutineScope
+    )
 }

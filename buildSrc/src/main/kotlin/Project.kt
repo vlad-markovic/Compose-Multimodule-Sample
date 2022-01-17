@@ -68,6 +68,9 @@ sealed interface Project: Named {
     object SharedTest : TopNameOrganised("shared") {
         override val fullName: String = "${shortName}Test"
     }
+    object SharedAndroidTest : TopNameOrganised("shared") {
+        override val fullName: String = "${shortName}AndroidTest"
+    }
 
     object Main : TopNameOrganised("main"), Presentation
 

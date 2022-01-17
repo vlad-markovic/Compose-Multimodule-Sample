@@ -5,9 +5,11 @@ package com.vladmarkovic.sample.shared_presentation.ui.model
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.OpenDrawer
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 
 sealed class UpButton(open val icon: ImageVector,
@@ -22,5 +24,10 @@ sealed class UpButton(open val icon: ImageVector,
     data class BackButton(override val action: () -> Unit) :
         UpButton(Icons.Filled.ArrowBack, R.string.button_back_label, action) {
             constructor(vm: BriefActionViewModel) : this({ vm.navigate(Back) })
+        }
+
+    data class DrawerButton(override val action: () -> Unit) :
+        UpButton(Icons.Filled.Menu, R.string.button_drawer_label, action) {
+            constructor(vm: BriefActionViewModel) : this({ vm.display(OpenDrawer) })
         }
 }

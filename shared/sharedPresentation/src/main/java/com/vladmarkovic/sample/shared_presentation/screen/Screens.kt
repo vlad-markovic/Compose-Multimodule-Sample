@@ -5,22 +5,10 @@ package com.vladmarkovic.sample.shared_presentation.screen
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys.POST
 
 sealed interface Screen {
     val name: String
     val args: List<NamedNavArgument>? get() = null
-}
-
-enum class PostsScreen : Screen {
-    FEED_SCREEN,
-    POST_SCREEN {
-        override val args: List<NamedNavArgument> = listOf(stringArg(POST.name))
-    };
-
-    enum class ArgKeys {
-        POST
-    }
 }
 
 val Screen.route: String get() = name + routeArgs
@@ -39,7 +27,7 @@ fun Screen.routeArgs(args: List<String>): String {
     return String.format(routeArgsFormat, *args.toTypedArray())
 }
 
-private fun stringArg(argName: String) =
+fun stringArg(argName: String) =
     navArgument(argName) {
         type = NavType.StringType
         nullable = false

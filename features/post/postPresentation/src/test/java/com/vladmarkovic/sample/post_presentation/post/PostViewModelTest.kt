@@ -9,7 +9,7 @@ import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

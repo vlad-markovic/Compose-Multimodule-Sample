@@ -3,4 +3,12 @@
 
     <string name="button_retry_label">Retry</string>
     <string name="button_back_label">Back</string>
+    <string name="button_drawer_label">Open Drawer</string>
+
+    <!-- Drawer -->
+    <string name="drawer_item_toast">Toast</string>
+
+    <!-- Bottom Tabs -->
+    <string name="bottom_tab_posts">Posts</string>
+
 </resources>

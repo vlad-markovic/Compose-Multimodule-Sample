@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.navigation.NavHostController
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
+import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
@@ -30,12 +30,12 @@ class PostScreenComposer @Inject constructor() : ScreenComposer() {
     override val screen: Screen = PostsScreen.POST_SCREEN
 
     @Composable
-    override fun Content(navController: NavHostController) {
-        val viewModel: PostViewModel = actionViewModel(navController)
+    override fun Content(contentArgs: ContentArgs) {
+        val viewModel: PostViewModel = actionViewModel(contentArgs)
 
         upButton.value = BackButton(viewModel)
 
-        AnimateSlide(navController.isScreenVisible, -1) {
+        AnimateSlide(contentArgs.navController.isScreenVisible, -1) {
             PostScreen(
                 viewModel.post,
                 viewModel.authorResult,

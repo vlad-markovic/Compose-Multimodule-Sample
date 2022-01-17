@@ -4,23 +4,31 @@ package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
-import com.vladmarkovic.sample.shared_presentation.navigation.NavigableComposeHolder
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.FEED_SCREEN
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigableComposeHolder
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.FEED_SCREEN
+import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
+import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /** Main holder activity, holding composers for Composable-s. */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigableComposeHolder {
+class MainActivity : AppCompatActivity(), TabNavigableComposeHolder<MainScreen, MainBottomTab> {
 
-    override val startDestination: String = FEED_SCREEN.name
+    @Inject
+    override lateinit var tabNavViewModelFactory: TabNavViewModelFactory<MainScreen, MainBottomTab>
+
+    override val tabNav: TabNavigable<MainScreen, MainBottomTab> by tabNavViewModels()
+
+    override val initialScreen: MainScreen = FEED_SCREEN
+
+    override val tabs: List<MainBottomTab> = MainBottomTab.values().asList()
 
     @Inject
     lateinit var postsScreenHolderComposer: ScreenHolderComposer<PostsScreen>
@@ -33,16 +41,9 @@ class MainActivity : AppCompatActivity(), NavigableComposeHolder {
         }
     }
 
-    override fun NavGraphBuilder.navGraph(navController: NavHostController) {
-        with(postsScreenHolderComposer) {
-            composeNavGraph(navController)
+    @Suppress("UNCHECKED_CAST")
+    override fun tabComposer(tab: MainBottomTab): ScreenHolderComposer<MainScreen> =
+        when (tab) {
+            MainBottomTab.POSTS_TAB -> postsScreenHolderComposer as ScreenHolderComposer<MainScreen>
         }
-    }
-
-    @Composable
-    override fun TopBar(scaffoldState: ScaffoldState, navController: NavHostController) {
-        with(postsScreenHolderComposer) {
-            ComposeTopBar(navController)
-        }
-    }
 }

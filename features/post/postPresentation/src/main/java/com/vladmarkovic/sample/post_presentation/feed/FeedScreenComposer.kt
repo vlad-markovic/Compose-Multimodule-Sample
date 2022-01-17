@@ -3,17 +3,24 @@
 package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.navigation.NavHostController
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.feed.compose.FeedScreen
 import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource.REMOTE
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
+import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen
+import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
@@ -25,11 +32,22 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer() {
 
     override val screen: Screen = PostsScreen.FEED_SCREEN
 
-    @Composable
-    override fun Content(navController: NavHostController) {
-        val viewModel: FeedViewModel = actionViewModel(navController)
+    override val upButton: MutableState<UpButton> = mutableStateOf(UpButton.DrawerButton {})
 
-        AnimateSlide(navController.isScreenVisible) {
+    override val drawerItems: State<List<DrawerItem>> get() = _drawerItems
+    private val _drawerItems: MutableState<List<DrawerItem>> = mutableStateOf(emptyList())
+
+    @Composable
+    override fun Content(contentArgs: ContentArgs) {
+        val viewModel: FeedViewModel = actionViewModel(contentArgs)
+
+        upButton.value = UpButton.DrawerButton {
+            viewModel.display(CommonDisplayAction.OpenDrawer)
+        }
+
+        _drawerItems.value = rememberSaveable { defaultDrawerItems(viewModel) }
+
+        AnimateSlide(contentArgs.navController.isScreenVisible) {
             FeedScreen(
                 loading = viewModel.loading,
                 posts = viewModel.posts,

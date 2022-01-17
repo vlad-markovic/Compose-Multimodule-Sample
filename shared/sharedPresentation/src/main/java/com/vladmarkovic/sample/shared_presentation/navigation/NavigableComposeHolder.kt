@@ -2,34 +2,47 @@
 
 package com.vladmarkovic.sample.shared_presentation.navigation
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.vladmarkovic.sample.shared_presentation.compose.BaseComposeHolder
+import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * For decorating an Activity to give it Compose Navigation functionality,
  * extracted to provide composition over inheritance.
  */
 @Suppress("FunctionName")
-interface NavigableComposeHolder : BaseComposeHolder {
+interface NavigableComposeHolder<S : Screen> : BaseComposeHolder {
 
-    val startDestination: String
+    val initialScreen: S
+
+    val initialDestination: String get() = initialScreen.name
 
     val initialGraphModifier: Modifier get() = Modifier
 
-    fun NavGraphBuilder.navGraph(navController: NavHostController)
+    fun NavGraphBuilder.navGraph(
+        navController: NavHostController,
+        scaffoldState: ScaffoldState,
+        mainScope: CoroutineScope
+    )
 
     @Composable
-    override fun ScaffoldContent(navController: NavHostController) {
+    override fun ScaffoldContent(
+        navController: NavHostController,
+        scaffoldState: ScaffoldState,
+        mainScope: CoroutineScope
+    ) {
         NavHost(
             navController = navController,
-            startDestination = startDestination,
+            startDestination = initialDestination,
             modifier = initialGraphModifier
         ) {
-            navGraph(navController)
+            navGraph(navController, scaffoldState, mainScope)
         }
     }
 }
