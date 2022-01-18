@@ -6,14 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.feed.compose.FeedScreen
 import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource.REMOTE
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.DrawerScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -25,7 +24,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class FeedScreenComposer @Inject constructor() : ScreenComposer() {
+class FeedScreenComposer @Inject constructor() : DrawerScreenComposer() {
 
     override val screenTitle: State<StrOrRes> = titleFromRes(R.string.feed_screen_title)
 
@@ -38,11 +37,13 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer() {
 
     @Composable
     override fun Content(contentArgs: ContentArgs) {
+        super.Content(contentArgs)
+
         val viewModel: FeedViewModel = actionViewModel(contentArgs)
 
         upButton.value = UpButton.DrawerButton(viewModel)
 
-        _drawerItems.value = rememberSaveable { defaultDrawerItems(viewModel) }
+        _drawerItems.value = defaultDrawerItems(viewModel)
 
         AnimateSlide(contentArgs.navController.isScreenVisible) {
             FeedScreen(

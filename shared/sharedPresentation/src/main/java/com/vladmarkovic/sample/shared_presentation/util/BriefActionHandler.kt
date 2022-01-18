@@ -15,8 +15,8 @@ import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.route
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
 
-// region Compose / NavController
 fun ContentArgs.handleBriefAction(action: BriefAction) {
     return when (action) {
         is NavigationAction -> navigate(action)
@@ -30,6 +30,7 @@ private fun ContentArgs.navigate(action: NavigationAction) =
     when(action) {
         is Tab<*> -> context.asActivity.setCurrentTab(action)
         is ToScreen -> navController.navigate(action.route)
+        is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
         is CommonNavigationAction -> navigate(action)
         else -> throw IllegalArgumentException("Unhandled navigation action: $action")
     }
@@ -38,7 +39,6 @@ private fun ContentArgs.navigate(action: CommonNavigationAction) =
     when (action) {
         is CommonNavigationAction.Back -> onBack()
     }
-// endregion Compose / NavController
 
 /** Enables separate back stack navigation per tab. */
 fun <S: Screen, T: Tab<S>> NavHostController.navigate(tab: T) {

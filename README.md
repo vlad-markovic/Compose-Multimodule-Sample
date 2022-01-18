@@ -20,9 +20,13 @@ Most feature modules would be split into "layers": "_data_", "_domain_" and "_pr
 
 ## Branches
 
-There are two branches:
+There are three branches:
+
 - `fragments` branch, with fragments holding compose views, with fragment per screen, and custom navigation via view models using BriefAction pattern.
+  
 - `compose` branch, several commits on top of the `fragments` branch, refactoring to remove fragments, and use compose screens only, with compose navigation. There are benefits to this, such as being able to apply animations, but a lot of the Compose features don't seem fully mature yet.
+
+- `tabs` branch, several commits on top of the `compose` branch, adds full scaffold structure (bottom tabs - adding another tab, drawer and menu).
 
 ## BriefAction
 
@@ -170,6 +174,10 @@ Main Compose structure is defined in the base `ScreenHolderComposer` and `Screen
         }
     }
 ```
+
+## `tabs` branch
+
+Continues on top of the `compose` branch, adding another tab and full scaffold structure - bottom tabs, drawer and menu.
 
 ## Hilt Injection
 - Application (`App`) class is annotated with `@HiltAndroidApp` which enables injection into Application class and initiates Hilt injection (in Application onCreate so dependencies are available after that point).

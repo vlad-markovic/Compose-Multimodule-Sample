@@ -5,10 +5,12 @@ package com.vladmarkovic.sample.di
 import android.content.Context
 import com.vladmarkovic.sample.connectivity.AppNetworkConnectivity
 import com.vladmarkovic.sample.log.TimberLogger
+import com.vladmarkovic.sample.nav.TopNavHandler
 import com.vladmarkovic.sample.shared_domain.AppSystem
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Logger
+import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,4 +47,8 @@ object AppModule {
         override val io = Dispatchers.IO
         override val unconfined = Dispatchers.Unconfined
     }
+
+    @Singleton
+    @Provides
+    fun provideTopNavHandler(): TopNavigationActionHandler = TopNavHandler()
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.vladmarkovic.sample.settings_presentation">
+
+    <application>
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/drawer_item_settings"
+            android:theme="@style/Theme.Sample.NoActionBar">
+        </activity>
+    </application>
+
+</manifest>

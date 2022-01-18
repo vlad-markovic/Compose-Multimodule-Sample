@@ -66,7 +66,7 @@ fun Up(_upButton: State<UpButton?>) {
     upButton?.let {
         IconButton(it.action) {
             Icon(
-                it.icon,
+                imageVector = it.icon,
                 contentDescription = stringResource(it.contentDescriptionRes),
                 tint = Color.White
             )

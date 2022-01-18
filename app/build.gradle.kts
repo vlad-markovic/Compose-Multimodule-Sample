@@ -57,6 +57,7 @@ dependencies {
     // Projects
     implementationProject(Project.Shared)
     implementationProject(Project.Main)
+    implementationProject(Project.Feature.Settings)
     implementationProject(Project.Feature.Post)
     implementationProject(Project.Feature.Covid)
 

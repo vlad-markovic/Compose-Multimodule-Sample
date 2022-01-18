@@ -18,14 +18,13 @@ import javax.inject.Inject
 class CovidTabComposer @Inject constructor(
     private val comparisonComposer: CovidCountryComparisonScreenComposer,
     private val dataComposer: CovidCountryInfoScreenComposer
-) : ScreenHolderComposer<CovidScreen>() {
+) : ScreenHolderComposer<CovidScreen> {
 
     override val type: ScreenHolderType = ScreenHolderType.TAB
 
-    override var screen: MutableState<CovidScreen> =
-        mutableStateOf(CovidScreen.COVID_COUNTRY_COMPARISON)
-
     override val allScreens: Array<CovidScreen> = CovidScreen.values()
+
+    override var currentScreen: MutableState<CovidScreen> = mutableStateOf(allScreens.first())
 
     override fun composer(screen: CovidScreen): ScreenComposer = when (screen) {
         CovidScreen.COVID_COUNTRY_COMPARISON -> comparisonComposer

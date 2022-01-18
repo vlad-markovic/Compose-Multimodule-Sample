@@ -15,30 +15,34 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 
 @Composable
 fun DefaultDrawer(_drawerItems: State<List<DrawerItem>>, closeDrawer: () -> Unit) {
     val drawerItems by _drawerItems
 
-    Spacer(Modifier.padding(8.dp))
+    Spacer(Modifier.padding(Dimens.m / 2))
 
     Column(
         Modifier
             .wrapContentWidth()
-            .padding(16.dp)
+            .padding(Dimens.m)
     ) {
         drawerItems.forEach { item ->
             Row(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .fillMaxWidth()
                     .clickable {
                         closeDrawer()
                         item.onClick()
                     }
+                    .then(Modifier.padding(Dimens.m))
+
             ) {
                 Icon(
-                    modifier = Modifier.padding(end = 4.dp).align(Alignment.CenterVertically),
+                    modifier = Modifier
+                        .padding(end = Dimens.m / 4)
+                        .align(Alignment.CenterVertically),
                     imageVector = item.icon,
                     contentDescription = null
                 )

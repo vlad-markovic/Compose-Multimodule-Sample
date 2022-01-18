@@ -77,6 +77,8 @@ sealed interface Project: Named {
     sealed class Feature(override val shortName: String) : NameOrganised {
         override val dirs: List<String> = listOf("features")
 
+        object Settings : Feature("settings"), Presentation
+
         object Post : Feature("post"), Layered
         object Covid : Feature("covid"), Layered
     }

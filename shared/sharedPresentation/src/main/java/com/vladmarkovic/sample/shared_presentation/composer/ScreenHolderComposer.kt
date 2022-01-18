@@ -20,22 +20,21 @@ import kotlinx.coroutines.CoroutineScope
  * Also saves and holds the state for the current screen.
  */
 @Suppress("FunctionName")
-abstract class ScreenHolderComposer<S: Screen> {
+interface ScreenHolderComposer<S: Screen> {
 
-    abstract val type: ScreenHolderType
+    val type: ScreenHolderType
 
     /** Override providing values() of the scoped screens enum */
-    abstract val allScreens: Array<S>
+    val allScreens: Array<S>
 
     /** Set to first screen to be initial screen */
-    protected open val screen: MutableState<S> by lazy { mutableStateOf(allScreens.first()) }
-    val currentScreen: State<S> by lazy { screen }
+    val currentScreen: MutableState<S>
 
     /**
      * Inject [ScreenComposer]s for each screen, and override to provide
      * with when statement a composer for each screen.
      */
-    abstract fun composer(screen: S): ScreenComposer
+    fun composer(screen: S): ScreenComposer
 
     /** Composes screens and a "navigation branch" with "composable" function for each screen. */
     fun NavGraphBuilder.composeNavGraph(
@@ -52,7 +51,7 @@ abstract class ScreenHolderComposer<S: Screen> {
 
                 BackHandler(contentArgs)
 
-                this@ScreenHolderComposer.screen.value = screen
+                currentScreen.value = screen
 
                 with(composer(screen)) {
                     Content(contentArgs)
@@ -63,7 +62,7 @@ abstract class ScreenHolderComposer<S: Screen> {
 
     @Composable
     fun ComposeTopBar(navController: NavHostController) {
-        val screen by this@ScreenHolderComposer.screen
+        val screen by currentScreen
         composer(screen).TopBar(navController)
     }
 
