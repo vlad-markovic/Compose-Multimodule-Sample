@@ -89,7 +89,7 @@ fun CountryList(
                             )
                             Text(item.sortField,
                                 Modifier
-                                    .width(70.dp)
+                                    .width(90.dp)
                                     .padding(end = 10.dp))
                         }
                         Text(item.info.country, Modifier.padding(end = 10.dp))

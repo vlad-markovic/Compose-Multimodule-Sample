@@ -12,7 +12,7 @@ import javax.inject.Inject
 class CovidInfoApiService @Inject constructor(private val httpClient: HttpClient) : CovidInfoRepo {
 
     companion object {
-        private const val URL_COVID_INFO = "https://corona.lmao.ninja/v3/covid-19/countries"
+        private const val URL_COVID_INFO = "https://disease.sh/v3/covid-19/countries"
     }
 
     override suspend fun getAffectedCountries(): List<CountryCovidInfo> =
