@@ -2,14 +2,12 @@
 
 package com.vladmarkovic.sample.covid_presentation.country_comparison
 
-import com.vladmarkovic.sample.shared_test.*
 import com.vladmarkovic.sample.covid_domain.CovidInfoRepo
-import com.vladmarkovic.sample.shared_test.CustomizableEachTestSetupExtension
-import com.vladmarkovic.sample.shared_test.assertValueEquals
+import com.vladmarkovic.sample.shared_test.*
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -24,7 +22,7 @@ class CountryComparisonViewModelTest {
         @ExperimentalCoroutinesApi
         @Suppress("Unused")
         val testSetupExtension: CustomizableEachTestSetupExtension =
-            CustomizableEachTestSetupExtension(TestCoroutineDispatcher())
+            CustomizableEachTestSetupExtension(UnconfinedTestDispatcher())
                 .setupLiveData()
                 .setupCoroutines()
                 .setupLogger()
