@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.flowOf
 class FakePostRepository : PostRepository {
 
     companion object{
-        const val FAKE_FETCH_DELAY = 2L
+        const val FAKE_FETCH_DELAY = 3L
     }
 
     private var initialPosts = fakeInitialPosts.toMutableList()
 
     override suspend fun fetchAllPosts(forceFetch: DataSource): List<Post> {
-        delay(FAKE_FETCH_DELAY)
+        delay(FAKE_FETCH_DELAY - 1)
         return if (forceFetch == DataSource.REMOTE) fakeRefreshedPosts else initialPosts
     }
 
-    override fun observePostsCache(): Flow<List<Post>> = flowOf(emptyList())
+    override fun observePostsCache(): Flow<List<Post>> = flowOf(initialPosts)
 
     override suspend fun deletePost(post: Post) {
         initialPosts.remove(post)

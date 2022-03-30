@@ -83,8 +83,8 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
 /** Common for data and domain modules. */
 fun GradleProject.configureAndroidModule() {
     applyPlugin(Plugins.androidLibrary)
-    applyPlugin(Plugins.kotlinKapt)
     applyPlugin(Plugins.kotlinAndroid)
+    applyPlugin(Plugins.kotlinKapt)
     applyPlugin(Plugins.kotlinSerialization)
     applyPlugin(Plugins.hilt)
 

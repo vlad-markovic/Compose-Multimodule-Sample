@@ -11,8 +11,8 @@ import io.mockk.coVerify
 import io.mockk.slot
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
@@ -29,7 +29,7 @@ import kotlin.test.assertTrue
 class PostDataRepositoryTest {
 
     companion object {
-        private val testDispatcher = TestCoroutineDispatcher()
+        private val testDispatcher = UnconfinedTestDispatcher()
 
         @JvmField
         @RegisterExtension
@@ -87,7 +87,7 @@ class PostDataRepositoryTest {
             times: Pair<Int, Int>,
             posts: List<DataPost>
         ) {
-            testDispatcher.runBlockingTest {
+            runTest {
                 spyDao.insertPosts(fakeDbPosts)
                 spyDao.updateLastSaved(getLastSaved(PostDatabase.POSTS_TABLE))
 
@@ -113,7 +113,7 @@ class PostDataRepositoryTest {
                 @BeforeEach
                 fun setup() {
                     setExpiredCache(PostDatabase.POSTS_TABLE)
-                    testDispatcher.runBlockingTest {
+                    runTest {
                         postRepo.fetchAllPosts(DataSource.UNSPECIFIED)
                     }
                 }
@@ -122,7 +122,7 @@ class PostDataRepositoryTest {
                 @Order(1)
                 @DisplayName("Then it fetches posts from remote")
                 fun thenItFetchesPostsFromRemote() {
-                    testDispatcher.runBlockingTest {
+                    runTest {
                         coVerify(exactly = 1) { spyApi.fetchAllPosts() }
                     }
                 }
@@ -131,7 +131,7 @@ class PostDataRepositoryTest {
                 @Order(2)
                 @DisplayName("And it does NOT fetch posts from cache")
                 fun andItDoesNotFetchPostsFromCache() {
-                    testDispatcher.runBlockingTest {
+                    runTest {
                         coVerify(exactly = 0) { spyDao.getAllPosts() }
                     }
                 }
@@ -144,7 +144,7 @@ class PostDataRepositoryTest {
                 @BeforeEach
                 fun setup() {
                     setNotExpiredCache(PostDatabase.POSTS_TABLE)
-                    testDispatcher.runBlockingTest {
+                    runTest {
                         postRepo.fetchAllPosts(DataSource.UNSPECIFIED)
                     }
                 }
@@ -152,7 +152,7 @@ class PostDataRepositoryTest {
                 @Test
                 @DisplayName("Then it fetches posts from the cache")
                 fun thenItFetchesPostsFromRemote() {
-                    testDispatcher.runBlockingTest {
+                    runTest {
                         coVerify(exactly = 1) { spyDao.getAllPosts() }
                     }
                 }
@@ -160,7 +160,7 @@ class PostDataRepositoryTest {
                 @Test
                 @DisplayName("And it does not fetch posts from the remote")
                 fun andItDoesNotFetchPostsFromCache() {
-                    testDispatcher.runBlockingTest {
+                    runTest {
                         coVerify(exactly = 0) { spyApi.fetchAllPosts() }
                     }
                 }
@@ -174,7 +174,7 @@ class PostDataRepositoryTest {
 
             @BeforeEach
             fun setup() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     postRepo.fetchAllPosts(DataSource.CACHE)
                 }
             }
@@ -187,7 +187,7 @@ class PostDataRepositoryTest {
                 if (expired == "has") setExpiredCache(PostDatabase.POSTS_TABLE)
                 else setNotExpiredCache(PostDatabase.POSTS_TABLE)
 
-                testDispatcher.runBlockingTest {
+                runTest {
                     postRepo.fetchAllPosts(DataSource.CACHE)
                 }
 
@@ -198,7 +198,7 @@ class PostDataRepositoryTest {
             @Order(2)
             @DisplayName("And it does not fetch posts from remote")
             fun andItDoesNotFetchPostsFromCache() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     coVerify(exactly = 0) { spyApi.fetchAllPosts() }
                 }
             }
@@ -211,7 +211,7 @@ class PostDataRepositoryTest {
 
             @BeforeEach
             fun setup() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     postRepo.fetchAllPosts(DataSource.REMOTE)
                 }
             }
@@ -224,7 +224,7 @@ class PostDataRepositoryTest {
                 if (expired == "has") setExpiredCache(PostDatabase.POSTS_TABLE)
                 else setNotExpiredCache(PostDatabase.POSTS_TABLE)
 
-                testDispatcher.runBlockingTest {
+                runTest {
                     postRepo.fetchAllPosts(DataSource.REMOTE)
                 }
 
@@ -235,7 +235,7 @@ class PostDataRepositoryTest {
             @Order(2)
             @DisplayName("And it does not fetch posts from the cache")
             fun andItDoesNotFetchPostsFromCache() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     coVerify(exactly = 0) { spyDao.getAllPosts() }
                 }
             }
@@ -244,7 +244,7 @@ class PostDataRepositoryTest {
             @Order(3)
             @DisplayName("And it clears current posts cache")
             fun andItClearsCurrentPostsCache() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     coVerify(exactly = 1) { spyDao.deleteAllPosts() }
                 }
             }
@@ -253,7 +253,7 @@ class PostDataRepositoryTest {
             @Order(4)
             @DisplayName("And it clears current authors cache")
             fun andItClearsCurrentAuthorsCache() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     coVerify(exactly = 1) { spyDao.deleteAllAuthors() }
                 }
             }
@@ -262,7 +262,7 @@ class PostDataRepositoryTest {
             @Order(5)
             @DisplayName("And it clears current last saved cache")
             fun andItClearsCurrentLastSavedCache() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     coVerify(exactly = 1) { spyDao.deleteAllLastSaved() }
                 }
             }
@@ -271,7 +271,7 @@ class PostDataRepositoryTest {
             @Order(6)
             @DisplayName("And it caches newly fetched posts")
             fun andItCachesNewlyFetchedPosts() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     coVerify(exactly = 1) { spyDao.insertPosts(fakeApiPosts) }
                     assertEquals(fakeApiPosts, spyDao.getAllPosts())
                 }
@@ -281,7 +281,7 @@ class PostDataRepositoryTest {
             @Order(7)
             @DisplayName("And saves time posts were last cached")
             fun andItSavesTimePostsWereLastCached() {
-                testDispatcher.runBlockingTest {
+                runTest {
                     val lastSaved = getLastSaved(PostDatabase.POSTS_TABLE)
                     val lastSavedSlot = slot<LastSaved>()
                     coVerify(exactly = 1) { spyDao.updateLastSaved(capture(lastSavedSlot)) }
@@ -304,7 +304,7 @@ class PostDataRepositoryTest {
         fun testInitiallyFetchingAuthor() {
             setExpiredCache(PostDatabase.AUTHORS_TABLE)
 
-            testDispatcher.runBlockingTest {
+            runTest {
                 authorRepo.fetchAuthor(fakeApiAuthor.id)
 
                 coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
@@ -315,7 +315,7 @@ class PostDataRepositoryTest {
         @Test
         @DisplayName("Given fetching author from api, It gets saved into database.")
         fun testCachingAuthor() {
-            testDispatcher.runBlockingTest {
+            runTest {
                 authorRepo.fetchAuthor(fakeApiAuthor.id)
 
                 coVerify(exactly = 1) { spyApi.fetchAuthor(fakeApiAuthor.id) }
@@ -336,7 +336,7 @@ class PostDataRepositoryTest {
         @ParameterizedTest(name = "When cache expired is ''{0}'', author is fetched from the ''{1}''")
         @DisplayName("Given fetching author, after initially saved before")
         fun testFetchingAuthorAfterSavedAndCacheExpired(expireCache: Boolean, source: String) {
-            testDispatcher.runBlockingTest {
+            runTest {
                 spyDao.insertAuthor(fakeDbAuthor)
                 spyDao.updateLastSaved(getLastSaved(PostDatabase.AUTHORS_TABLE))
 
@@ -360,9 +360,8 @@ class PostDataRepositoryTest {
             LastSaved = LastSaved(tableName, millis)
 
     private fun setExpiredCache(tableName: String) {
-        testDispatcher.runBlockingTest {
+        runTest {
             spyDao.updateLastSaved(getLastSaved(tableName, 0))
-            println(spyDao.getLastSaved(tableName)?.time?.toString())
             assertEquals(0, spyDao.getLastSaved(tableName)?.time)
             assertTrue(postRepo.cacheExpired(tableName))
         }
@@ -370,7 +369,7 @@ class PostDataRepositoryTest {
 
     @Suppress("SameParameterValue")
     private fun setNotExpiredCache(tableName: String) {
-        testDispatcher.runBlockingTest {
+        runTest {
             spyDao.updateLastSaved(getLastSaved(tableName))
             assertEquals(testSystem.currentMillis, spyDao.getLastSaved(tableName)?.time)
             assertFalse(postRepo.cacheExpired(tableName))

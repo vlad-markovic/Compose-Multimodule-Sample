@@ -18,8 +18,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -33,7 +34,7 @@ import kotlin.test.assertTrue
 class FeedViewModelTest {
 
     companion object {
-        private val testDispatcher = TestCoroutineDispatcher()
+        private val testDispatcher = UnconfinedTestDispatcher()
         private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
@@ -75,13 +76,13 @@ class FeedViewModelTest {
     fun testInitialState() {
         viewModel.loading.assertValueEquals(true)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(0, viewModel.posts.value.count()) }
+        runTest { assertEquals(fakeInitialPosts.size, viewModel.posts.value.count()) }
 
-        testSetupExtension.testDispatcher!!.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.loading.assertValueEquals(false)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        runTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
     }
 
     @Test
@@ -90,19 +91,19 @@ class FeedViewModelTest {
                 "It shows loading while fetching and shows refreshed posts after fetched"
     )
     fun testRefreshingPosts() {
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.refreshPosts(DataSource.REMOTE)
 
         viewModel.loading.assertValueEquals(true)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        runTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.loading.assertValueEquals(false)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(fakeRefreshedPosts, viewModel.posts.value) }
+        runTest { assertEquals(fakeRefreshedPosts, viewModel.posts.value) }
     }
 
     @Test
@@ -111,38 +112,39 @@ class FeedViewModelTest {
                 "It shows loading while fetching and shows saved posts after fetched"
     )
     fun testReFetchingPosts() {
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.refreshPosts(DataSource.CACHE)
 
         viewModel.loading.assertValueEquals(true)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(emptyList(), viewModel.posts.value) }
+        runTest { assertEquals(emptyList(), viewModel.posts.value) }
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.loading.assertValueEquals(false)
         viewModel.error.assertValueEquals(false)
-        runBlockingTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        runTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
     }
 
     @Test
     @DisplayName("Given loading posts, When an error occurs, It shows an error message")
     fun testFailureToFetchPosts() {
-        fakePostRepository = mockk()
-        coEvery { fakePostRepository.fetchAllPosts(DataSource.UNSPECIFIED) }.throws(IOException())
-        coEvery { fakePostRepository.fetchAllPosts(DataSource.REMOTE) }.throws(IOException())
-        coEvery { fakePostRepository.fetchAllPosts(DataSource.CACHE) }.returns(emptyList())
+        val mockPostRepository = mockk<PostRepository>()
+        coEvery { mockPostRepository.fetchAllPosts(DataSource.UNSPECIFIED) }.throws(IOException())
+        coEvery { mockPostRepository.fetchAllPosts(DataSource.REMOTE) }.throws(IOException())
+        coEvery { mockPostRepository.fetchAllPosts(DataSource.CACHE) }.returns(emptyList())
+        coEvery { mockPostRepository.observePostsCache() }.returns(flowOf(emptyList()))
 
         val viewModel = FeedViewModel(
-            fakePostRepository,
+            mockPostRepository,
             testDispatchers,
             testNetworkConnectivity
         )
 
         viewModel.refreshPosts(DataSource.REMOTE)
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         assertTrue(viewModel.error.value)
     }
@@ -157,6 +159,7 @@ class FeedViewModelTest {
         coEvery { mockPostRepository.fetchAllPosts() }.throws(IOException())
         coEvery { mockPostRepository.fetchAllPosts(DataSource.REMOTE) }.throws(IOException())
         coEvery { mockPostRepository.fetchAllPosts(DataSource.CACHE) }.returns(emptyList())
+        every { mockPostRepository.observePostsCache() }.returns(flowOf(emptyList()))
 
         FeedViewModel(
             mockPostRepository,
@@ -172,7 +175,7 @@ class FeedViewModelTest {
 
         testNetworkConnectivity.state.value = true
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         // Another call after connected
         coVerify(exactly = 1) { mockPostRepository.fetchAllPosts(DataSource.REMOTE) }

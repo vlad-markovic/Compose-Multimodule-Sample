@@ -5,6 +5,12 @@ buildscript {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven {
+            url = java.net.URI("https://oss.sonatype.org/content/repositories/snapshots")
+            content {
+                includeModule("com.google.dagger", "hilt-android-gradle-plugin")
+            }
+        }
     }
     dependencies {
         classpath(Dependencies.kotlinGradlePlugin)

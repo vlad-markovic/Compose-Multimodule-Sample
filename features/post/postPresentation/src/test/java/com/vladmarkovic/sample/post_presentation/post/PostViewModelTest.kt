@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.shared_presentation.screen.PostsScreen.ArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -26,7 +26,7 @@ import kotlin.test.assertFalse
 class PostViewModelTest {
 
     companion object {
-        private val testDispatcher = TestCoroutineDispatcher()
+        private val testDispatcher = UnconfinedTestDispatcher()
         private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
@@ -75,7 +75,7 @@ class PostViewModelTest {
         assertEquals(fakePost, viewModel.post)
         viewModel.authorResult.assertValueEquals(null)
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         viewModel.authorResult.assertValueEquals(fakeAuthorSuccessResult)
     }
@@ -97,7 +97,7 @@ class PostViewModelTest {
             testNetworkConnectivity
         )
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         assertEquals(exception, viewModel.authorResult.value!!.exceptionOrNull()!!)
     }
@@ -125,7 +125,7 @@ class PostViewModelTest {
 
         testNetworkConnectivity.state.value = true
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
         // Another call after connected
         coVerify(exactly = 2) { mockAuthorRepository.fetchAuthor(any()) }
     }
@@ -144,7 +144,7 @@ class PostViewModelTest {
             testNetworkConnectivity
         )
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         val post = fakeInitialPosts.first()
 

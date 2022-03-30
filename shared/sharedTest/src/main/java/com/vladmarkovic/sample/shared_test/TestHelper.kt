@@ -11,12 +11,10 @@ import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.log.Logger
 import com.vladmarkovic.sample.shared_domain.log.LoggerEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.extension.*
 
 // In order to test LiveData, the `InstantTaskExecutorRule` rule needs to be applied via JUnit.
@@ -55,7 +53,7 @@ fun instantTaskExecutorRuleFinish() = ArchTaskExecutor.getInstance().setDelegate
  */
 @ExperimentalCoroutinesApi
 class EachTestSetupExtension : BeforeEachCallback, AfterEachCallback {
-    private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 
     override fun beforeEach(context: ExtensionContext?) {
         instantTaskExecutorRuleStart()
@@ -68,7 +66,7 @@ class EachTestSetupExtension : BeforeEachCallback, AfterEachCallback {
 
     private fun resetAll() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+        testDispatcher.scheduler.runCurrent()
         instantTaskExecutorRuleFinish()
     }
 }
@@ -83,7 +81,7 @@ class EachTestSetupExtension : BeforeEachCallback, AfterEachCallback {
  */
 @ExperimentalCoroutinesApi
 class AllTestSetupExtension : BeforeAllCallback, AfterAllCallback {
-    private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 
     override fun beforeAll(context: ExtensionContext?) {
         // Because beforeAll/afterAll are called for each @Nested inner test class, we need to first resetAll().
@@ -98,7 +96,7 @@ class AllTestSetupExtension : BeforeAllCallback, AfterAllCallback {
 
     private fun resetAll() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+        testDispatcher.scheduler.runCurrent()
         instantTaskExecutorRuleFinish()
     }
 }
@@ -122,9 +120,9 @@ class AllTestSetupExtension : BeforeAllCallback, AfterAllCallback {
 sealed class BaseCustomizableTestSetupExtension(
     open val dispatcher: CoroutineDispatcher? = null,
     private val setupLiveData: Boolean = false
-) : TestCoroutineScope by TestCoroutineScope() {
+) : CoroutineScope by TestScope() {
 
-    val testDispatcher: TestCoroutineDispatcher? get() = dispatcher as? TestCoroutineDispatcher?
+    val testDispatcher: TestDispatcher? get() = dispatcher as? TestDispatcher?
 
     protected fun setup() {
         dispatcher?.let { Dispatchers.setMain(it) }
@@ -134,7 +132,7 @@ sealed class BaseCustomizableTestSetupExtension(
     protected fun tearDown() {
         dispatcher?.let {
             Dispatchers.resetMain()
-            testDispatcher?.cleanupTestCoroutines()
+            testDispatcher?.scheduler?.runCurrent()
         }
         if (setupLiveData) instantTaskExecutorRuleFinish()
     }
@@ -195,7 +193,7 @@ data class CustomizableEachTestSetupExtension(
 
 // region BeforeAllTestSetupExtension builder functions.
 @ExperimentalCoroutinesApi
-fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = TestCoroutineDispatcher())
+fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = UnconfinedTestDispatcher())
         : CustomizableAllTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
@@ -231,7 +229,7 @@ fun CustomizableAllTestSetupExtension.setupLogger(): CustomizableAllTestSetupExt
 
 // region BeforeEachTestSetupExtension builder functions.
 @ExperimentalCoroutinesApi
-fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = TestCoroutineDispatcher())
+fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = UnconfinedTestDispatcher())
         : CustomizableEachTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
