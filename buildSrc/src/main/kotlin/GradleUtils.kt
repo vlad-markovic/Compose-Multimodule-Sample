@@ -75,7 +75,7 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
         defaultConfig {
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
-        packagingOptions {
+        packaging {
             resources.excludes.addAll(excludePackagingOptions)
         }
     }
@@ -96,6 +96,10 @@ fun GradleProject.configureAndroidModule() {
     androidLibrary {
         configureAndroidSdkVersions()
 
+        defaultConfig {
+            namespace = "com.vladmarkovic.sample"
+        }
+
         dependencies {
             implementation(Dependencies.androidxCoreExtensions)
             implementation(Dependencies.hiltAndroid)
@@ -108,7 +112,7 @@ fun LibraryExtension.configureAndroidSdkVersions() {
     compileSdk = Versions.compileSdk
     defaultConfig {
         minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
+        testOptions.targetSdk = Versions.targetSdk
     }
 }
 

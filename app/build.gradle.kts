@@ -12,6 +12,8 @@ android {
 
     defaultConfig {
         applicationId = "com.vladmarkovic.sample"
+        namespace = "com.vladmarkovic.sample"
+
         minSdk = GlobalVersions.minSdk
         targetSdk = GlobalVersions.targetSdk
         versionCode = 1
@@ -43,7 +45,7 @@ android {
         kotlinCompilerExtensionVersion = GlobalVersions.kotlinCompilerExtension
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.addAll(excludePackagingOptions)
     }
 

@@ -53,6 +53,7 @@ fun DependencyHandler.implementationRoom() {
 }
 
 fun DependencyHandler.implementationCompose() {
+    implementation(Dependencies.composeBom)
     implementation(Dependencies.composeCompiler)
     implementation(Dependencies.composeActivity)
     implementation(Dependencies.composeUi)
@@ -77,7 +78,6 @@ fun DependencyHandler.testImplementationAll() {
     testImplementation(Dependencies.coroutinesTesting)
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     testImplementation(Dependencies.slf4jNop)
-    testImplementation(Dependencies.hiltAndroidTesting)
 }
 
 fun DependencyHandler.androidTestImplementationAll() {

@@ -45,17 +45,17 @@ object Dependencies {
     // endregion Hilt injection
 
     // region Compose
+    val composeBom = dependency("androidx.compose", "compose-bom", Versions.composeBom)
     val composeCompiler = dependency("androidx.compose.compiler", "compiler", Versions.compose)
-    val composeActivity = dependency("androidx.activity", "activity-compose", Versions.composeActivity)
+    val composeActivity = dependency("androidx.activity", "activity-compose")
     val composeUi = composeUi("ui")
     val composeUiToolingPreview = composeUi("ui-tooling-preview")
-    val composeMaterial = dependency("androidx.compose.material", "material", Versions.compose)
-    val composeRuntimeLiveData = dependency("androidx.compose.runtime", "runtime-livedata", Versions.compose)
+    val composeMaterial = dependency("androidx.compose.material", "material")
+    val composeRuntimeLiveData = dependency("androidx.compose.runtime", "runtime-livedata")
     val composeSwipeRefresh = googleAccompanist("accompanist-swiperefresh")
     val composeSystemUiController = googleAccompanist("accompanist-systemuicontroller")
 
-    private fun composeUi(module: String, version: String = Versions.compose) =
-        dependency("androidx.compose.ui", module, version)
+    private fun composeUi(module: String) = dependency("androidx.compose.ui", module)
 
     private fun googleAccompanist(module: String, version: String = Versions.googleAccompanist) =
         dependency("com.google.accompanist", module, version)
@@ -79,7 +79,7 @@ object Dependencies {
     val lifecycleViewModel = lifecycle("lifecycle-viewmodel-ktx")
     val lifecycleRuntimeExtensions = lifecycle("lifecycle-runtime-ktx")
     val lifecycleLiveDataExtensions = lifecycle("lifecycle-livedata-ktx")
-    val fragmentExtensions = dependency("androidx.fragment", "fragment-ktx", Versions.fragmentExtensions)
+    val fragmentExtensions = dependency("androidx.fragment", "fragment-ktx", Versions.fragmentVersion)
 
     private fun lifecycle(module: String, version: String = Versions.lifecycle) =
         dependency("androidx.lifecycle", module, version)
@@ -108,7 +108,7 @@ object Dependencies {
     val androidxTestCore = androidxTest("core")
     val androidxTestRunner = androidxTest("runner")
     val androidxTestRules = androidxTest("rules")
-    val androidxTestExtJunit = androidxTestExt("junit", Versions.androidxTestJunit)
+    val androidxTestExtJunit = androidxTestExt("junit", Versions.androidxTestExtJunit)
     val androidxTestExtTruth = androidxTestExt("truth")
     val composeUiTest = composeUi("ui-test-junit4")
     // Needed for createComposeRule
