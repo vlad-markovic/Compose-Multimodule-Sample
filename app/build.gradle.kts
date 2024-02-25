@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.vladmarkovic.sample"
-        namespace = "com.vladmarkovic.sample"
+        namespace = applicationId
 
         minSdk = GlobalVersions.minSdk
         targetSdk = GlobalVersions.targetSdk
@@ -34,6 +34,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = GlobalVersions.java
+        targetCompatibility = GlobalVersions.java
+    }
+
     kotlinOptions {
         jvmTarget = GlobalVersions.java.toString()
     }
@@ -47,11 +52,6 @@ android {
 
     packaging {
         resources.excludes.addAll(excludePackagingOptions)
-    }
-
-    compileOptions {
-        sourceCompatibility = GlobalVersions.java
-        targetCompatibility = GlobalVersions.java
     }
 }
 

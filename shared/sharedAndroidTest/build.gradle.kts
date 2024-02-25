@@ -5,6 +5,10 @@ configureJavaPluginExtension()
 
 configureComposeInModule()
 
+androidLibrary {
+    namespace = "com.vladmarkovic.sample.shared_android_test"
+}
+
 dependencies {
     implementationProject(Project.Shared.domain)
     implementationProject(Project.Shared.presentation)

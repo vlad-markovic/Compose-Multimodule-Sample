@@ -2,6 +2,10 @@
 
 configureDataModule()
 
+androidLibrary {
+    namespace = "com.vladmarkovic.sample.covid_data"
+}
+
 dependencies {
     implementationProject(Project.Feature.Covid.domain)
 }

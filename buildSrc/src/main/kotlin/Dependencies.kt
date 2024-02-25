@@ -21,6 +21,8 @@ object Dependencies {
     val ktorClientCore = ktor("ktor-client-core")
     val ktorClientCio = ktor("ktor-client-cio")
     val ktorClientSerialization = ktor("ktor-client-serialization")
+    val ktorClientContentNegotiation = ktor("ktor-client-content-negotiation")
+    val ktorSerializationKotlinxJson = ktor("ktor-serialization-kotlinx-json")
 
     private fun ktor(module: String, version: String = Versions.ktor): String =
         dependency("io.ktor", module, version)
@@ -48,6 +50,7 @@ object Dependencies {
     val composeBom = dependency("androidx.compose", "compose-bom", Versions.composeBom)
     val composeCompiler = dependency("androidx.compose.compiler", "compiler", Versions.compose)
     val composeActivity = dependency("androidx.activity", "activity-compose")
+    val composeLifecycle = dependency("androidx.lifecycle", "lifecycle-runtime-compose")
     val composeUi = composeUi("ui")
     val composeUiToolingPreview = composeUi("ui-tooling-preview")
     val composeMaterial = dependency("androidx.compose.material", "material")

@@ -3,6 +3,7 @@
 configurePresentationModule()
 
 androidLibrary {
+    namespace = "com.vladmarkovic.sample.post_presentation"
     sourceSets {
         getByName("test").java.srcDirs(
             "src/test/java",

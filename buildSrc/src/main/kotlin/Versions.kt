@@ -15,7 +15,7 @@ internal object  Versions {
     const val gradleBuildTools = "8.2.2"
 
     // region Kotlin
-    const val kotlin = "1.9.21"
+    const val kotlin = "1.9.22"
     const val ktor = "2.3.8"
     const val kotlinCoroutines = "1.8.0"
     const val kotlinSerialization = "1.6.3"

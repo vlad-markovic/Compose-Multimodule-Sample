@@ -3,6 +3,10 @@
 configurePresentationModule()
 
 androidLibrary {
+    namespace = "com.vladmarkovic.sample.covid_presentation"
+}
+
+androidLibrary {
     dependencies {
         implementationProject(Project.Feature.Covid.domain)
     }

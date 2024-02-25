@@ -40,6 +40,8 @@ private fun DependencyHandler.implementationKtor() {
     implementation(Dependencies.ktorClientCore)
     implementation(Dependencies.ktorClientCio)
     implementation(Dependencies.ktorClientSerialization)
+    implementation(Dependencies.ktorClientContentNegotiation)
+    implementation(Dependencies.ktorSerializationKotlinxJson)
 }
 
 fun DependencyHandler.implementationKotlinCoroutines() {
@@ -56,6 +58,7 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeBom)
     implementation(Dependencies.composeCompiler)
     implementation(Dependencies.composeActivity)
+    implementation(Dependencies.composeLifecycle)
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.composeMaterial)

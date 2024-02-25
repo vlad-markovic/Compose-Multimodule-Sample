@@ -2,6 +2,10 @@
 
 configureDataModule()
 
+androidLibrary {
+    namespace = "com.vladmarkovic.sample.post_data"
+}
+
 dependencies {
     implementationProject(Project.Feature.Post.domain)
 }

@@ -8,9 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,9 +21,25 @@ object AppModule {
     @Singleton
     @Provides
     fun provideHttpClient(): HttpClient = HttpClient(CIO) {
-        install(JsonFeature) {
-            val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
-            serializer = KotlinxSerializer(json)
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    prettyPrint = true
+                    ignoreUnknownKeys = true
+                }
+            )
         }
+        expectSuccess = true
+//        HttpResponseValidator {
+//            handleResponseExceptionWithRequest { exception, request ->
+//                val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+//                val exceptionResponse = clientException.response
+//                if (exceptionResponse.status == HttpStatusCode.NotFound) {
+//                    val exceptionResponseText = exceptionResponse.bodyAsText()
+//                    throw clientException
+//                    // TODO throw CustomException(exceptionResponse, exceptionResponseText)
+//                }
+//            }
+//        }
     }
 }

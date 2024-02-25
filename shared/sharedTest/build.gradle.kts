@@ -3,12 +3,15 @@
 configureAndroidModule()
 configureJavaPluginExtension()
 
+androidLibrary {
+    namespace = "com.vladmarkovic.sample.shared_test"
+}
+
 dependencies {
     implementationProject(Project.Shared.domain)
     implementation(Dependencies.junitJupiterApi)
     implementation(Dependencies.androidxArchCoreCommon)
     implementation(Dependencies.archCoreTesting)
-    implementation(Dependencies.composeUi)
     implementation(Dependencies.kotlinTest)
     implementation(Dependencies.coroutinesTesting)
 }
