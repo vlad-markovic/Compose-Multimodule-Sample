@@ -81,6 +81,6 @@ class PostViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
 
-        state.set(ArgKeys.POST.name, null)
+        state[ArgKeys.POST.name] = null
     }
 }

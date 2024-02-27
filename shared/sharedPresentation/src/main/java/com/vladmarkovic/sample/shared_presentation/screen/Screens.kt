@@ -2,6 +2,8 @@
 
 package com.vladmarkovic.sample.shared_presentation.screen
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -10,6 +12,8 @@ import androidx.navigation.navArgument
  * A representation of a screen with defined [name] for navigation,
  * and defined [argNames] for arguments it expects, if any.
  */
+@Stable
+@Immutable
 sealed interface Screen {
     val name: String
     val argNames: List<String>? get() = null
@@ -33,7 +37,7 @@ val Screen.routeArgs: String
 /** i.e. ?POST=[post-json] */
 fun Screen.routeArgs(args: List<String>): String {
     if (args.isEmpty()) return ""
-    if (args.size != this.argNames?.size ?: 0) throw IllegalArgumentException()
+    if (args.size != (this.argNames?.size ?: 0)) throw IllegalArgumentException()
     return String.format(routeArgsFormat, *args.toTypedArray())
 }
 

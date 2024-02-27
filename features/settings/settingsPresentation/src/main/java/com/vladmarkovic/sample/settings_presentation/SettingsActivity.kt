@@ -10,6 +10,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.vladmarkovic.sample.settings_presentation.main.SettingsMainScreenComposer
 import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenManager
+import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenMonitor
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
@@ -18,22 +20,16 @@ import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 /** [ScreenHolderComposer] holding [SettingsScreen]s. */
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity(),
     NavigableComposeHolder<SettingsScreen>,
-    ScreenHolderComposer<SettingsScreen> {
+    ScreenHolderComposer<SettingsScreen>,
+    CurrentScreenMonitor<SettingsScreen> by CurrentScreenManager(SettingsScreen.entries) {
 
     override val type: ScreenHolderType = ScreenHolderType.STANDALONE
-
-    override val allScreens: List<SettingsScreen> = SettingsScreen.entries
-
-    override val initialScreen: SettingsScreen = SettingsScreen.MAIN
-
-    override val currentScreen: MutableStateFlow<SettingsScreen> = MutableStateFlow(initialScreen)
 
     @Inject
     lateinit var settingsMainScreenComposer: SettingsMainScreenComposer

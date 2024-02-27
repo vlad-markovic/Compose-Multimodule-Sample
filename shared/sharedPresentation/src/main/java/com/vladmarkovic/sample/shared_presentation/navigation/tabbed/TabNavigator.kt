@@ -15,6 +15,8 @@ class TabNavigator<S: Screen, T: Tab<S>>(initialTab: T)  {
     val tab: StateFlow<T> = _tab.asStateFlow()
 
     fun navigateTo(tab: T) {
-        _tab.value = tab
+        if (_tab.value != tab) {
+            _tab.value = tab
+        }
     }
 }

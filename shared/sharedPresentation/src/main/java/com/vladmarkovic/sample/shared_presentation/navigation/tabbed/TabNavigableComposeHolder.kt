@@ -3,10 +3,13 @@
 package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material.*
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -16,8 +19,10 @@ import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.navigation.NavigableComposeHolder
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.util.LogComposition
 import com.vladmarkovic.sample.shared_presentation.util.collectWith
 import com.vladmarkovic.sample.shared_presentation.util.navigate
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.drop
 
@@ -51,6 +56,7 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
                 route = tab.name
             ) {
                 with(tabComposer(tab)) {
+                    Lumber.e("setup navigation to tab: $tab in ${this.javaClass.simpleName}, currentScreen: ${currentScreen.value}")
                     composeNavGraph(navController, scaffoldState, mainScope)
                 }
             }
@@ -75,24 +81,22 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
         // Don't show tabs if there is only one.
         if (tabs.size == 1) return
 
-        val currentTab by tabNav.tab.collectAsState()
-
-        BottomBar(currentTab)
+        BottomBar(tabNav.tab.safeValue)
     }
 
     @Composable
     fun BottomBar(currentTab: T) {
-        Lumber.v("recompose currentTab: $currentTab")
+        LogComposition("currentTab: $currentTab in ${this.javaClass.simpleName}")
         BottomAppBar {
             BottomNavigation {
                 tabs.forEach { tab ->
-                    Lumber.v("BottomBar, navigation: ${tabNav.hashCode()} ${tab.name}")
+                    Lumber.e("BottomBar, setup navigation: ${tabNav.hashCode()} ${tab.name}")
                     BottomNavigationItem(
                         icon = { Icon(tab.icon, contentDescription = null) },
                         label = { Text(stringResource(tab.textRes)) },
                         alwaysShowLabel = false,
                         selected = currentTab == tab,
-                        onClick = { if (currentTab != tab) tabNav.navigate(tab) }
+                        onClick = { tabNav.navigate(tab) }
                     )
                 }
             }
@@ -101,16 +105,14 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
 
     @Composable
     override fun TopBar(navController: NavHostController) {
-        val tab by tabNav.tab.collectAsState(mainTab)
+        val tab = tabNav.tab.safeValue
         Lumber.v("recompose")
         tabComposer(tab).ComposeTopBar(navController)
     }
 
     @Composable
     override fun Drawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope) {
-        val tab by tabNav.tab.collectAsState(mainTab)
-        Lumber.v("recompose")
-        tabComposer(tab).ComposeDrawer(scaffoldState, mainScope)
+        tabComposer(tabNav.tab.safeValue).ComposeDrawer(scaffoldState, mainScope)
     }
     // endregion NavigableComposeHolder overrides
 }

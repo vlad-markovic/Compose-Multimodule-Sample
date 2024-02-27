@@ -26,7 +26,6 @@ buildscript {
         classpath(Dependencies.gradleBuildTools)
         classpath(Dependencies.hiltPlugin)
         classpath(Dependencies.kotlinSerialization)
-        classpath("com.squareup:javapoet:1.13.0")
     }
 }
 

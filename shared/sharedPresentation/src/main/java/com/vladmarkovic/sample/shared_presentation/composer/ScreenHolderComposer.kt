@@ -3,10 +3,11 @@
 package com.vladmarkovic.sample.shared_presentation.composer
 
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
@@ -16,22 +17,15 @@ import com.vladmarkovic.sample.shared_presentation.screen.route
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Holds a number of scoped screens specifying all it holds, and serves as a screen selector.
  * Also saves and holds the state for the current screen.
  */
 @Suppress("FunctionName")
-interface ScreenHolderComposer<S: Screen> {
+interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
 
     val type: ScreenHolderType
-
-    /** Override providing values() of the scoped screens enum */
-    val allScreens: List<S>
-
-    /** Set to first screen to be initial screen */
-    val currentScreen: MutableStateFlow<S>
 
     /**
      * Inject [ScreenComposer]s for each screen, and override to provide
@@ -50,11 +44,12 @@ interface ScreenHolderComposer<S: Screen> {
                 route = screen.route,
                 arguments = screen.namedArgs,
             ) { backStackEntry ->
+                Lumber.e("composable nav to screen $screen in ${this@ScreenHolderComposer.javaClass.simpleName}")
                 val contentArgs = ContentArgs(type, navController, scaffoldState, mainScope, backStackEntry)
 
                 BackHandler(contentArgs)
 
-                LaunchedEffect(contentArgs) { currentScreen.value = screen }
+                updateCurrentScreen(screen)
 
                 with(composer(screen)) {
                     Content(contentArgs)

@@ -4,6 +4,7 @@ package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
@@ -46,9 +47,11 @@ class MainActivity : AppCompatActivity(), TabNavigableComposeHolder<MainScreen, 
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun tabComposer(tab: MainBottomTab): ScreenHolderComposer<MainScreen> =
-        when (tab) {
+    override fun tabComposer(tab: MainBottomTab): ScreenHolderComposer<MainScreen> {
+        Lumber.e("Resolve tab composer: $tab")
+        return when (tab) {
             MainBottomTab.POSTS_TAB -> postsScreenHolderComposer as ScreenHolderComposer<MainScreen>
             MainBottomTab.COVID_TAB -> covidTabComposer as ScreenHolderComposer<MainScreen>
         }
+    }
 }
