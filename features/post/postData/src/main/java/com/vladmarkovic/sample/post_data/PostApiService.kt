@@ -6,6 +6,7 @@ import com.vladmarkovic.sample.post_data.model.DataAuthor
 import com.vladmarkovic.sample.post_data.model.DataPost
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
+import com.vladmarkovic.sample.shared_data.util.unpack
 import dagger.hilt.android.scopes.ViewModelScoped
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -20,8 +21,8 @@ class PostApiService @Inject constructor(private val httpClient: HttpClient) : P
     }
 
     override suspend fun fetchAllPosts(): List<DataPost> =
-        httpClient.get("$BASE_URL/posts")
+        httpClient.get("$BASE_URL/posts").unpack()
 
     override suspend fun fetchAuthor(id: Int): DataAuthor =
-        httpClient.get("$BASE_URL/users/$id")
+        httpClient.get("$BASE_URL/users/$id").unpack()
 }

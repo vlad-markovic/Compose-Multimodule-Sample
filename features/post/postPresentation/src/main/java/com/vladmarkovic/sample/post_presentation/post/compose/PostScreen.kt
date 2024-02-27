@@ -10,16 +10,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.R
+import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
+import com.vladmarkovic.sample.post_presentation.R.string.delete_post_button_label
 import com.vladmarkovic.sample.shared_presentation.compose.Error
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
@@ -29,7 +27,7 @@ import java.io.IOException
 @Composable
 fun PostScreen(
     post: Post,
-    _authorResult: State<Result<Author>?>,
+    authorResult: Result<Author>?,
     onFetchAuthor: () -> Unit,
     onDeletePost: (Post) -> Unit
 ) {
@@ -40,21 +38,19 @@ fun PostScreen(
             .padding(Dimens.m)
             .verticalScroll(scrollState)
     ) {
-        val authorResult by _authorResult
-
         PostInfo(post)
 
         if (authorResult == null) {
             LoadingIndicator()
         } else {
             when {
-                authorResult?.isFailure == true -> {
-                    Error(stringResource(R.string.error_on_author_fetch)) {
+                authorResult.isFailure -> {
+                    Error(stringResource(error_on_author_fetch)) {
                         onFetchAuthor()
                     }
                 }
-                authorResult?.isSuccess == true -> {
-                    AuthorInfo(authorResult!!.getOrNull()!!)
+                authorResult.isSuccess -> {
+                    AuthorInfo(authorResult.getOrNull()!!)
                 }
             }
 
@@ -62,7 +58,7 @@ fun PostScreen(
                 modifier = Modifier.padding(Dimens.m),
                 onClick = { onDeletePost(post) }
             ) {
-                Text(stringResource(R.string.delete_post_button_label))
+                Text(stringResource(delete_post_button_label))
             }
         }
     }
@@ -104,8 +100,8 @@ private fun ColumnScope.LoadingIndicator() {
 }
 
 // region preview
-private val successAuthorResult = mutableStateOf(
-    Result.success(
+private val successAuthorResult
+    get() = Result.success(
         object : Author {
             override val id: Int = 3
             override val name: String = "Author"
@@ -113,14 +109,14 @@ private val successAuthorResult = mutableStateOf(
             override val email: String = "auth@email.com"
         }
     )
-)
 
-private val post = object: Post {
-    override val id: Int = 1
-    override val userId: Int = 2
-    override val title: String = "Title"
-    override val content: String = "Content"
-}
+private val post
+    get() = object: Post {
+        override val id: Int = 1
+        override val userId: Int = 2
+        override val title: String = "Title"
+        override val content: String = "Content"
+    }
 
 @Preview
 @Composable
@@ -128,9 +124,7 @@ private fun PreviewSuccessPostScreen() {
     PostScreen(post, successAuthorResult, {}, {})
 }
 
-private val failureAuthorResult = mutableStateOf(
-    Result.failure<Author>(IOException())
-)
+private val failureAuthorResult = Result.failure<Author>(IOException())
 
 @Preview
 @Composable
@@ -138,11 +132,9 @@ private fun PreviewFailurePostScreen() {
     PostScreen(post, failureAuthorResult, {}, {})
 }
 
-private val loadingAuthorResult = mutableStateOf(null)
-
 @Preview
 @Composable
 private fun PreviewLoadingPostScreen() {
-    PostScreen(post, loadingAuthorResult, {}, {})
+    PostScreen(post, authorResult = null, {}, {})
 }
 // endregion preview

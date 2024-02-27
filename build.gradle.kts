@@ -1,5 +1,14 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
+plugins {
+    id("com.android.application") apply false
+    id("com.android.library") apply false
+    id("org.jetbrains.kotlin.android") apply false
+//    id("com.google.devtools.ksp") apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+//    id("dagger.hilt.android.plugin") apply false
+}
+
 buildscript {
     repositories {
         gradlePluginPortal()
@@ -17,6 +26,7 @@ buildscript {
         classpath(Dependencies.gradleBuildTools)
         classpath(Dependencies.hiltPlugin)
         classpath(Dependencies.kotlinSerialization)
+        classpath("com.squareup:javapoet:1.13.0")
     }
 }
 

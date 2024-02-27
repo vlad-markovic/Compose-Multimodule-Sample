@@ -10,20 +10,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.shared_presentation.util.padding
-import com.vladmarkovic.sample.shared_presentation.util.str
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 @Composable
-fun CountryCovidInfoScreen(info: CountryCovidInfo, title: MutableState<StrOrRes>) {
-    title.value = info.country.str
+fun CountryCovidInfoScreen(info: CountryCovidInfo) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier

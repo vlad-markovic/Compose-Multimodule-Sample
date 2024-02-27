@@ -2,9 +2,6 @@
 
 package com.vladmarkovic.sample.covid_presentation.country_comparison
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.covid_domain.CovidInfoRepo
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
@@ -14,6 +11,9 @@ import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -21,21 +21,21 @@ import javax.inject.Inject
 @HiltViewModel
 class CountryComparisonViewModel @Inject constructor(private val covidInfoRepo: CovidInfoRepo) : BriefActionViewModel() {
 
-    private val _showLoading: MutableState<Boolean> = mutableStateOf(false)
-    val showLoading: State<Boolean> = _showLoading
+    private val _showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showLoading: StateFlow<Boolean> = _showLoading.asStateFlow()
 
-    private val _covidInfo: MutableState<List<CountryCovidInfo>> = mutableStateOf(listOf())
-    private val _items: MutableState<List<CountryComparisonItem>> = mutableStateOf(listOf())
-    val items: State<List<CountryComparisonItem>> = _items
+    private val _covidInfo: MutableStateFlow<List<CountryCovidInfo>> = MutableStateFlow(listOf())
+    private val _items: MutableStateFlow<List<CountryComparisonItem>> = MutableStateFlow(listOf())
+    val items: StateFlow<List<CountryComparisonItem>> = _items.asStateFlow()
 
-    private val _sortBy: MutableState<CountryComparisonSort> = mutableStateOf(COUNTRY_NAME)
-    val sortBy: State<CountryComparisonSort> = _sortBy
+    private val _sortBy: MutableStateFlow<CountryComparisonSort> = MutableStateFlow(COUNTRY_NAME)
+    val sortBy: StateFlow<CountryComparisonSort> = _sortBy.asStateFlow()
 
-    private val _sortAscending: MutableState<Boolean> = mutableStateOf(true)
-    val sortAscending: State<Boolean> = _sortAscending
+    private val _sortAscending: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val sortAscending: StateFlow<Boolean> = _sortAscending.asStateFlow()
 
-    private val _groupByContinent: MutableState<Boolean> = mutableStateOf(false)
-    val groupByContinent: State<Boolean> = _groupByContinent
+    private val _groupByContinent: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val groupByContinent: StateFlow<Boolean> = _groupByContinent.asStateFlow()
 
     fun sortBy(sort: CountryComparisonSort) {
         _sortBy.value = sort

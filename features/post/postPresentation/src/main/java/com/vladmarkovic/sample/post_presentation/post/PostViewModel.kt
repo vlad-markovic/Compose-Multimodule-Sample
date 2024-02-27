@@ -2,9 +2,6 @@
 
 package com.vladmarkovic.sample.post_presentation.post
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.post_domain.AuthorRepository
@@ -17,12 +14,15 @@ import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.ArgKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -37,10 +37,10 @@ class PostViewModel @Inject constructor(
 
     val post: Post = Json.decodeFromString<PostArg>(state.get<String>(ArgKeys.POST.name)!!)
 
-    private val _authorResult: MutableState<Result<Author>?> = mutableStateOf(null)
+    private val _authorResult: MutableStateFlow<Result<Author>?> = MutableStateFlow(null)
 
     /** null value (data unavailable) means loading */
-    val authorResult: State<Result<Author>?> = _authorResult
+    val authorResult: StateFlow<Result<Author>?> = _authorResult.asStateFlow()
 
     init {
         connection.doOnMainOnConnectionChange(viewModelScope, dispatchers) { connected ->

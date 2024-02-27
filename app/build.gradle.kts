@@ -44,6 +44,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -70,7 +71,6 @@ dependencies {
     implementation(Dependencies.hiltAndroid)
     kapt(Dependencies.hiltAndroidCompiler)
     kapt(Dependencies.androidXHiltCompiler)
-
 
     // Android / Google
     implementation(Dependencies.appCompat)

@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.vladmarkovic.sample.settings_presentation.main.SettingsMainScreenComposer
@@ -20,6 +18,7 @@ import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 /** [ScreenHolderComposer] holding [SettingsScreen]s. */
@@ -30,11 +29,11 @@ class SettingsActivity : AppCompatActivity(),
 
     override val type: ScreenHolderType = ScreenHolderType.STANDALONE
 
-    override val allScreens: Array<SettingsScreen> = SettingsScreen.values()
+    override val allScreens: List<SettingsScreen> = SettingsScreen.entries
 
     override val initialScreen: SettingsScreen = SettingsScreen.MAIN
 
-    override val currentScreen: MutableState<SettingsScreen> = mutableStateOf(initialScreen)
+    override val currentScreen: MutableStateFlow<SettingsScreen> = MutableStateFlow(initialScreen)
 
     @Inject
     lateinit var settingsMainScreenComposer: SettingsMainScreenComposer

@@ -7,7 +7,6 @@ import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.ArgKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -23,6 +22,6 @@ class CovidCountryInfoViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
 
-        state.set(ArgKeys.COUNTRY_INFO.name, null)
+        state[ArgKeys.COUNTRY_INFO.name] = null
     }
 }

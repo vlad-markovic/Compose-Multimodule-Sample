@@ -2,13 +2,17 @@
 
 package com.vladmarkovic.sample.shared_presentation.briefaction
 
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
 /** Manages "sending" of [BriefAction]s. */
 class BriefActioner {
 
-    private val _action = MutableLiveAction<BriefAction>()
-    val action: LiveAction<BriefAction> = _action
+    private val _action = MutableSharedFlow<BriefAction>()
+    val action: SharedFlow<BriefAction> = _action.asSharedFlow()
 
-    fun action(action: BriefAction) {
-        _action.value = action
+    suspend fun action(action: BriefAction) {
+        _action.emit(action)
     }
 }

@@ -5,8 +5,8 @@ package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 import androidx.activity.ComponentActivity
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -16,10 +16,10 @@ import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.navigation.NavigableComposeHolder
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.util.drop
+import com.vladmarkovic.sample.shared_presentation.util.collectWith
 import com.vladmarkovic.sample.shared_presentation.util.navigate
-import com.vladmarkovic.sample.shared_presentation.util.observeNonNull
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.drop
 
 /** For decorating an Activity to give it Tabbed Compose Navigation functionality. */
 @Suppress("FunctionName")
@@ -63,7 +63,7 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
 
     private fun TabNavigable<S, T>.setupWith(navController: NavHostController) {
         with(this@TabNavigableComposeHolder as ComponentActivity) {
-            tab.drop(1).observeNonNull(this) {
+            tab.drop(1).collectWith(this) {
                 navController.navigate(it)
             }
         }
@@ -75,7 +75,7 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
         // Don't show tabs if there is only one.
         if (tabs.size == 1) return
 
-        val currentTab by tabNav.tab.observeAsState(mainTab)
+        val currentTab by tabNav.tab.collectAsState()
 
         BottomBar(currentTab)
     }
@@ -101,14 +101,14 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
 
     @Composable
     override fun TopBar(navController: NavHostController) {
-        val tab by tabNav.tab.observeAsState(mainTab)
+        val tab by tabNav.tab.collectAsState(mainTab)
         Lumber.v("recompose")
         tabComposer(tab).ComposeTopBar(navController)
     }
 
     @Composable
     override fun Drawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope) {
-        val tab by tabNav.tab.observeAsState(mainTab)
+        val tab by tabNav.tab.collectAsState(mainTab)
         Lumber.v("recompose")
         tabComposer(tab).ComposeDrawer(scaffoldState, mainScope)
     }

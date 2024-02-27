@@ -25,34 +25,31 @@ import com.vladmarkovic.sample.shared_domain.log.Lumber
 
 @Composable
 fun CountryComparisonScreen(
-    showLoading: State<Boolean>,
-    _items: State<List<CountryComparisonItem>>,
-    _sortBy: State<CountryComparisonSort>,
+    showLoading: Boolean,
+    items: List<CountryComparisonItem>,
+    sortBy: CountryComparisonSort,
     onSortByChanged: (CountryComparisonSort) -> Unit,
     onOpenCountryDetail: (CountryCovidInfo) -> Unit
 ) {
-    if (showLoading.value) {
+    if (showLoading) {
         Box(Modifier.fillMaxSize()) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     } else {
         Column(Modifier.padding(8.dp)) {
-            val sortBy by _sortBy
             SortByDropdown(sortBy, onSortByChanged)
-            CountryList(_items, sortBy, onOpenCountryDetail)
+            CountryList(items, sortBy, onOpenCountryDetail)
         }
     }
 }
 
 @Composable
 fun CountryList(
-    _items: State<List<CountryComparisonItem>>,
+    items: List<CountryComparisonItem>,
     sort: CountryComparisonSort,
     onOpenCountryDetail: (CountryCovidInfo) -> Unit
 ) {
     val listState = rememberLazyListState()
-
-    val items by _items
 
     LazyColumn(state = listState, modifier = Modifier.padding(start = 8.dp, bottom = 48.dp)) {
         items(items.size) { index ->
@@ -120,7 +117,7 @@ fun SortByDropdown(sort: CountryComparisonSort, onSortChanged: (CountryCompariso
                 expanded = false
             }
         ) {
-            CountryComparisonSort.values().forEach { sortItem ->
+            CountryComparisonSort.entries.forEach { sortItem ->
                 DropdownMenuItem({
                     expanded = false
                     Lumber.v("CLICK ITEM: $sortItem")

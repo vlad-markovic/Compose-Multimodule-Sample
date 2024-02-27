@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.post_data
 
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PROTECTED
+import androidx.annotation.VisibleForTesting.Companion.PROTECTED
 import com.vladmarkovic.sample.shared_domain.AppSystem
 import java.util.concurrent.TimeUnit
 

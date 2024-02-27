@@ -4,8 +4,13 @@ package com.vladmarkovic.sample.covid_data
 
 import com.vladmarkovic.sample.covid_domain.CovidInfoRepo
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
+import com.vladmarkovic.sample.shared_data.util.unpack
 import io.ktor.client.*
+import io.ktor.client.call.body
 import io.ktor.client.request.*
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpMethod
+import java.io.IOException
 import javax.inject.Inject
 
 /** [CovidInfoRepo] implementation for fetching a list of [CountryCovidInfo] from the api using ktor. */
@@ -16,5 +21,5 @@ class CovidInfoApiService @Inject constructor(private val httpClient: HttpClient
     }
 
     override suspend fun getAffectedCountries(): List<CountryCovidInfo> =
-        httpClient.get(URL_COVID_INFO)
+        httpClient.get(URL_COVID_INFO).unpack()
 }

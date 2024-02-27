@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation(Dependencies.gradleBuildTools)
     implementation(Dependencies.kotlinGradlePlugin)
+    implementation("com.squareup:javapoet:1.13.0")
 }
 
 tasks {

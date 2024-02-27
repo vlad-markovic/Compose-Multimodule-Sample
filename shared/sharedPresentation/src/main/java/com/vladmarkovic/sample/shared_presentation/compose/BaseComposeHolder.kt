@@ -2,6 +2,7 @@
 
 package com.vladmarkovic.sample.shared_presentation.compose
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
@@ -33,11 +34,11 @@ interface BaseComposeHolder {
                 topBar = { TopBar(navController) },
                 bottomBar = { BottomBar() },
                 drawerContent = { Drawer(scaffoldState, mainScope) }
-            ) {
+            ) { paddingValues ->
                 val systemUiController = rememberSystemUiController()
                 systemUiController.setSystemBarsColor(Color.Black)
 
-                ScaffoldContent(navController, scaffoldState, mainScope)
+                ScaffoldContent(navController, scaffoldState, mainScope, paddingValues)
             }
         }
     }
@@ -61,6 +62,7 @@ interface BaseComposeHolder {
     fun ScaffoldContent(
         navController: NavHostController,
         scaffoldState: ScaffoldState,
-        mainScope: CoroutineScope
+        mainScope: CoroutineScope,
+        paddingValues: PaddingValues
     )
 }

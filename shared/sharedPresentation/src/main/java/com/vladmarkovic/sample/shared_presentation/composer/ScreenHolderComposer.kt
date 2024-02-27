@@ -8,12 +8,15 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Holds a number of scoped screens specifying all it holds, and serves as a screen selector.
@@ -25,10 +28,10 @@ interface ScreenHolderComposer<S: Screen> {
     val type: ScreenHolderType
 
     /** Override providing values() of the scoped screens enum */
-    val allScreens: Array<S>
+    val allScreens: List<S>
 
     /** Set to first screen to be initial screen */
-    val currentScreen: MutableState<S>
+    val currentScreen: MutableStateFlow<S>
 
     /**
      * Inject [ScreenComposer]s for each screen, and override to provide
@@ -51,7 +54,7 @@ interface ScreenHolderComposer<S: Screen> {
 
                 BackHandler(contentArgs)
 
-                currentScreen.value = screen
+                LaunchedEffect(contentArgs) { currentScreen.value = screen }
 
                 with(composer(screen)) {
                     Content(contentArgs)
@@ -62,14 +65,12 @@ interface ScreenHolderComposer<S: Screen> {
 
     @Composable
     fun ComposeTopBar(navController: NavHostController) {
-        val screen by currentScreen
-        composer(screen).TopBar(navController)
+        composer(currentScreen.safeValue).TopBar(navController)
     }
 
     @Composable
     fun ComposeDrawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope) {
-        val screen by currentScreen
-        composer(screen).Drawer(scaffoldState, mainScope)
+        composer(currentScreen.safeValue).Drawer(scaffoldState, mainScope)
     }
 
     @Composable

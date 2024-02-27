@@ -2,8 +2,6 @@
 
 package com.vladmarkovic.sample.post_presentation
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import com.vladmarkovic.sample.post_presentation.feed.FeedScreenComposer
 import com.vladmarkovic.sample.post_presentation.post.PostScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
@@ -13,6 +11,7 @@ import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.FEED_SCREEN
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.POST_SCREEN
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @ActivityRetainedScoped
@@ -23,9 +22,9 @@ class PostsTabComposer @Inject constructor(
 
     override val type: ScreenHolderType = ScreenHolderType.INITIAL_TAB
 
-    override val allScreens: Array<PostsScreen> = PostsScreen.values()
+    override val allScreens: List<PostsScreen> = PostsScreen.entries
 
-    override val currentScreen: MutableState<PostsScreen> = mutableStateOf(allScreens.first())
+    override val currentScreen: MutableStateFlow<PostsScreen> = MutableStateFlow(allScreens.first())
 
     override fun composer(screen: PostsScreen): ScreenComposer = when (currentScreen.value) {
         FEED_SCREEN -> feedScreenComposer

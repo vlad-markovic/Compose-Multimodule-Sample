@@ -11,14 +11,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.R
+import com.vladmarkovic.sample.post_presentation.R.string.error_on_posts_fetch
 import com.vladmarkovic.sample.shared_presentation.compose.Error
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
@@ -26,25 +24,23 @@ import com.vladmarkovic.sample.shared_presentation.util.padding
 
 @Composable
 fun FeedScreen(
-    loading: State<Boolean>,
-    posts: State<List<Post>>,
-    error: State<Boolean>,
+    loading: Boolean,
+    posts: List<Post>,
+    error: Boolean,
     onRefresh: () -> Unit,
     onPostClick: (Post) -> Unit
 ) {
     SwipeRefresh(
-        state = rememberSwipeRefreshState(loading.value),
+        state = rememberSwipeRefreshState(loading),
         onRefresh = onRefresh
     ) {
-        if (error.value) Error(stringResource(R.string.error_on_posts_fetch), onRefresh)
+        if (error) Error(stringResource(error_on_posts_fetch), onRefresh)
         else PostList(posts, onPostClick)
     }
 }
 
 @Composable
-private fun PostList(_posts: State<List<Post>>, onPostClick: (Post) -> Unit) {
-    val posts by _posts
-
+private fun PostList(posts: List<Post>, onPostClick: (Post) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = Dimens.m)
     ) {

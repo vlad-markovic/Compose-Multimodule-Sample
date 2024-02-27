@@ -3,12 +3,12 @@
 package com.vladmarkovic.sample.shared_presentation.util
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,7 +64,7 @@ inline fun <reified VM : BriefActionViewModel> actionViewModel(
 
 /** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
 fun BriefActioner.setupWith(contentArgs: ContentArgs) {
-    action.observeNonNull(contentArgs.context as ComponentActivity) { action ->
+    action.collectWith(contentArgs.context as LifecycleOwner) { action ->
         contentArgs.handleBriefAction(action)
     }
 }

@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.vladmarkovic.sample.shared_presentation.R
+import com.vladmarkovic.sample.shared_presentation.R.string.button_retry_label
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 
 @Composable
@@ -29,7 +29,7 @@ fun Error(error: String, onRetry: () -> Unit) {
             text = error
         )
         Button(onRetry) {
-            Text(stringResource(R.string.button_retry_label))
+            Text(stringResource(button_retry_label))
         }
     }
 }

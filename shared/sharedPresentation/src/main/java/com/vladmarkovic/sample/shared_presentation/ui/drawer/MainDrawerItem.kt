@@ -4,20 +4,24 @@ package com.vladmarkovic.sample.shared_presentation.ui.drawer
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.display
+import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen.ToSettings
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
 
-sealed class MainDrawerItem(override val icon: ImageVector,
-                            @StringRes override val textRes: Int) : DrawerItem {
+sealed class MainDrawerItem(
+    override val icon: ImageVector,
+    @StringRes override val textRes: Int
+) : DrawerItem {
 
     data class ItemPostsTab(override val onClick: () -> Unit) :
-        MainDrawerItem(Icons.Filled.List, R.string.bottom_tab_posts)
+        MainDrawerItem(Icons.AutoMirrored.Filled.List, R.string.bottom_tab_posts)
 
     data class ItemCovidTab(override val onClick: () -> Unit) :
         MainDrawerItem(Icons.Filled.Info, R.string.bottom_tab_covid)

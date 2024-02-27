@@ -2,6 +2,8 @@
 
 package com.vladmarkovic.sample.shared_presentation.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +18,6 @@ import kotlinx.coroutines.CoroutineScope
  * For decorating an Activity to give it Compose Navigation functionality,
  * extracted to provide composition over inheritance.
  */
-@Suppress("FunctionName")
 interface NavigableComposeHolder<S : Screen> : BaseComposeHolder {
 
     val initialScreen: S
@@ -35,12 +36,13 @@ interface NavigableComposeHolder<S : Screen> : BaseComposeHolder {
     override fun ScaffoldContent(
         navController: NavHostController,
         scaffoldState: ScaffoldState,
-        mainScope: CoroutineScope
+        mainScope: CoroutineScope,
+        paddingValues: PaddingValues
     ) {
         NavHost(
             navController = navController,
             startDestination = initialDestination,
-            modifier = initialGraphModifier
+            modifier = Modifier.padding(paddingValues).then(initialGraphModifier)
         ) {
             navGraph(navController, scaffoldState, mainScope)
         }

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), TabNavigableComposeHolder<MainScreen, 
 
     override val initialScreen: MainScreen = FEED_SCREEN
 
-    override val tabs: List<MainBottomTab> = MainBottomTab.values().asList()
+    override val tabs: List<MainBottomTab> = MainBottomTab.entries
 
     @Inject
     lateinit var postsScreenHolderComposer: ScreenHolderComposer<PostsScreen>

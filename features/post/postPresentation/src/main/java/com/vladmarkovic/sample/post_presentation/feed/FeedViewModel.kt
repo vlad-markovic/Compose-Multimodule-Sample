@@ -2,9 +2,6 @@
 
 package com.vladmarkovic.sample.post_presentation.feed
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
@@ -15,7 +12,9 @@ import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -29,14 +28,14 @@ class FeedViewModel @Inject constructor(
     connection: NetworkConnectivity
 ): BriefActionViewModel() {
 
-    private val _loading: MutableState<Boolean> = mutableStateOf(false)
-    val loading: State<Boolean> = _loading
+    private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
-    private val _error: MutableState<Boolean> = mutableStateOf(false)
-    val error: State<Boolean> = _error
+    private val _error: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val error: StateFlow<Boolean> = _error.asStateFlow()
 
-    private val _posts: MutableState<List<Post>> = mutableStateOf(emptyList())
-    val posts: State<List<Post>> = _posts
+    private val _posts: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
+    val posts: StateFlow<List<Post>> = _posts.asStateFlow()
 
     init {
         connection.doOnMainOnConnectionChange(viewModelScope, dispatchers) { connected ->

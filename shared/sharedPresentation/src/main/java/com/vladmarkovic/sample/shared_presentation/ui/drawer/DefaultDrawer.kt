@@ -5,22 +5,23 @@
 package com.vladmarkovic.sample.shared_presentation.ui.drawer
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 
 @Composable
-fun DefaultDrawer(_drawerItems: State<List<DrawerItem>>, closeDrawer: () -> Unit) {
-    val drawerItems by _drawerItems
-
+fun DefaultDrawer(drawerItems: List<DrawerItem>, closeDrawer: () -> Unit) {
     Spacer(Modifier.padding(Dimens.m / 2))
 
     Column(

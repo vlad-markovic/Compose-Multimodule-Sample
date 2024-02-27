@@ -91,14 +91,10 @@ fun GradleProject.configureAndroidModule() {
 
     version = "1.0"
 
-    configureJavaPluginExtension()
+    configureJavaVersion()
 
     androidLibrary {
         configureAndroidSdkVersions()
-
-        defaultConfig {
-            namespace = "com.vladmarkovic.sample"
-        }
 
         dependencies {
             implementation(Dependencies.androidxCoreExtensions)
@@ -120,6 +116,16 @@ fun GradleProject.configureJavaPluginExtension() {
     configure<JavaPluginExtension> {
         sourceCompatibility = Versions.java
         targetCompatibility = Versions.java
+    }
+}
+
+fun GradleProject.configureJavaVersion() {
+    configureJavaPluginExtension()
+    androidLibrary {
+        compileOptions {
+            sourceCompatibility = Versions.java
+            targetCompatibility = Versions.java
+        }
     }
 }
 

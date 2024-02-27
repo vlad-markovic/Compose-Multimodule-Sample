@@ -2,7 +2,11 @@
 
 package com.vladmarkovic.sample.shared_presentation.briefaction
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.*
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
 /**
  * For decorating a ViewModel to give it functionality to send [DisplayAction]s and [NavigationAction]s,
@@ -10,20 +14,19 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.*
  * or inherit from [BriefActionViewModel]
  */
 interface BriefActionable {
-
     val actioner: BriefActioner
-
-    val action: LiveAction<BriefAction> get() = actioner.action
-
-    fun action(action: BriefAction) {
-        actioner.action(action)
-    }
-
-    fun navigate(action: NavigationAction) {
-        actioner.action(action)
-    }
-
-    fun display(action: DisplayAction) {
-        actioner.action(action)
-    }
+    val action: SharedFlow<BriefAction> get() = actioner.action
 }
+
+fun <T> T.action(action: BriefAction) where T: ViewModel, T: BriefActionable {
+    viewModelScope.launch { actioner.action(action) }
+}
+
+fun <T> T.navigate(action: NavigationAction) where T: ViewModel, T: BriefActionable {
+    viewModelScope.launch { actioner.action(action) }
+}
+
+fun <T> T.display(action: DisplayAction) where T: ViewModel, T: BriefActionable {
+    viewModelScope.launch { actioner.action(action) }
+}
+

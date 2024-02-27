@@ -29,18 +29,17 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
 @Composable
 fun DefaultTopBar(
-    _title: State<StrOrRes>,
+    title: StrOrRes,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
-    up: State<UpButton?>? = null,
-    menuItems: State<Array<MenuItem>>? = null,
+    up: UpButton? = null,
+    menuItems: Array<MenuItem>? = null,
     elevation: Dp = AppBarDefaults.TopAppBarElevation
 ) {
-    val title by _title
-
     TopAppBar(
         modifier = modifier,
         backgroundColor = AppColor.Grey900,
@@ -61,8 +60,7 @@ fun DefaultTopBar(
 }
 
 @Composable
-fun Up(_upButton: State<UpButton?>) {
-    val upButton by _upButton
+fun Up(upButton: UpButton?) {
     upButton?.let {
         IconButton(it.action) {
             Icon(
@@ -77,13 +75,12 @@ fun Up(_upButton: State<UpButton?>) {
 @Preview
 @Composable
 private fun PreviewTopBar() {
-    DefaultTopBar(remember { mutableStateOf(StrOrRes.str("Top Title")) })
+    DefaultTopBar(StrOrRes.str("Top Title"))
 }
 
 @Composable
-fun DefaultMenu(_menuItems: State<Array<MenuItem>>) {
+fun DefaultMenu(menuItems: Array<MenuItem>) {
     val expanded = remember { mutableStateOf(false) }
-    val menuItems by _menuItems
 
     Box(
         modifier = Modifier
@@ -108,7 +105,7 @@ fun DefaultMenu(_menuItems: State<Array<MenuItem>>) {
                         checked = checked.value,
                         onCheckedChange = menuItem.onCheckedChange
                     ) {
-                        val tint by animateColorAsState(menuItem.color(checked.value))
+                        val tint by animateColorAsState(menuItem.color(checked.value), label = "animate_appbar_icon_color")
                         Icon(
                             Filled.Favorite,
                             contentDescription = menuItem.text(checked.value),
@@ -144,7 +141,7 @@ fun DefaultMenu(_menuItems: State<Array<MenuItem>>) {
                         }
                     }
                     is MenuItem.Toggle -> {
-                        val checked by menuItem.checked
+                        val checked = menuItem.checked.safeValue
 
                         DropdownMenuItem(onClick = {
                             expanded.value = false

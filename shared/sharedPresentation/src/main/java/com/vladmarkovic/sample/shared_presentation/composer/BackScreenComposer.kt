@@ -3,12 +3,11 @@
 package com.vladmarkovic.sample.shared_presentation.composer
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * ScreenComposer with back arrow as up button - navigates back on click.
@@ -19,10 +18,11 @@ import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
  */
 abstract class BackScreenComposer : ScreenComposer() {
 
-    override val upButton: MutableState<UpButton> = mutableStateOf(UpButton.BackButton {})
+    override val upButton: MutableStateFlow<UpButton> = MutableStateFlow(UpButton.BackButton {})
 
     @Composable
     override fun Content(contentArgs: ContentArgs) {
-        upButton.value = UpButton.BackButton(actionViewModel<BriefActionViewModel>(contentArgs))
+        val viewModel = actionViewModel<BriefActionViewModel>(contentArgs)
+        LaunchedEffect(contentArgs) { upButton.value = UpButton.BackButton(viewModel) }
     }
 }

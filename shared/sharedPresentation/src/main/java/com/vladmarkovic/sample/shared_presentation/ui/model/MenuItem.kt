@@ -2,8 +2,8 @@
 
 package com.vladmarkovic.sample.shared_presentation.ui.model
 
-import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.coroutines.flow.StateFlow
 
 /** Defines all elements needed to represent different types of menu items. */
 sealed interface MenuItem {
@@ -22,7 +22,7 @@ sealed interface MenuItem {
         val uncheckedTextRes: Int
         val checkedColorRes: Int? get() = null
         val uncheckedColorRes: Int? get() = null
-        val checked: State<Boolean>
+        val checked: StateFlow<Boolean>
         val onCheckedChange: (Boolean) -> Unit
     }
 }
