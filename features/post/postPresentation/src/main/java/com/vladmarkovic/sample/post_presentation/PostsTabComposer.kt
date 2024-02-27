@@ -4,7 +4,6 @@ package com.vladmarkovic.sample.post_presentation
 
 import com.vladmarkovic.sample.post_presentation.feed.FeedScreenComposer
 import com.vladmarkovic.sample.post_presentation.post.PostScreenComposer
-import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenManager
 import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenMonitor
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
@@ -25,16 +24,10 @@ class PostsTabComposer @Inject constructor(
 
     override val type: ScreenHolderType = ScreenHolderType.INITIAL_TAB
 
-    init {
-        Lumber.e("PostsTabComposer currentScreen ${currentScreen.value}")
-    }
-
-    override fun composer(screen: PostsScreen): ScreenComposer {
-        Lumber.e("PostsTab resolve composer for $screen")
-        return when (screen) {
+    override fun composer(screen: PostsScreen): ScreenComposer =
+        when (screen) {
             FEED_SCREEN -> feedScreenComposer
             POST_SCREEN -> postScreenComposer
             else -> throw IllegalArgumentException("Unhandled screen ${currentScreen.value}")
         }
-    }
 }

@@ -58,7 +58,7 @@ class PostViewModel @Inject constructor(
                 val author = authorRepository.fetchAuthor(post.userId)
                 Result.success(author)
             } catch (e: Exception) {
-                Lumber.e(e.stackTraceToString(), "Error fetching author")
+                Lumber.e(e, "Error fetching author")
                 Result.failure(e)
             }
 

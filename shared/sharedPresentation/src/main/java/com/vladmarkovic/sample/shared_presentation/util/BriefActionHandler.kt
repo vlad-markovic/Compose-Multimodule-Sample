@@ -5,7 +5,6 @@ package com.vladmarkovic.sample.shared_presentation.util
 import android.widget.Toast
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
@@ -42,7 +41,6 @@ private fun ContentArgs.navigate(action: CommonNavigationAction) =
 
 /** Enables separate back stack navigation per tab. */
 fun <S: Screen, T: Tab<S>> NavHostController.navigate(tab: T) {
-    Lumber.v("navigateTo tab: ${tab.name}")
     navigate(tab.name) {
         // Separate stacks per tab.
         popUpTo(graph.findStartDestination().id) {

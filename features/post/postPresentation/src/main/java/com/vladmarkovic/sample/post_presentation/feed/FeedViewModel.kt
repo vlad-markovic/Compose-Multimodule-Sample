@@ -66,7 +66,7 @@ class FeedViewModel @Inject constructor(
             val (posts, error) = try {
                 Pair(postRepository.fetchAllPosts(forceFetch), null)
             } catch (exception: Exception) {
-                Lumber.e(exception.stackTraceToString(), "Error fetching posts")
+                Lumber.e(exception, "Error fetching posts")
                 when (exception) {
                     is UnresolvedAddressException, is IOException -> {
                         val cachedPosts = postRepository.fetchAllPosts(DataSource.CACHE)

@@ -44,7 +44,6 @@ interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
                 route = screen.route,
                 arguments = screen.namedArgs,
             ) { backStackEntry ->
-                Lumber.e("composable nav to screen $screen in ${this@ScreenHolderComposer.javaClass.simpleName}")
                 val contentArgs = ContentArgs(type, navController, scaffoldState, mainScope, backStackEntry)
 
                 BackHandler(contentArgs)
@@ -60,6 +59,7 @@ interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
 
     @Composable
     fun ComposeTopBar(navController: NavHostController) {
+        Lumber.e("RECOMPOSE ComposeTopBar in ${javaClass.simpleName}")
         composer(currentScreen.safeValue).TopBar(navController)
     }
 

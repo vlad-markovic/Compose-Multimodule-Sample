@@ -7,6 +7,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateFade
 import com.vladmarkovic.sample.shared_presentation.compose.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
@@ -43,6 +44,7 @@ abstract class ScreenComposer {
 
     @Composable
     fun TopBar(navController: NavHostController) {
+        Lumber.e("RECOMPOSE TopBar in ${javaClass.simpleName}")
         AnimateFade(navController.isScreenVisible) {
             DefaultTopBar(
                 title = screenTitle.safeValue,

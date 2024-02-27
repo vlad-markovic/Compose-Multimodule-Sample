@@ -4,7 +4,6 @@ package com.vladmarkovic.sample.covid_presentation
 
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CovidCountryComparisonScreenComposer
 import com.vladmarkovic.sample.covid_presentation.country_info.CovidCountryInfoScreenComposer
-import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenManager
 import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenMonitor
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
@@ -24,11 +23,9 @@ class CovidTabComposer @Inject constructor(
 
     override val type: ScreenHolderType = ScreenHolderType.TAB
 
-    override fun composer(screen: CovidScreen): ScreenComposer {
-        Lumber.e("CovidTab resolve composer for $screen")
-        return when (screen) {
+    override fun composer(screen: CovidScreen): ScreenComposer =
+        when (screen) {
             CovidScreen.COVID_COUNTRY_COMPARISON -> comparisonComposer
             CovidScreen.COVID_COUNTRY_INFO -> dataComposer
         }
-    }
 }

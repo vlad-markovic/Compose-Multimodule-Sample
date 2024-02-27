@@ -14,12 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
-import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.navigation.NavigableComposeHolder
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.util.LogComposition
 import com.vladmarkovic.sample.shared_presentation.util.collectWith
 import com.vladmarkovic.sample.shared_presentation.util.navigate
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
@@ -27,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.drop
 
 /** For decorating an Activity to give it Tabbed Compose Navigation functionality. */
-@Suppress("FunctionName")
 interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHolder<S> {
 
     val tabNavViewModelFactory: TabNavViewModelFactory<S, T>
@@ -56,7 +53,6 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
                 route = tab.name
             ) {
                 with(tabComposer(tab)) {
-                    Lumber.e("setup navigation to tab: $tab in ${this.javaClass.simpleName}, currentScreen: ${currentScreen.value}")
                     composeNavGraph(navController, scaffoldState, mainScope)
                 }
             }
@@ -86,11 +82,9 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
 
     @Composable
     fun BottomBar(currentTab: T) {
-        LogComposition("currentTab: $currentTab in ${this.javaClass.simpleName}")
         BottomAppBar {
             BottomNavigation {
                 tabs.forEach { tab ->
-                    Lumber.e("BottomBar, setup navigation: ${tabNav.hashCode()} ${tab.name}")
                     BottomNavigationItem(
                         icon = { Icon(tab.icon, contentDescription = null) },
                         label = { Text(stringResource(tab.textRes)) },
@@ -106,7 +100,6 @@ interface TabNavigableComposeHolder<S : Screen, T : Tab<S>> : NavigableComposeHo
     @Composable
     override fun TopBar(navController: NavHostController) {
         val tab = tabNav.tab.safeValue
-        Lumber.v("recompose")
         tabComposer(tab).ComposeTopBar(navController)
     }
 

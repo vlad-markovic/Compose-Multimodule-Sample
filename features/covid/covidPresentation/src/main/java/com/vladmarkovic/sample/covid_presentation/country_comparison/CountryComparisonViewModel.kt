@@ -62,7 +62,7 @@ class CountryComparisonViewModel @Inject constructor(private val covidInfoRepo: 
             val covidInfoList = try {
                 covidInfoRepo.getAffectedCountries()
             } catch (e: Exception) {
-                Lumber.e(e.stackTraceToString(), "Error fetching covid data")
+                Lumber.e(e, "Error fetching covid data")
                 emptyList()
             }
 
