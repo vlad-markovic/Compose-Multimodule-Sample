@@ -74,7 +74,7 @@ fun <T> StateFlow<T>.collectAsStateLifecycleAware(
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     context: CoroutineContext = EmptyCoroutineContext
 ): State<T> =
-    rememberState(initialValue, key, lifecycle, minActiveState, context) {
+    rememberState(initialValue, key) {
         lifecycle.repeatOnLifecycle(minActiveState) {
             if (context == EmptyCoroutineContext) {
                 this@collectAsStateLifecycleAware.collect { this@rememberState.value = it }
@@ -113,7 +113,7 @@ fun <T> rememberState(
     vararg keys: Any?,
     producer: suspend ProduceStateScope<T>.() -> Unit
 ): State<T> {
-    val result = remember(initialValue, *keys) { mutableStateOf(initialValue) }
+    val result = remember(keys = keys) { mutableStateOf(initialValue) }
     (LaunchedEffect(keys = keys) {
         ProduceStateScopeImpl(result, coroutineContext).producer()
     })
