@@ -5,5 +5,5 @@ package com.vladmarkovic.sample.shared_presentation.screen
 enum class SettingsScreen : Screen {
     MAIN, SECOND;
 
-    object ToSettings: ToScreenGroup
+    data object ToSettings: ToScreenGroup
 }

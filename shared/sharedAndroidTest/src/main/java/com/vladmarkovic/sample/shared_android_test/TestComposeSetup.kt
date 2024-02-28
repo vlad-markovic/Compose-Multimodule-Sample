@@ -16,7 +16,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewMo
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.util.setupWith
+import com.vladmarkovic.sample.shared_presentation.util.SetupWith
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -44,7 +44,7 @@ fun TestCompose(
                 val contentArgs = ContentArgs(ScreenHolderType.STANDALONE, navController,
                     scaffoldState, mainScope, backStackEntry)
 
-                viewModel.apply { actioner.setupWith(contentArgs) }
+                viewModel.apply { actioner.SetupWith(contentArgs) }
 
                 content(contentArgs)
             }
