@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class PostScreenComposer @Inject constructor() : ScreenComposer() {
+class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel>() {
 
     override var upButton: MutableStateFlow<UpButton?> = MutableStateFlow(null)
 
@@ -32,8 +32,12 @@ class PostScreenComposer @Inject constructor() : ScreenComposer() {
     override val screen: Screen = PostsScreen.POST_SCREEN
 
     @Composable
-    override fun Content(contentArgs: ContentArgs) {
-        val viewModel: PostViewModel = actionViewModel(contentArgs)
+    override fun viewModel(contentArgs: ContentArgs): PostViewModel =
+        actionViewModel<PostViewModel>(contentArgs)
+
+    @Composable
+    override fun Content(contentArgs: ContentArgs, viewModel: PostViewModel) {
+        super.Content(contentArgs, viewModel)
 
         LaunchedEffect(contentArgs) { upButton.value = BackButton(viewModel) }
 

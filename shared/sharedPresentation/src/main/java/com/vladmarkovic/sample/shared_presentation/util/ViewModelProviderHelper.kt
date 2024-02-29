@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActioner
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
@@ -61,15 +62,18 @@ inline fun <reified VM : ViewModel> hiltViewModel(
 )
 
 @Composable
-inline fun <reified VM : BriefActionViewModel> actionViewModel(contentArgs: ContentArgs): VM =
-    androidx.hilt.navigation.compose.hiltViewModel<VM>().apply { actioner.SetupWith(contentArgs) }
+inline fun <reified VM> actionViewModel(
+    contentArgs: ContentArgs,
+    factory: ViewModelProvider.Factory// = contentArgs.backStackEntry.defaultViewModelProviderFactory
+): VM where VM : BriefActionable, VM : ViewModel =
+    hiltViewModel<VM>(contentArgs.backStackEntry, factory).apply { actioner.SetupWith(contentArgs) }
 
 @Composable
-inline fun <reified VM : BriefActionViewModel> actionViewModel(
+inline fun <reified VM> Any.actionViewModel(
     contentArgs: ContentArgs,
-    factory: ViewModelProvider.Factory
-): VM = hiltViewModel<VM>(contentArgs.backStackEntry, factory)
-    .apply { actioner.SetupWith(contentArgs) }
+    key: String? = hashCode().toString()
+): VM where VM : BriefActionable, VM : ViewModel =
+    androidx.hilt.navigation.compose.hiltViewModel<VM>(key = key).apply { actioner.SetupWith(contentArgs) }
 
 /** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
 @Composable

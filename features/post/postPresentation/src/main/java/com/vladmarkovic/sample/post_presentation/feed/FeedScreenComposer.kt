@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class FeedScreenComposer @Inject constructor() : DrawerScreenComposer() {
+class FeedScreenComposer @Inject constructor() : DrawerScreenComposer<FeedViewModel>() {
 
     override val screenTitle: StateFlow<StrOrRes> = titleFromRes(feed_screen_title).asStateFlow()
 
@@ -39,10 +39,11 @@ class FeedScreenComposer @Inject constructor() : DrawerScreenComposer() {
     private val _drawerItems: MutableStateFlow<List<DrawerItem>> = MutableStateFlow(emptyList())
 
     @Composable
-    override fun Content(contentArgs: ContentArgs) {
-        super.Content(contentArgs)
+    override fun viewModel(contentArgs: ContentArgs): FeedViewModel = actionViewModel<FeedViewModel>(contentArgs)
 
-        val viewModel: FeedViewModel = actionViewModel(contentArgs)
+    @Composable
+    override fun Content(contentArgs: ContentArgs, viewModel: FeedViewModel) {
+        super.Content(contentArgs, viewModel)
 
         LaunchedEffect(contentArgs) {
             upButton.value = UpButton.DrawerButton(viewModel)

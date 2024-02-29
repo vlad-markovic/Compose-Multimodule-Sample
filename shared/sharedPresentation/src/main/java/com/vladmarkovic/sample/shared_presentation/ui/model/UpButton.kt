@@ -7,8 +7,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.shared_presentation.R
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.briefaction.display
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.OpenDrawer
@@ -28,11 +29,17 @@ sealed class UpButton(
 
     data class BackButton(override val action: () -> Unit) :
         UpButton(Icons.AutoMirrored.Filled.ArrowBack, R.string.button_back_label, action) {
-        constructor(vm: BriefActionViewModel) : this({ vm.navigate(Back) })
+        companion object {
+            operator fun <VM> invoke(vm: VM): BackButton where VM : BriefActionable, VM : ViewModel =
+                BackButton { vm.navigate(Back) }
+        }
     }
 
     data class DrawerButton(override val action: () -> Unit) :
         UpButton(Icons.Filled.Menu, R.string.button_open_drawer_label, action) {
-        constructor(vm: BriefActionViewModel) : this({ vm.display(OpenDrawer) })
+        companion object {
+            operator fun <VM> invoke(vm: VM): DrawerButton where VM : BriefActionable, VM : ViewModel =
+                DrawerButton { vm.display(OpenDrawer) }
+        }
     }
 }

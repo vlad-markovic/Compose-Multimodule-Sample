@@ -9,8 +9,8 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.Sort
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.composer.BackScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
-import com.vladmarkovic.sample.shared_presentation.composer.DrawerScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for Covid country comparison screen. */
-class CovidCountryComparisonScreenComposer @Inject constructor() : DrawerScreenComposer() {
+class CovidCountryComparisonScreenComposer @Inject constructor() : BackScreenComposer<CountryComparisonViewModel>() {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_COMPARISON
 
@@ -38,10 +38,12 @@ class CovidCountryComparisonScreenComposer @Inject constructor() : DrawerScreenC
     private val _drawerItems: MutableStateFlow<List<DrawerItem>> = MutableStateFlow(emptyList())
 
     @Composable
-    override fun Content(contentArgs: ContentArgs) {
-        super.Content(contentArgs)
+    override fun viewModel(contentArgs: ContentArgs): CountryComparisonViewModel =
+        actionViewModel<CountryComparisonViewModel>(contentArgs)
 
-        val viewModel: CountryComparisonViewModel = actionViewModel(contentArgs)
+    @Composable
+    override fun Content(contentArgs: ContentArgs, viewModel: CountryComparisonViewModel) {
+        super.Content(contentArgs, viewModel)
 
         LaunchedEffect(key1 = contentArgs) {
             _menuItems.value = arrayOf(

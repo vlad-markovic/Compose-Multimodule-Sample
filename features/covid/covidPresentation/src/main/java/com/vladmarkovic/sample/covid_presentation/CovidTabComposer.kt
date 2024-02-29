@@ -23,7 +23,7 @@ class CovidTabComposer @Inject constructor(
 
     override val type: ScreenHolderType = ScreenHolderType.TAB
 
-    override fun composer(screen: CovidScreen): ScreenComposer =
+    override fun composer(screen: CovidScreen): ScreenComposer<*> =
         when (screen) {
             CovidScreen.COVID_COUNTRY_COMPARISON -> comparisonComposer
             CovidScreen.COVID_COUNTRY_INFO -> dataComposer

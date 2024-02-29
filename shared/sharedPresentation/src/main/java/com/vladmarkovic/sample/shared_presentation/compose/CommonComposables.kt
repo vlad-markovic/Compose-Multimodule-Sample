@@ -2,18 +2,42 @@
 
 package com.vladmarkovic.sample.shared_presentation.compose
 
-import androidx.compose.animation.*
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import com.vladmarkovic.sample.shared_domain.log.Lumber
+import com.vladmarkovic.sample.shared_domain.util.doNothing
 import com.vladmarkovic.sample.shared_presentation.R.string.button_retry_label
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
+import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
+import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
+import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 
 @Composable
 fun Error(error: String, onRetry: () -> Unit) {
@@ -59,4 +83,43 @@ fun AnimateFade(
         exit = fadeOut(),
         content = content
     )
+}
+
+@Composable
+fun BackHandler(contentArgs: ContentArgs)  {
+    BackHandler("".actionViewModel<BriefActionViewModel>(contentArgs))
+}
+
+@Composable
+fun <VM> BackHandler(viewModel: VM) where VM : BriefActionable, VM : ViewModel {
+    LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher?.let { backDispatcher ->
+        val onBack by rememberUpdatedState { viewModel.navigate(CommonNavigationAction.Back) }
+        val backCallback = remember {
+            object : OnBackPressedCallback(enabled = true) {
+                override fun handleOnBackPressed() { onBack() }
+            }
+        }
+        val lifecycleOwner = LocalLifecycleOwner.current
+        OnLifecycleEvent { lifecycleEvent ->
+            when (lifecycleEvent) {
+                Lifecycle.Event.ON_START -> backDispatcher.addCallback(lifecycleOwner, backCallback)
+                Lifecycle.Event.ON_STOP -> backCallback.remove()
+                else -> doNothing()
+            }
+        }
+        DisposableEffect(lifecycleOwner, backDispatcher) {
+            onDispose { backCallback.remove() }
+        }
+    } ?: Lumber.e("No OnBackPressedDispatcherOwner was provided via LocalOnBackPressedDispatcherOwner")
+}
+
+@Composable
+fun OnLifecycleEvent(onEach: (Lifecycle.Event) -> Unit) {
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val currentOnEach by rememberUpdatedState(newValue = onEach)
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event -> currentOnEach(event) }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 }

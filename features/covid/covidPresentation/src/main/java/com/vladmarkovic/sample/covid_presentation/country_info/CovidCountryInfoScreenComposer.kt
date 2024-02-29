@@ -15,21 +15,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for country Covid details screen. */
-class CovidCountryInfoScreenComposer @Inject constructor() : BackScreenComposer() {
+class CovidCountryInfoScreenComposer @Inject constructor() : BackScreenComposer<CovidCountryInfoViewModel>() {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_INFO
 
     override val screenTitle: MutableStateFlow<StrOrRes> = titleFromStr("")
 
     @Composable
-    override fun Content(contentArgs: ContentArgs) {
-        super.Content(contentArgs)
+    override fun viewModel(contentArgs: ContentArgs): CovidCountryInfoViewModel =
+        actionViewModel<CovidCountryInfoViewModel>(contentArgs)
 
-        // When a parent is injecting ViewModel with hiltViewModel, it has to called in child too,
-        // so actionViewModel<BriefActionViewModel>(contentArgs) has to be called inside child Content,
-        // otherwise the app crashes with "Compose Runtime internal error. Unexpected or incorrect use of
-        // the Compose internal runtime API (Cannot seek outside the current group (106-1394))."
-        val viewModel = actionViewModel<CovidCountryInfoViewModel>(contentArgs)
+    @Composable
+    override fun Content(contentArgs: ContentArgs, viewModel: CovidCountryInfoViewModel) {
+        super.Content(contentArgs, viewModel)
 
         LaunchedEffect(contentArgs) { screenTitle.value = viewModel.info.country.str }
 

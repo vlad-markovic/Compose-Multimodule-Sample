@@ -21,17 +21,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for main settings screen. */
-class SettingsMainScreenComposer @Inject constructor() : BackScreenComposer() {
+class SettingsMainScreenComposer @Inject constructor() : BackScreenComposer<BriefActionViewModel>() {
 
     override val screenTitle: MutableStateFlow<StrOrRes> = titleFromStr("Settings")
 
     override val screen: Screen = SettingsScreen.MAIN
 
     @Composable
-    override fun Content(contentArgs: ContentArgs) {
-        super.Content(contentArgs)
+    override fun viewModel(contentArgs: ContentArgs): BriefActionViewModel =
+        actionViewModel<BriefActionViewModel>(contentArgs)
 
-        val viewModel: BriefActionViewModel = actionViewModel(contentArgs)
+    @Composable
+    override fun Content(contentArgs: ContentArgs, viewModel: BriefActionViewModel) {
+        super.Content(contentArgs, viewModel)
 
         Column (Modifier.padding(16.dp)) {
             Button({ viewModel.navigate(ToSecondSettingsScreen) }) {

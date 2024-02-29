@@ -24,7 +24,7 @@ class PostsTabComposer @Inject constructor(
 
     override val type: ScreenHolderType = ScreenHolderType.INITIAL_TAB
 
-    override fun composer(screen: PostsScreen): ScreenComposer =
+    override fun composer(screen: PostsScreen): ScreenComposer<*> =
         when (screen) {
             FEED_SCREEN -> feedScreenComposer
             POST_SCREEN -> postScreenComposer

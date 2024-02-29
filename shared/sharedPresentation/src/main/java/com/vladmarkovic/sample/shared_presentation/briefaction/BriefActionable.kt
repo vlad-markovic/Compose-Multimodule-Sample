@@ -4,7 +4,8 @@ package com.vladmarkovic.sample.shared_presentation.briefaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.*
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.DisplayAction
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
@@ -29,4 +30,3 @@ fun <T> T.navigate(action: NavigationAction) where T: ViewModel, T: BriefActiona
 fun <T> T.display(action: DisplayAction) where T: ViewModel, T: BriefActionable {
     viewModelScope.launch { actioner.action(action) }
 }
-

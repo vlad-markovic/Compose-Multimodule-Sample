@@ -16,22 +16,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for second settings screen. */
-class SettingsTwoScreenComposer @Inject constructor() : BackScreenComposer() {
+class SettingsTwoScreenComposer @Inject constructor() : BackScreenComposer<BriefActionViewModel>() {
 
     override val screenTitle: StateFlow<StrOrRes> = titleFromStr("Settings Two").asStateFlow()
 
     override val screen: Screen = SettingsScreen.SECOND
 
     @Composable
-    override fun Content(contentArgs: ContentArgs) {
-        super.Content(contentArgs)
-        
-        // When a parent is injecting ViewModel with hiltViewModel, it has to called in child too,
-        // so actionViewModel<BriefActionViewModel>(contentArgs) has to be called inside child Content,
-        // otherwise the app crashes with "Compose Runtime internal error. Unexpected or incorrect use of
-        // the Compose internal runtime API (Cannot seek outside the current group (106-1394))."
+    override fun viewModel(contentArgs: ContentArgs): BriefActionViewModel =
         actionViewModel<BriefActionViewModel>(contentArgs)
 
+    @Composable
+    override fun Content(contentArgs: ContentArgs, viewModel: BriefActionViewModel) {
+        super.Content(contentArgs, viewModel)
         Text("This is Settings Two")
     }
 }

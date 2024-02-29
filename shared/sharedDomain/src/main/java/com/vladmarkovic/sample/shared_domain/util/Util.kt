@@ -13,8 +13,11 @@ import kotlinx.coroutines.withContext
  * Convenience extension for function which don't return Unit
  * for when statement needing the common return to be Unit.
  */
-@Suppress("unused")
+@Suppress("unused", "UnusedReceiverParameter")
 fun <T> T.ignoreReturn() = Unit
+
+@Suppress("UNUSED_PARAMETER", "RedundantNullableReturnType")
+fun doNothing(vararg args: Any): Any? = Unit
 
 inline fun NetworkConnectivity.doOnMainOnConnectionChange(
     coroutineScope: CoroutineScope,

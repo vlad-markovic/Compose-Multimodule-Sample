@@ -5,10 +5,12 @@ package com.vladmarkovic.sample.shared_presentation.composer
 import androidx.annotation.StringRes
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.vladmarkovic.sample.shared_domain.log.Lumber
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateFade
+import com.vladmarkovic.sample.shared_presentation.compose.BackHandler
 import com.vladmarkovic.sample.shared_presentation.compose.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -24,7 +26,7 @@ import kotlinx.coroutines.launch
 
 /** Defines Compose UI and elements for a Screen. */
 @Suppress("FunctionName")
-abstract class ScreenComposer {
+abstract class ScreenComposer<VM> where VM : BriefActionable, VM : ViewModel {
 
     abstract val screen: Screen
 
@@ -38,13 +40,22 @@ abstract class ScreenComposer {
 
     open val menuItems: StateFlow<Array<MenuItem>>? get() = null
 
+    @Composable
+    open fun Content(contentArgs: ContentArgs) {
+        Content(contentArgs, viewModel(contentArgs))
+    }
+
     /** Override to specify a [Composable] content for this screen. */
     @Composable
-    abstract fun Content(contentArgs: ContentArgs)
+    open fun Content(contentArgs: ContentArgs, viewModel: VM) {
+        BackHandler(viewModel)
+    }
+
+    @Composable
+    abstract fun viewModel(contentArgs: ContentArgs): VM
 
     @Composable
     fun TopBar(navController: NavHostController) {
-        Lumber.e("RECOMPOSE TopBar in ${javaClass.simpleName}")
         AnimateFade(navController.isScreenVisible) {
             DefaultTopBar(
                 title = screenTitle.safeValue,

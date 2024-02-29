@@ -53,7 +53,7 @@ class SettingsActivity : AppCompatActivity(),
         composeNavGraph(navController, scaffoldState, mainScope)
     }
 
-    override fun composer(screen: SettingsScreen): ScreenComposer = when (screen) {
+    override fun composer(screen: SettingsScreen): ScreenComposer<*> = when (screen) {
         SettingsScreen.MAIN -> settingsMainScreenComposer
         SettingsScreen.SECOND -> settingsTwoScreenComposer
     }

@@ -11,7 +11,6 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 
 object AppTheme {
     val shapes = Shapes(

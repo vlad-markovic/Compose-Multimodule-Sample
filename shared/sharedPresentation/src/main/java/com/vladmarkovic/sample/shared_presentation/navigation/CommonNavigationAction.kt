@@ -6,5 +6,5 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.Navig
 
 /** Common [NavigationAction]s. */
 sealed class CommonNavigationAction : NavigationAction {
-    object Back : CommonNavigationAction()
+    data object Back : CommonNavigationAction()
 }

@@ -14,5 +14,5 @@ sealed class CommonDisplayAction : DisplayAction {
         constructor(str: String): this(StrOrRes.str(str))
         constructor(@StringRes res: Int): this(StrOrRes.res(res))
     }
-    object OpenDrawer : CommonDisplayAction()
+    data object OpenDrawer : CommonDisplayAction()
 }
