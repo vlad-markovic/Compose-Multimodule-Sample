@@ -8,6 +8,9 @@ import androidx.navigation.NavHostController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
+import com.vladmarkovic.sample.shared_presentation.composer.context
+import com.vladmarkovic.sample.shared_presentation.composer.onBack
+import com.vladmarkovic.sample.shared_presentation.composer.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab

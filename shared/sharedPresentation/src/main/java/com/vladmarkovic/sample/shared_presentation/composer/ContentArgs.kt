@@ -10,38 +10,36 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Suppress("MemberVisibilityCanBePrivate")
 data class ContentArgs(
     val type: ScreenHolderType,
     val navController: NavController,
     val scaffoldState: ScaffoldState,
     val mainScope: CoroutineScope,
     val backStackEntry: NavBackStackEntry
-) {
+)
 
-    val context: Context get() = navController.context
+val ContentArgs.context: Context get() = navController.context
 
-    val isDrawerOpen: Boolean get() = scaffoldState.drawerState.isOpen
+val ContentArgs.isDrawerOpen: Boolean get() = scaffoldState.drawerState.isOpen
 
-    val isInitialTabFirstScreen: Boolean
-        get() = backStackEntry.isTabFirstScreen && navController.backQueue.size < type.initialBackstackSize
+val ContentArgs.isInitialTabFirstScreen: Boolean
+    get() = backStackEntry.isTabFirstScreen && navController.backQueue.size < type.initialBackstackSize
 
-    fun closeDrawer() {
-        mainScope.launch { scaffoldState.drawerState.close() }
-    }
-
-    fun openDrawer() {
-        mainScope.launch { scaffoldState.drawerState.open() }
-    }
-
-    fun onBack() {
-        when {
-            isDrawerOpen -> closeDrawer()
-            isInitialTabFirstScreen -> (navController.context as Activity).finish()
-            else -> navController.popBackStack()
-        }
-    }
-
-    private val NavBackStackEntry.isTabFirstScreen: Boolean
-        get() = destination.parent?.startDestinationRoute == destination.route
+fun ContentArgs.closeDrawer() {
+    mainScope.launch { scaffoldState.drawerState.close() }
 }
+
+fun ContentArgs.openDrawer() {
+    mainScope.launch { scaffoldState.drawerState.open() }
+}
+
+fun ContentArgs.onBack() {
+    when {
+        isDrawerOpen -> closeDrawer()
+        isInitialTabFirstScreen -> (navController.context as Activity).finish()
+        else -> navController.popBackStack()
+    }
+}
+
+private val NavBackStackEntry.isTabFirstScreen: Boolean
+    get() = destination.parent?.startDestinationRoute == destination.route
