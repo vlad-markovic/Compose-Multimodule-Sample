@@ -2,32 +2,25 @@
 
 package com.vladmarkovic.sample.shared_presentation.util
 
-import android.content.Context
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActioner
-import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigableComposeHolder
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabNavViewModelProviderFactory
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -41,44 +34,55 @@ fun <S: Screen, T: Tab<S>> TabNavigableComposeHolder<S, T>.tabNavViewModels(): L
     }
 
 // region Compose
-fun hiltViewModelFactory(
-    context: Context,
-    navBackStackEntry: NavBackStackEntry,
-    factory: ViewModelProvider.Factory = navBackStackEntry.defaultViewModelProviderFactory
-): ViewModelProvider.Factory = HiltViewModelFactory.createInternal(
-    context.asActivity,
-    navBackStackEntry,
-    navBackStackEntry.arguments,
-    factory,
-)
-
-@Composable
-inline fun <reified VM : ViewModel> hiltViewModel(
-    navBackStackEntry: NavBackStackEntry,
-    factory: ViewModelProvider.Factory = navBackStackEntry.defaultViewModelProviderFactory
-): VM = viewModel(
-    viewModelStoreOwner = navBackStackEntry,
-    factory = hiltViewModelFactory(LocalContext.current, navBackStackEntry, factory)
-)
+//fun hiltViewModelFactory(
+//    context: Context,
+//    navBackStackEntry: NavBackStackEntry,
+//    factory: ViewModelProvider.Factory = navBackStackEntry.defaultViewModelProviderFactory
+//): ViewModelProvider.Factory = HiltViewModelFactory.createInternal(
+//    context.asActivity,
+//    navBackStackEntry,
+//    navBackStackEntry.arguments,
+//    factory,
+//)
+//
+//@Composable
+//inline fun <reified VM : ViewModel> hiltViewModel(
+//    navBackStackEntry: NavBackStackEntry,
+//    factory: ViewModelProvider.Factory = navBackStackEntry.defaultViewModelProviderFactory,
+//    key: String? = null
+//): VM = viewModel(
+//    viewModelStoreOwner = navBackStackEntry,
+//    factory = hiltViewModelFactory(LocalContext.current, navBackStackEntry, factory),
+//    key = key
+//)
+//
+//@Composable
+//inline fun <reified VM> actionViewModel(
+//    backStackEntry: NavBackStackEntry,
+//    noinline actionHandler: (BriefAction) -> Unit,
+//    factory: ViewModelProvider.Factory = backStackEntry.defaultViewModelProviderFactory,
+//    key: String? = null
+//): VM where VM : BriefActionable, VM : ViewModel =
+//    hiltViewModel<VM>(backStackEntry, factory, key).apply { actioner.SetupWith(actionHandler) }
 
 @Composable
 inline fun <reified VM> actionViewModel(
-    contentArgs: ContentArgs,
-    factory: ViewModelProvider.Factory// = contentArgs.backStackEntry.defaultViewModelProviderFactory
+    noinline actionHandler: (BriefAction) -> Unit,
 ): VM where VM : BriefActionable, VM : ViewModel =
-    hiltViewModel<VM>(contentArgs.backStackEntry, factory).apply { actioner.SetupWith(contentArgs) }
+    actionViewModel(key = null, actionHandler)
+
 
 @Composable
-inline fun <reified VM> Any.actionViewModel(
-    contentArgs: ContentArgs,
-    key: String? = hashCode().toString()
+inline fun <reified VM> actionViewModel(
+    key: String?,
+    noinline actionHandler: (BriefAction) -> Unit
 ): VM where VM : BriefActionable, VM : ViewModel =
-    androidx.hilt.navigation.compose.hiltViewModel<VM>(key = key).apply { actioner.SetupWith(contentArgs) }
+    androidx.hilt.navigation.compose.hiltViewModel<VM>(key = key).apply { actioner.SetupWith(actionHandler) }
 
 /** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
 @Composable
-fun BriefActioner.SetupWith(contentArgs: ContentArgs) {
-    ActionsHandler(action, contentArgs::handleBriefAction)
+fun BriefActioner.SetupWith(actionHandler: (BriefAction) -> Unit) {
+    ActionsHandler(action, actionHandler)
 }
 
 @Composable

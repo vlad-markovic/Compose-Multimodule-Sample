@@ -13,12 +13,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.vladmarkovic.sample.shared_presentation.compose.DrawerData
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+@Composable
+fun DefaultDrawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope, drawerData: DrawerData?) {
+    drawerData?.items?.takeIf { it.isNotEmpty() }?.let {
+        DefaultDrawer(it) {
+            mainScope.launch { scaffoldState.drawerState.close() }
+        }
+    }
+}
 
 @Composable
 fun DefaultDrawer(drawerItems: List<DrawerItem>, closeDrawer: () -> Unit) {

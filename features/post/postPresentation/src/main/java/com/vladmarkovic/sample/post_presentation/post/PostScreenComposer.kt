@@ -3,45 +3,48 @@
 package com.vladmarkovic.sample.post_presentation.post
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
-import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel>() {
-
-    override var upButton: MutableStateFlow<UpButton?> = MutableStateFlow(null)
-
-    override val screenTitle: StateFlow<StrOrRes> = titleFromRes(R.string.post_screen_title).asStateFlow()
+class PostScreenComposer @Inject constructor() : TabScreenComposer<PostViewModel> {
 
     override val screen: Screen = PostsScreen.POST_SCREEN
 
     @Composable
-    override fun viewModel(contentArgs: ContentArgs): PostViewModel =
-        actionViewModel<PostViewModel>(contentArgs)
+    override fun viewModel(stackContentArgs: StackContentArgs): PostViewModel =
+        actionViewModel<PostViewModel>(stackContentArgs.bubbleUp)
 
     @Composable
-    override fun Content(contentArgs: ContentArgs, viewModel: PostViewModel) {
-        super.Content(contentArgs, viewModel)
+    override fun Content(
+        stackContentArgs: StackContentArgs,
+        screenSetup: (ScaffoldChange) -> Unit,
+        viewModel: PostViewModel
+    ) {
+        super.Content(stackContentArgs, screenSetup, viewModel)
 
-        LaunchedEffect(contentArgs) { upButton.value = BackButton(viewModel) }
+        SetupScreen(screenSetup,
+            change(
+                topBarChange = topBarChange(
+                    title = StrOrRes.res(R.string.post_screen_title),
+                    upButton = BackButton(viewModel),
+                )
+            )
+        )
 
-        AnimateSlide(contentArgs.navController.isScreenVisible, -1) {
+        AnimateSlide(stackContentArgs.navController.isScreenVisible, -1) {
             PostScreen(
                 viewModel.post,
                 viewModel.authorResult.safeValue,

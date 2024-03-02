@@ -3,33 +3,36 @@
 package com.vladmarkovic.sample.covid_presentation.country_info
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import com.vladmarkovic.sample.shared_presentation.composer.BackScreenComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for country Covid details screen. */
-class CovidCountryInfoScreenComposer @Inject constructor() : BackScreenComposer<CovidCountryInfoViewModel>() {
+class CovidCountryInfoScreenComposer @Inject constructor() : TabScreenComposer<CovidCountryInfoViewModel> {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_INFO
 
-    override val screenTitle: MutableStateFlow<StrOrRes> = titleFromStr("")
+    @Composable
+    override fun viewModel(stackContentArgs: StackContentArgs): CovidCountryInfoViewModel =
+        actionViewModel<CovidCountryInfoViewModel>(stackContentArgs.bubbleUp)
 
     @Composable
-    override fun viewModel(contentArgs: ContentArgs): CovidCountryInfoViewModel =
-        actionViewModel<CovidCountryInfoViewModel>(contentArgs)
+    override fun Content(
+        stackContentArgs: StackContentArgs,
+        screenSetup: (ScaffoldChange) -> Unit,
+        viewModel: CovidCountryInfoViewModel
+    ) {
+        super.Content(stackContentArgs, screenSetup, viewModel)
 
-    @Composable
-    override fun Content(contentArgs: ContentArgs, viewModel: CovidCountryInfoViewModel) {
-        super.Content(contentArgs, viewModel)
-
-        LaunchedEffect(contentArgs) { screenTitle.value = viewModel.info.country.str }
+        SetupScreen(
+            screenSetup,
+            change(title = viewModel.info.country.str)
+        )
 
         CountryCovidInfoScreen(viewModel.info)
     }

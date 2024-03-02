@@ -3,55 +3,54 @@
 package com.vladmarkovic.sample.covid_presentation.country_comparison
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import com.vladmarkovic.sample.covid_presentation.R.string.country_comparison_screen_title
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.GroupByContinent
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.Sort
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.composer.BackScreenComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabInitialScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
-import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for Covid country comparison screen. */
-class CovidCountryComparisonScreenComposer @Inject constructor() : BackScreenComposer<CountryComparisonViewModel>() {
+class CovidCountryComparisonScreenComposer @Inject constructor() : TabInitialScreenComposer<CountryComparisonViewModel> {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_COMPARISON
 
-    override val screenTitle: MutableStateFlow<StrOrRes> = titleFromRes(country_comparison_screen_title)
-
-    override val menuItems: StateFlow<Array<MenuItem>> get() = _menuItems.asStateFlow()
-    override val drawerItems: StateFlow<List<DrawerItem>> get() = _drawerItems.asStateFlow()
-
-    private val _menuItems: MutableStateFlow<Array<MenuItem>> = MutableStateFlow(arrayOf())
-    private val _drawerItems: MutableStateFlow<List<DrawerItem>> = MutableStateFlow(emptyList())
+    @Composable
+    override fun viewModel(stackContentArgs: StackContentArgs): CountryComparisonViewModel =
+        actionViewModel<CountryComparisonViewModel>(stackContentArgs.bubbleUp)
 
     @Composable
-    override fun viewModel(contentArgs: ContentArgs): CountryComparisonViewModel =
-        actionViewModel<CountryComparisonViewModel>(contentArgs)
+    override fun Content(
+        stackContentArgs: StackContentArgs,
+        screenSetup: (ScaffoldChange) -> Unit,
+        viewModel: CountryComparisonViewModel
+    ) {
+        super.Content(stackContentArgs, screenSetup, viewModel)
 
-    @Composable
-    override fun Content(contentArgs: ContentArgs, viewModel: CountryComparisonViewModel) {
-        super.Content(contentArgs, viewModel)
-
-        LaunchedEffect(key1 = contentArgs) {
-            _menuItems.value = arrayOf(
-                GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
-                Sort(viewModel::sortAscending, viewModel.sortAscending)
+        SetupScreen(
+            screenSetup,
+            change(
+                topBarChange = topBarChange(
+                    title = StrOrRes.res(country_comparison_screen_title),
+                    upButton = UpButton.BackButton(viewModel),
+                    menuItems = listOf(
+                        GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
+                        Sort(viewModel::sortAscending, viewModel.sortAscending)
+                    )
+                ),
+                drawerItems = defaultDrawerItems(viewModel)
             )
-            _drawerItems.value = defaultDrawerItems(viewModel)
-        }
+        )
 
         CountryComparisonScreen(
             showLoading = viewModel.showLoading.safeValue,

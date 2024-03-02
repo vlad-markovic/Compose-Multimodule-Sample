@@ -2,22 +2,18 @@
 
 package com.vladmarkovic.sample.shared_presentation.composer
 
-import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
-import kotlinx.coroutines.CoroutineScope
 
 /**
  * Holds a number of scoped screens specifying all it holds, and serves as a screen selector.
  * Also saves and holds the state for the current screen.
  */
-@Suppress("FunctionName")
 interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
 
     val type: ScreenHolderType
@@ -30,33 +26,26 @@ interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
 
     /** Composes screens and a "navigation branch" with "composable" function for each screen. */
     fun NavGraphBuilder.composeNavGraph(
-        navController: NavHostController,
-        scaffoldState: ScaffoldState,
-        mainScope: CoroutineScope
+        contentArgs: ContentArgs,
+        scaffoldChange: (ScaffoldChange) -> Unit,
+        bubbleUp: (ScreenHolderType, BriefAction) -> Unit
     ) {
         allScreens.forEach { screen ->
             composable(
                 route = screen.route,
                 arguments = screen.namedArgs,
             ) { backStackEntry ->
-                val contentArgs = ContentArgs(type, navController, scaffoldState, mainScope, backStackEntry)
-
                 updateCurrentScreen(screen)
 
                 with(composer(screen)) {
-                    Content(contentArgs)
+                    Content(
+                        StackContentArgs(contentArgs, type, backStackEntry) { action ->
+                            bubbleUp(type, action)
+                        },
+                        scaffoldChange
+                    )
                 }
             }
         }
-    }
-
-    @Composable
-    fun ComposeTopBar(navController: NavHostController) {
-        composer(currentScreen.safeValue).TopBar(navController)
-    }
-
-    @Composable
-    fun ComposeDrawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope) {
-        composer(currentScreen.safeValue).Drawer(scaffoldState, mainScope)
     }
 }

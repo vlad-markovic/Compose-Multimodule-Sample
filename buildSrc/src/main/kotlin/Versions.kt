@@ -9,7 +9,7 @@ internal object  Versions {
 
     const val targetSdk = 34
     const val compileSdk = targetSdk
-    const val minSdk = 23
+    const val minSdk = 24
     // endregion Global
 
     const val gradleBuildTools = "8.2.2"

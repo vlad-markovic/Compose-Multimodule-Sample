@@ -19,14 +19,8 @@ interface BriefActionable {
     val action: SharedFlow<BriefAction> get() = actioner.action
 }
 
+fun <T> T.navigate(action: NavigationAction) where T: ViewModel, T: BriefActionable = action(action)
+fun <T> T.display(action: DisplayAction) where T: ViewModel, T: BriefActionable = action(action)
 fun <T> T.action(action: BriefAction) where T: ViewModel, T: BriefActionable {
-    viewModelScope.launch { actioner.action(action) }
-}
-
-fun <T> T.navigate(action: NavigationAction) where T: ViewModel, T: BriefActionable {
-    viewModelScope.launch { actioner.action(action) }
-}
-
-fun <T> T.display(action: DisplayAction) where T: ViewModel, T: BriefActionable {
     viewModelScope.launch { actioner.action(action) }
 }

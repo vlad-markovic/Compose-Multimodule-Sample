@@ -4,6 +4,9 @@ package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.compose.NavHost
+import androidx.navigation.navigation
+import com.vladmarkovic.sample.shared_presentation.compose.Tabs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
@@ -41,7 +44,25 @@ class MainActivity : AppCompatActivity(), TabNavigableComposeHolder<MainScreen, 
         super.onCreate(savedInstanceState)
 
         setComposeContentView {
-            MainContent()
+            Tabs(tabNav, tabs) { contentArgs, modifier, scaffoldChange, bubbleUp ->
+                NavHost(
+                    navController = contentArgs.navController,
+                    startDestination = initialDestination,
+                    modifier = modifier
+                ) {
+                    tabNav.setupWith(contentArgs.navController)
+                    tabs.forEach { tab ->
+                        navigation(
+                            startDestination = tab.initialScreen.name,
+                            route = tab.name
+                        ) {
+                            with(tabComposer(tab)) {
+                                composeNavGraph(contentArgs, scaffoldChange, bubbleUp)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

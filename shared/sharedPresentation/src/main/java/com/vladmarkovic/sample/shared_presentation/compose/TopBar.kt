@@ -6,11 +6,24 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.*
+import androidx.compose.material.AppBarDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.IconToggleButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,33 +36,59 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
 import com.vladmarkovic.sample.shared_presentation.R.string
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
+import com.vladmarkovic.sample.shared_presentation.util.isScreenVisible
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
 @Composable
+fun DefaultTopBar(navController: NavController, topBarData: TopBarData?) {
+    topBarData?.let {
+        DefaultTopBar(it) { navController.isScreenVisible(it.screen.name) }
+    }
+}
+
+@Composable
 fun DefaultTopBar(
-    title: StrOrRes,
+    topBarData: TopBarData,
+    isScreenVisible: () -> Boolean
+) {
+    AnimateFade(isScreenVisible()) {
+        DefaultTopBar(
+            title = topBarData.title,
+            modifier = topBarData.modifier,
+            textAlign = topBarData.textAlign,
+            upButton = topBarData.upButton,
+            menuItems = topBarData.menuItems,
+            elevation = topBarData.elevation,
+        )
+    }
+}
+
+@Composable
+fun DefaultTopBar(
+    title: StrOrRes?,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
-    up: UpButton? = null,
-    menuItems: Array<MenuItem>? = null,
+    upButton: UpButton? = null,
+    menuItems: List<MenuItem>? = null,
     elevation: Dp = AppBarDefaults.TopAppBarElevation
 ) {
     TopAppBar(
         modifier = modifier,
         backgroundColor = AppColor.Grey900,
-        navigationIcon = { up?.let { Up(it) } },
+        navigationIcon = { upButton?.let { UpButton(it) } },
         actions = { menuItems?.let { DefaultMenu(it) } },
         elevation = elevation,
         title = {
             Text(
                 modifier = modifier.then(Modifier.fillMaxWidth()),
-                text = title.get(LocalContext.current),
+                text = title?.get(LocalContext.current).orEmpty(),
                 textAlign = textAlign,
                 style = AppTheme.typography.h5,
                 fontWeight = FontWeight.Bold,
@@ -60,7 +99,7 @@ fun DefaultTopBar(
 }
 
 @Composable
-fun Up(upButton: UpButton?) {
+fun UpButton(upButton: UpButton?) {
     upButton?.let {
         IconButton(it.action) {
             Icon(
@@ -79,7 +118,7 @@ private fun PreviewTopBar() {
 }
 
 @Composable
-fun DefaultMenu(menuItems: Array<MenuItem>) {
+fun DefaultMenu(menuItems: List<MenuItem>) {
     val expanded = remember { mutableStateOf(false) }
 
     Box(
