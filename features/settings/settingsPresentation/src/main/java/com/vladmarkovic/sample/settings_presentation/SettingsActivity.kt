@@ -36,13 +36,13 @@ class SettingsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
 
         setComposeContentView {
-            ScreensHolder { contentArgs, modifier, scaffoldChange, bubbleUp ->
+            ScreensHolder { args, modifier ->
                 NavHost(
-                    navController = contentArgs.navController,
+                    navController = args.navController,
                     startDestination = initialScreen.name,
                     modifier = modifier,
                 ) {
-                    composeNavGraph(contentArgs, scaffoldChange, bubbleUp)
+                    composeNavGraph(args)
                 }
             }
         }

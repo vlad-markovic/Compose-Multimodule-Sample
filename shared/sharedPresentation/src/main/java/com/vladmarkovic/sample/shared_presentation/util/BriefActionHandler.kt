@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.composer.onBack
 import com.vladmarkovic.sample.shared_presentation.composer.openDrawer
@@ -29,18 +29,18 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 
-fun ContentArgs.handleAction(
+fun ComposeArgs.handleAction(
     type: ScreenHolderType,
     action: BriefAction,
     bubbleUp: (BriefAction) -> Unit
 ) = when (action) {
     is NavigationAction -> navigate(type, action, bubbleUp)
     is CommonDisplayAction -> handleCommonDisplayAction(action)
-    else -> throw IllegalArgumentException("Unhandled navigation action: $action")
+    else -> bubbleUp(action)
 }
 
 /** Branch out handling of different types of [NavigationAction]s. */
-private fun ContentArgs.navigate(
+private fun ComposeArgs.navigate(
     type: ScreenHolderType,
     action: NavigationAction,
     bubbleUp: (BriefAction) -> Unit
@@ -51,7 +51,7 @@ private fun ContentArgs.navigate(
     else -> bubbleUp(action)
 }
 
-private fun ContentArgs.navigate(type: ScreenHolderType, action: CommonNavigationAction) {
+private fun ComposeArgs.navigate(type: ScreenHolderType, action: CommonNavigationAction) {
     when (action) {
         is CommonNavigationAction.Back -> onBack(type)
     }
@@ -88,7 +88,7 @@ fun NavController.navigate(tab: Tab<*>) {
     }
 }
 
-private fun ContentArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
+private fun ComposeArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
     when(action) {
         is CommonDisplayAction.Toast -> {
             Toast.makeText(navController.context, action.value.get(navController.context), Toast.LENGTH_SHORT).show()

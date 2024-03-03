@@ -8,10 +8,9 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.Sort
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.composer.TabInitialScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
@@ -21,25 +20,20 @@ import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for Covid country comparison screen. */
-class CovidCountryComparisonScreenComposer @Inject constructor() :
-    TabInitialScreenComposer<CountryComparisonViewModel> {
+class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenComposer<CountryComparisonViewModel> {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_COMPARISON
 
     @Composable
-    override fun viewModel(stackContentArgs: StackContentArgs): CountryComparisonViewModel =
-        actionViewModel<CountryComparisonViewModel>(stackContentArgs.bubbleUp)
+    override fun viewModel(args: ScreenArgs): CountryComparisonViewModel =
+        actionViewModel<CountryComparisonViewModel>(args.bubbleUp)
 
     @Composable
-    override fun Content(
-        stackContentArgs: StackContentArgs,
-        screenSetup: (ScaffoldChange) -> Unit,
-        viewModel: CountryComparisonViewModel
-    ) {
-        super.Content(stackContentArgs, screenSetup, viewModel)
+    override fun Content(args: ScreenArgs, viewModel: CountryComparisonViewModel) {
+        super.Content(args, viewModel)
 
         SetupScreen(
-            screenSetup,
+            args.screenSetup,
             change(
                 topBarChange = topBarChange(
                     title = StrOrRes.res(country_comparison_screen_title),

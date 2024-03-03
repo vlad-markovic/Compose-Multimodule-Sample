@@ -9,10 +9,9 @@ import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource.REMOTE
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.composer.TabInitialScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
@@ -23,24 +22,20 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class FeedScreenComposer @Inject constructor() : TabInitialScreenComposer<FeedViewModel> {
+class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel> {
 
     override val screen: Screen = PostsScreen.FEED_SCREEN
 
     @Composable
-    override fun viewModel(stackContentArgs: StackContentArgs): FeedViewModel =
-        actionViewModel<FeedViewModel>(stackContentArgs.bubbleUp)
+    override fun viewModel(args: ScreenArgs): FeedViewModel =
+        actionViewModel<FeedViewModel>(args.bubbleUp)
 
     @Composable
-    override fun Content(
-        stackContentArgs: StackContentArgs,
-        screenSetup: (ScaffoldChange) -> Unit,
-        viewModel: FeedViewModel
-    ) {
-        super.Content(stackContentArgs, screenSetup, viewModel)
+    override fun Content(args: ScreenArgs, viewModel: FeedViewModel) {
+        super.Content(args, viewModel)
 
         SetupScreen(
-            screenSetup,
+            args.screenSetup,
             change(
                 topBarChange = topBarChange(
                     title = StrOrRes.res(feed_screen_title),
@@ -50,7 +45,7 @@ class FeedScreenComposer @Inject constructor() : TabInitialScreenComposer<FeedVi
             )
         )
 
-        AnimateSlide(stackContentArgs.navController.isScreenVisible) {
+        AnimateSlide(args.navController.isScreenVisible) {
             FeedScreen(
                 loading = viewModel.loading.safeValue,
                 posts = viewModel.posts.safeValue,

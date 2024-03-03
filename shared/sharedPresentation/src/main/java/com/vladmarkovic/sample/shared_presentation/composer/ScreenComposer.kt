@@ -9,7 +9,6 @@ import androidx.navigation.NavController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.compose.DrawerChange
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.ScreenData
 import com.vladmarkovic.sample.shared_presentation.compose.TopBarChange
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -22,7 +21,6 @@ import com.vladmarkovic.sample.shared_presentation.util.isScreenVisible
 interface ScreenComposer<VM> where VM : BriefActionable, VM : ViewModel {
 
     val screen: Screen
-    val type: ScreenHolderType get() = ScreenHolderType.STANDALONE
 
 //    @Composable
 //    fun Main() {
@@ -40,19 +38,20 @@ interface ScreenComposer<VM> where VM : BriefActionable, VM : ViewModel {
 //    }
 
     @Composable
-    fun Content(stackContentArgs: StackContentArgs, screenSetup: (ScaffoldChange) -> Unit) {
-        Content(stackContentArgs, screenSetup, viewModel(stackContentArgs))
+    fun Content(args: ScreenArgs, asSuper: @Composable () -> Unit) {
+        asSuper()
+        Content(args, viewModel(args))
     }
 
 
     /** Override to specify a [Composable] content for this screen. */
     @Composable
-    fun Content(stackContentArgs: StackContentArgs, screenSetup: (ScaffoldChange) -> Unit, viewModel: VM) {
+    fun Content(args: ScreenArgs, viewModel: VM) {
 //        BackHandler(viewModel)
     }
 
     @Composable
-    fun viewModel(stackContentArgs: StackContentArgs): VM
+    fun viewModel(args: ScreenArgs): VM
 
     @Composable
     fun SetupScreen(screenSetup: (ScaffoldChange) -> Unit, change: ScaffoldChange) {
@@ -62,10 +61,10 @@ interface ScreenComposer<VM> where VM : BriefActionable, VM : ViewModel {
     }
 
     fun change(title: StrOrRes? = null, upButton: UpButton? = null, menuItems: List<MenuItem>? = null) =
-        ScaffoldChange(ScreenData(screen, type), topBarChange(title, upButton, menuItems))
+        ScaffoldChange(screen, topBarChange(title, upButton, menuItems))
 
     fun change(topBarChange: TopBarChange, drawerItems: List<DrawerItem>? = null) =
-        ScaffoldChange(ScreenData(screen, type), topBarChange, drawerItems?.let { DrawerChange(it) })
+        ScaffoldChange(screen, topBarChange, drawerItems?.let { DrawerChange(it) })
 
     fun topBarChange(title: StrOrRes? = null, upButton: UpButton? = null, menuItems: List<MenuItem>? = null) =
         TopBarChange(screen, title, upButton, menuItems)

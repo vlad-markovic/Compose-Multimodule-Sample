@@ -4,7 +4,6 @@ import androidx.compose.material.AppBarDefaults
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
@@ -15,8 +14,6 @@ import kotlin.jvm.optionals.getOrNull
 
 sealed interface ScaffoldPartData
 sealed interface ScaffoldPartChange
-
-data class ScreenData(val screen: Screen, val screenHolderType: ScreenHolderType)
 
 // region TopBar
 data class TopBarData(
@@ -104,13 +101,13 @@ fun DrawerData.updateWith(change: DrawerChange): DrawerData = copy(
 
 // region ScaffoldChange
 data class ScaffoldChange(
-    val screenChange: ScreenData,
+    val screenChange: Screen,
     val topBarChange: Optional<TopBarChange>? = null,
     val drawerChange: Optional<DrawerChange>? = null,
 ) {
-    constructor(screenChange: ScreenData, drawerChange: DrawerChange) :
+    constructor(screenChange: Screen, drawerChange: DrawerChange) :
             this(screenChange = screenChange, drawerChange = Optional.of(drawerChange))
-    constructor(screenChange: ScreenData, topBarChange: TopBarChange, drawerChange: DrawerChange? = null) :
+    constructor(screenChange: Screen, topBarChange: TopBarChange, drawerChange: DrawerChange? = null) :
             this(screenChange = screenChange, topBarChange = Optional.of(topBarChange), drawerChange = Optional.ofNullable(drawerChange))
 }
 // endregion ScaffoldChange

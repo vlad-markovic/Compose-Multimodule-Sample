@@ -15,9 +15,8 @@ import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.composer.ContentArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
-import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.util.SetupWith
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +28,7 @@ fun TestCompose(
     navController: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     mainScope: CoroutineScope = rememberCoroutineScope(),
-    content: @Composable (StackContentArgs) -> Unit
+    content: @Composable (ScreenArgs) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -43,24 +42,19 @@ fun TestCompose(
             composable(
                 route = tab.initialScreen.name,
                 arguments = emptyList(),
-            ) { backStackEntry ->
+            ) { _ ->
                 val scaffoldChange: (ScaffoldChange) -> Unit = {
 
                 }
-                val contentArgs = ContentArgs(navController, scaffoldState, mainScope)
+                val composeArgs = ComposeArgs(navController, scaffoldState, mainScope)
                 val actionHandler: (BriefAction) -> Unit = {
 
                 }
-                val stackContentArgs = StackContentArgs(
-                    contentArgs,
-                    ScreenHolderType.STANDALONE,
-                    backStackEntry,
-                    actionHandler
-                )
+                val screenArgs = ScreenArgs(composeArgs, scaffoldChange, actionHandler)
 
                 viewModel.apply { actioner.SetupWith(actionHandler) }
 
-                content(stackContentArgs)
+                content(screenArgs)
             }
         }
     }

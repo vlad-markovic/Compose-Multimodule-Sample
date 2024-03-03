@@ -36,38 +36,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.navigation.NavController
 import com.vladmarkovic.sample.shared_presentation.R.string
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
-import com.vladmarkovic.sample.shared_presentation.util.isScreenVisible
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
 @Composable
-fun DefaultTopBar(navController: NavController, topBarData: TopBarData?) {
-    topBarData?.let {
-        DefaultTopBar(it) { navController.isScreenVisible(it.screen.name) }
-    }
-}
-
-@Composable
-fun DefaultTopBar(
-    topBarData: TopBarData,
-    isScreenVisible: () -> Boolean
-) {
-    AnimateFade(isScreenVisible()) {
-        DefaultTopBar(
-            title = topBarData.title,
-            modifier = topBarData.modifier,
-            textAlign = topBarData.textAlign,
-            upButton = topBarData.upButton,
-            menuItems = topBarData.menuItems,
-            elevation = topBarData.elevation,
-        )
-    }
+fun DefaultTopBar(topBarData: TopBarData?) {
+    if (topBarData == null) return
+    DefaultTopBar(
+        title = topBarData.title,
+        modifier = topBarData.modifier,
+        textAlign = topBarData.textAlign,
+        upButton = topBarData.upButton,
+        menuItems = topBarData.menuItems,
+        elevation = topBarData.elevation,
+    )
 }
 
 @Composable

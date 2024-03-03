@@ -4,8 +4,8 @@ package com.vladmarkovic.sample.shared_presentation.composer
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.compose.OnStart
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenHolderChange
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
@@ -25,25 +25,17 @@ interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
     fun composer(screen: S): ScreenComposer<*>
 
     /** Composes screens and a "navigation branch" with "composable" function for each screen. */
-    fun NavGraphBuilder.composeNavGraph(
-        contentArgs: ContentArgs,
-        scaffoldChange: (ScaffoldChange) -> Unit,
-        bubbleUp: (ScreenHolderType, BriefAction) -> Unit
-    ) {
+    fun NavGraphBuilder.composeNavGraph(args: ScreenArgs) {
         allScreens.forEach { screen ->
             composable(
                 route = screen.route,
                 arguments = screen.namedArgs,
-            ) { backStackEntry ->
-                updateCurrentScreen(screen)
-
+            ) { _ ->
+//                updateCurrentScreen(screen) TODO?
                 with(composer(screen)) {
-                    Content(
-                        StackContentArgs(contentArgs, type, backStackEntry) { action ->
-                            bubbleUp(type, action)
-                        },
-                        scaffoldChange
-                    )
+                    Content(args) {
+                        OnStart { args.bubbleUp(ScreenHolderChange(type)) }
+                    }
                 }
             }
         }

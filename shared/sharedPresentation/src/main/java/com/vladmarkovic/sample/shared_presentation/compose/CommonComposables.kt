@@ -63,19 +63,21 @@ fun AnimateSlide(
 @Composable
 fun AnimateFade(
     visible: Boolean,
+    label: String,
     content: @Composable AnimatedVisibilityScope.() -> Unit
 ) {
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(),
         exit = fadeOut(),
+        label = label,
         content = content
     )
 }
 
 //@Composable
-//fun BackHandler(stackContentArgs: StackContentArgs)  {
-//    BackHandler(actionViewModel<BriefActionViewModel>(stackContentArgs.bubbleUp))
+//fun BackHandler(args: ScreenArgs)  {
+//    BackHandler(actionViewModel<BriefActionViewModel>(args.bubbleUp))
 //}
 //
 //@Composable
@@ -100,6 +102,13 @@ fun AnimateFade(
 //        }
 //    } ?: Lumber.e("No OnBackPressedDispatcherOwner was provided via LocalOnBackPressedDispatcherOwner")
 //}
+
+@Composable
+fun OnStart(onStart: () -> Unit) {
+    OnLifecycleEvent { event ->
+        if (event == Lifecycle.Event.ON_START) onStart()
+    }
+}
 
 @Composable
 fun OnLifecycleEvent(onEach: (Lifecycle.Event) -> Unit) {

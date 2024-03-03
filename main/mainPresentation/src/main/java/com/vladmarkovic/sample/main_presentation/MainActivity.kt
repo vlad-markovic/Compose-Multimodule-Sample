@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setComposeContentView {
-            Tabs(MainBottomTab.entries) { tab, contentArgs, scaffoldChange, bubbleUp ->
+            Tabs(MainBottomTab.entries) { tab, args ->
                 with(tabComposer(tab as MainBottomTab)) {
-                    composeNavGraph(contentArgs, scaffoldChange, bubbleUp)
+                    composeNavGraph(args)
                 }
             }
         }

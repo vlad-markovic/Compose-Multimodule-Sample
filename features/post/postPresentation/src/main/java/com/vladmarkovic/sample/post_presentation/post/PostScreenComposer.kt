@@ -6,10 +6,9 @@ import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.composer.TabScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
@@ -19,23 +18,20 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class PostScreenComposer @Inject constructor() : TabScreenComposer<PostViewModel> {
+class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel> {
 
     override val screen: Screen = PostsScreen.POST_SCREEN
 
     @Composable
-    override fun viewModel(stackContentArgs: StackContentArgs): PostViewModel =
-        actionViewModel<PostViewModel>(stackContentArgs.bubbleUp)
+    override fun viewModel(args: ScreenArgs): PostViewModel =
+        actionViewModel<PostViewModel>(args.bubbleUp)
 
     @Composable
-    override fun Content(
-        stackContentArgs: StackContentArgs,
-        screenSetup: (ScaffoldChange) -> Unit,
-        viewModel: PostViewModel
-    ) {
-        super.Content(stackContentArgs, screenSetup, viewModel)
+    override fun Content(args: ScreenArgs, viewModel: PostViewModel) {
+        super.Content(args, viewModel)
 
-        SetupScreen(screenSetup,
+        SetupScreen(
+            args.screenSetup,
             change(
                 topBarChange = topBarChange(
                     title = StrOrRes.res(R.string.post_screen_title),
@@ -44,7 +40,7 @@ class PostScreenComposer @Inject constructor() : TabScreenComposer<PostViewModel
             )
         )
 
-        AnimateSlide(stackContentArgs.navController.isScreenVisible, -1) {
+        AnimateSlide(args.navController.isScreenVisible, -1) {
             PostScreen(
                 viewModel.post,
                 viewModel.authorResult.safeValue,
