@@ -15,7 +15,7 @@ import com.vladmarkovic.sample.shared_presentation.util.str
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for second settings screen. */
-class SettingsTwoScreenComposer @Inject constructor() : ScreenComposer<BriefActionViewModel> {
+class SettingsTwoScreenComposer @Inject constructor() : ScreenComposer<BriefActionViewModel>() {
 
     override val screen: Screen = SettingsScreen.SECOND
 

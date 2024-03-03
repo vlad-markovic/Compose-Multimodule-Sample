@@ -13,12 +13,13 @@ import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.util.isScreenVisible
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel> {
+class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel>() {
 
     override val screen: Screen = PostsScreen.POST_SCREEN
 
@@ -40,7 +41,7 @@ class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel> {
             )
         )
 
-        AnimateSlide(args.navController.isScreenVisible, -1) {
+        AnimateSlide(args.navController.isScreenVisible(screen.name), -1) {
             PostScreen(
                 viewModel.post,
                 viewModel.authorResult.safeValue,

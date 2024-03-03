@@ -17,12 +17,13 @@ import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.util.isScreenVisible
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
-class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel> {
+class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel>() {
 
     override val screen: Screen = PostsScreen.FEED_SCREEN
 
@@ -45,7 +46,7 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel> {
             )
         )
 
-        AnimateSlide(args.navController.isScreenVisible) {
+        AnimateSlide(args.navController.isScreenVisible(screen.name)) {
             FeedScreen(
                 loading = viewModel.loading.safeValue,
                 posts = viewModel.posts.safeValue,

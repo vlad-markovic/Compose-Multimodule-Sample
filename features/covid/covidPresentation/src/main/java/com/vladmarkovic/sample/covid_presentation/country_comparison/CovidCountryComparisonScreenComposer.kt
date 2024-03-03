@@ -20,7 +20,7 @@ import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for Covid country comparison screen. */
-class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenComposer<CountryComparisonViewModel> {
+class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenComposer<CountryComparisonViewModel>() {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_COMPARISON
 

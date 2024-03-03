@@ -12,7 +12,7 @@ import com.vladmarkovic.sample.shared_presentation.util.str
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for country Covid details screen. */
-class CovidCountryInfoScreenComposer @Inject constructor() : ScreenComposer<CovidCountryInfoViewModel> {
+class CovidCountryInfoScreenComposer @Inject constructor() : ScreenComposer<CovidCountryInfoViewModel>() {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_INFO
 

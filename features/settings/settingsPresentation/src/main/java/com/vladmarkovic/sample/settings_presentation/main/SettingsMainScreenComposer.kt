@@ -21,7 +21,7 @@ import com.vladmarkovic.sample.shared_presentation.util.str
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for main settings screen. */
-class SettingsMainScreenComposer @Inject constructor() : ScreenComposer<BriefActionViewModel> {
+class SettingsMainScreenComposer @Inject constructor() : ScreenComposer<BriefActionViewModel>() {
 
     override val screen: Screen = SettingsScreen.MAIN
 
