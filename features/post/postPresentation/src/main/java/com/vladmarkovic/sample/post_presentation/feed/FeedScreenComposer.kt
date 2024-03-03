@@ -12,7 +12,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabInitialScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.TabInitialScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems

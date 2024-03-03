@@ -12,15 +12,15 @@ import kotlinx.coroutines.flow.StateFlow
  * for enabling composition - ViewModel just needs to instantiate the [TabNavigator];
  * or inherit from [TabNavViewModel].
  */
-interface TabNavigable<S : Screen, T: Tab<S>> {
+interface TabNavigable {
 
-    val initialTab: T
+    val initialTab: Tab<*>
 
-    val tabNavigator: TabNavigator<S, T>
+    val tabNavigator: TabNavigator
 
-    val tab: StateFlow<T> get() = tabNavigator.tab
+    val tab: StateFlow<Tab<*>> get() = tabNavigator.tab
 
-    fun navigate(tab: T) {
+    fun navigate(tab: Tab<*>) {
         tabNavigator.navigateTo(tab)
     }
 }

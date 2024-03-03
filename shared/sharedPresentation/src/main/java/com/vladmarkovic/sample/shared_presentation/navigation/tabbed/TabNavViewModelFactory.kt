@@ -5,21 +5,29 @@ package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import dagger.assisted.AssistedFactory
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 @AssistedFactory
-interface TabNavViewModelFactory<S : Screen, T: Tab<S>> {
-    fun create(initial: T): TabNavViewModel<S, T>
+interface TabNavViewModelFactory {
+    fun create(initial: Tab<*>): TabNavViewModel
 }
 
-fun <S : Screen, T: Tab<S>> tabNavViewModelProviderFactory(
-    assistedFactory: TabNavViewModelFactory<S, T>,
-    initial: T
+fun tabNavViewModelProviderFactory(
+    assistedFactory: TabNavViewModelFactory,
+    initial: Tab<*>
 ): ViewModelProvider.Factory =
     object : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
         override fun <VM : ViewModel> create(modelClass: Class<VM>): VM {
+            @Suppress("UNCHECKED_CAST")
             return assistedFactory.create(initial) as VM
         }
     }
+
+@EntryPoint
+@InstallIn(ActivityComponent::class)
+interface TabNavViewModelFactoryProvider {
+    fun tabNavViewModelProviderFactory(): TabNavViewModelFactory
+}

@@ -2,36 +2,45 @@
 
 package com.vladmarkovic.sample.shared_presentation.util
 
-import androidx.activity.viewModels
-import androidx.annotation.MainThread
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActioner
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigableComposeHolder
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactoryProvider
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabNavViewModelProviderFactory
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.EmptyCoroutineContext
 
-@MainThread
-fun <S: Screen, T: Tab<S>> TabNavigableComposeHolder<S, T>.tabNavViewModels(): Lazy<TabNavViewModel<S, T>> =
-    with(this as FragmentActivity) {
-        viewModels { tabNavViewModelProviderFactory(tabNavViewModelFactory, mainTab) }
-    }
+//@MainThread
+//fun <S: Screen, T: Tab<S>> TabNavigableComposeHolder<S, T>.tabNavViewModels(): Lazy<TabNavViewModel<S, T>> =
+//    with(this as FragmentActivity) {
+//        viewModels { tabNavViewModelProviderFactory(tabNavViewModelFactory, mainTab) }
+//    }
+
+@Composable
+fun tabNavViewModel(initialTab: Tab<*>, key: String? = null): TabNavViewModel {
+    val factory = EntryPointAccessors.fromActivity(
+        LocalContext.current.asActivity,
+        TabNavViewModelFactoryProvider::class.java
+    ).tabNavViewModelProviderFactory()
+    return viewModel(factory = tabNavViewModelProviderFactory(factory, initialTab), key = key)
+}
 
 // region Compose
 //fun hiltViewModelFactory(

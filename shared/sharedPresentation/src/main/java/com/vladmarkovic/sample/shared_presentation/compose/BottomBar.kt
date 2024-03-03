@@ -6,33 +6,26 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
-fun <S: Screen, T : Tab<S>> DefaultBottomBar(tabNav: TabNavigable<S, T>, tabs: List<T>) {
-    // Don't show tabs if there is only one.
-    if (tabs.size > 1) {
-        DefaultBottomBar(
-            tabs = tabs,
-            currentTab = tabNav.tab.safeValue,
-            navToTab = { tabNav.navigate(it) }
-        )
-    }
-}
-
-@Composable
-fun <S, T : Tab<S>> DefaultBottomBar(
-    tabs: List<T>,
-    currentTab: T,
-    navToTab: (T) -> Unit,
-    modifier: Modifier = Modifier
+fun DefaultBottomBar(
+    tabs: List<Tab<*>>,
+    currentTabFlow: StateFlow<Tab<*>>,
+    onTabSelected: (Tab<*>) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    // Don't show tabs if there is none or only one.
+    if (tabs.size < 2) return
+
+    val currentTab by currentTabFlow.collectAsState()
+
     BottomAppBar(modifier) {
         BottomNavigation {
             tabs.forEach { tab ->
@@ -41,7 +34,7 @@ fun <S, T : Tab<S>> DefaultBottomBar(
                     label = { Text(stringResource(tab.textRes)) },
                     alwaysShowLabel = false,
                     selected = currentTab == tab,
-                    onClick = { navToTab(tab) }
+                    onClick = { onTabSelected(tab) }
                 )
             }
         }

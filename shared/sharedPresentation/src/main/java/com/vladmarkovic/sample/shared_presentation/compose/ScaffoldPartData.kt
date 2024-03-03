@@ -6,8 +6,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
@@ -104,22 +102,6 @@ fun DrawerData.updateWith(change: DrawerChange): DrawerData = copy(
 )
 // endregion Drawer
 
-// region BottomBar
-data class BottomBarData(val tabNav: TabNavigable<*, *>, val tabs: List<Tab<*>>) : ScaffoldPartData
-
-/**
- * For non-nullable values, null means no change, value means replace.
- * For nullable values, null Optional means no change. Empty optional means remove. Optional with value means replace.
- */
-data class BottomBarChange(val tabNav: TabNavigable<*, *>, val tabs: List<Tab<*>>) : ScaffoldPartChange
-
-fun BottomBarChange.toData(): BottomBarData = BottomBarData(tabNav = tabNav, tabs = tabs)
-
-fun BottomBarData.updateWith(change: BottomBarChange): BottomBarData = copy(
-    tabs = change.tabs ?: tabs
-)
-// endregion BottomBar
-
 // region ScaffoldChange
 data class ScaffoldChange(
     val screenChange: ScreenData,
@@ -158,14 +140,12 @@ inline fun <reified D : ScaffoldPartData> updateDataWithChange(data: D, change: 
     when (change) {
         is TopBarChange -> (data as TopBarData).updateWith(change) as D
         is DrawerChange -> (data as DrawerData).updateWith(change) as D
-        is BottomBarChange -> (data as BottomBarData).updateWith(change) as D
     }
 
 inline fun <reified D : ScaffoldPartData> changeToData(change: ScaffoldPartChange): D =
     when (change) {
         is TopBarChange -> change.toData() as D
         is DrawerChange -> change.toData() as D
-        is BottomBarChange -> change.toData() as D
     }
 // endregion mapping utils
 

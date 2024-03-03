@@ -3,7 +3,11 @@
 package com.vladmarkovic.sample.shared_presentation.util
 
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.material.ScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,28 +22,34 @@ import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAc
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.route
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 
-fun ContentArgs.handleAction(type: ScreenHolderType, action: BriefAction) =
-    when (action) {
-        is NavigationAction -> navigate(type, action)
-        is CommonDisplayAction -> handleCommonDisplayAction(action)
-        else -> throw IllegalArgumentException("Unhandled navigation action: $action")
-    }
+fun ContentArgs.handleAction(
+    type: ScreenHolderType,
+    action: BriefAction,
+    bubbleUp: (BriefAction) -> Unit
+) = when (action) {
+    is NavigationAction -> navigate(type, action, bubbleUp)
+    is CommonDisplayAction -> handleCommonDisplayAction(action)
+    else -> throw IllegalArgumentException("Unhandled navigation action: $action")
+}
 
 /** Branch out handling of different types of [NavigationAction]s. */
-private fun ContentArgs.navigate(type: ScreenHolderType, action: NavigationAction) =
-    when(action) {
-        is Tab<*> -> navController.context.asActivity.setCurrentTab(action)
-        is ToScreen -> navController.navigate(action.route)
-        is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
-        is CommonNavigationAction -> navigate(type, action)
-        else -> throw IllegalArgumentException("Unhandled navigation action: $action")
-    }
+private fun ContentArgs.navigate(
+    type: ScreenHolderType,
+    action: NavigationAction,
+    bubbleUp: (BriefAction) -> Unit
+) = when(action) {
+    is ToScreen -> navController.navigate(action.route)
+    is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
+    is CommonNavigationAction -> navigate(type, action)
+    else -> bubbleUp(action)
+}
 
 private fun ContentArgs.navigate(type: ScreenHolderType, action: CommonNavigationAction) {
     when (action) {
@@ -64,7 +74,7 @@ val NavBackStackEntry.isStackFirstScreen: Boolean
 
 
 /** Enables separate back stack navigation per tab. */
-fun <S: Screen, T: Tab<S>> NavController.navigate(tab: T) {
+fun NavController.navigate(tab: Tab<*>) {
     navigate(tab.name) {
         // Separate stacks per tab.
         popUpTo(graph.findStartDestination().id) {
@@ -87,3 +97,13 @@ private fun ContentArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
             openDrawer()
         }
     }
+
+@Composable
+fun SetupTabsNavigation(tabs: Flow<Tab<*>>, navController: NavController) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        tabs.drop(1).collectWith(context.asActivity<ComponentActivity>()) {
+            navController.navigate(it)
+        }
+    }
+}

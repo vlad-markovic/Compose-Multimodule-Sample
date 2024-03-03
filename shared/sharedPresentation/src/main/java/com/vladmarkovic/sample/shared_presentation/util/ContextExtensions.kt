@@ -8,11 +8,12 @@ import android.content.ContextWrapper
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
 
-val Context.asActivity: Activity
-    get() = this.let {
+val Context.asActivity: Activity get() = asActivity<Activity>()
+
+inline fun <reified T: Activity> Context.asActivity(): T = this.let {
         var context = it
         while (context is ContextWrapper) {
-            if (context is Activity) return@let context
+            if (context is T) return@let context
             context = context.baseContext
         }
         throw IllegalStateException("Expected an activity context but instead found: $context")

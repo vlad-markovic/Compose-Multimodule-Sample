@@ -11,7 +11,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabInitialScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.TabInitialScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
@@ -21,7 +21,8 @@ import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for Covid country comparison screen. */
-class CovidCountryComparisonScreenComposer @Inject constructor() : TabInitialScreenComposer<CountryComparisonViewModel> {
+class CovidCountryComparisonScreenComposer @Inject constructor() :
+    TabInitialScreenComposer<CountryComparisonViewModel> {
 
     override val screen: Screen = CovidScreen.COVID_COUNTRY_COMPARISON
 

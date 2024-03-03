@@ -5,7 +5,7 @@ package com.vladmarkovic.sample.covid_presentation.country_info
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.composer.StackContentArgs
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.TabScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
