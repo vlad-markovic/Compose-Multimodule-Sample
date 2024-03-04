@@ -4,8 +4,8 @@ package com.vladmarkovic.sample.shared_presentation.composer
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.OnStart
-import com.vladmarkovic.sample.shared_presentation.compose.ScreenHolderChange
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
@@ -14,9 +14,11 @@ import com.vladmarkovic.sample.shared_presentation.screen.route
  * Holds a number of scoped screens specifying all it holds, and serves as a screen selector.
  * Also saves and holds the state for the current screen.
  */
-interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
+interface ScreenHolderComposer<S: Screen> {
 
     val type: ScreenHolderType
+
+    val allScreens: List<S>
 
     /**
      * Inject [ScreenComposer]s for each screen, and override to provide
@@ -41,3 +43,5 @@ interface ScreenHolderComposer<S: Screen> : CurrentScreenMonitor<S> {
         }
     }
 }
+
+data class ScreenHolderChange(val holderType: ScreenHolderType) : BriefAction

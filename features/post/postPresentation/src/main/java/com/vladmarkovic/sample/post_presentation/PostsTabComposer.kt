@@ -4,8 +4,6 @@ package com.vladmarkovic.sample.post_presentation
 
 import com.vladmarkovic.sample.post_presentation.feed.FeedScreenComposer
 import com.vladmarkovic.sample.post_presentation.post.PostScreenComposer
-import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenManager
-import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenMonitor
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
@@ -19,15 +17,15 @@ import javax.inject.Inject
 class PostsTabComposer @Inject constructor(
     private val feedScreenComposer: FeedScreenComposer,
     private val postScreenComposer: PostScreenComposer
-) : ScreenHolderComposer<PostsScreen>,
-    CurrentScreenMonitor<PostsScreen> by CurrentScreenManager(PostsScreen.entries) {
+) : ScreenHolderComposer<PostsScreen> {
 
     override val type: ScreenHolderType = ScreenHolderType.INITIAL_TAB
+
+    override val allScreens: List<PostsScreen> = PostsScreen.entries
 
     override fun composer(screen: PostsScreen): ScreenComposer<*> =
         when (screen) {
             FEED_SCREEN -> feedScreenComposer
             POST_SCREEN -> postScreenComposer
-            else -> throw IllegalArgumentException("Unhandled screen ${currentScreen.value}")
         }
 }

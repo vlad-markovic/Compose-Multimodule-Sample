@@ -8,6 +8,7 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.Sort
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
@@ -28,24 +29,21 @@ class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenCompose
     override fun viewModel(args: ScreenArgs): CountryComparisonViewModel =
         actionViewModel<CountryComparisonViewModel>(args.bubbleUp)
 
+    override fun scaffoldChange(viewModel: CountryComparisonViewModel): ScreenChange = change(
+        topBarChange = topBarChange(
+            title = StrOrRes.res(country_comparison_screen_title),
+            upButton = UpButton.BackButton(viewModel),
+            menuItems = listOf(
+                GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
+                Sort(viewModel::sortAscending, viewModel.sortAscending)
+            )
+        ),
+        drawerItems = defaultDrawerItems(viewModel)
+    )
+
     @Composable
     override fun Content(args: ScreenArgs, viewModel: CountryComparisonViewModel) {
         super.Content(args, viewModel)
-
-        SetupScreen(
-            args.screenSetup,
-            change(
-                topBarChange = topBarChange(
-                    title = StrOrRes.res(country_comparison_screen_title),
-                    upButton = UpButton.BackButton(viewModel),
-                    menuItems = listOf(
-                        GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
-                        Sort(viewModel::sortAscending, viewModel.sortAscending)
-                    )
-                ),
-                drawerItems = defaultDrawerItems(viewModel)
-            )
-        )
 
         CountryComparisonScreen(
             showLoading = viewModel.showLoading.safeValue,

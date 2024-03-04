@@ -27,8 +27,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val tabs = MainBottomTab.entries
+        val initialTab = tabs.first()
+        val initialScreen = tabComposer(initialTab).allScreens.first()
+
         setComposeContentView {
-            Tabs(MainBottomTab.entries) { tab, args ->
+            Tabs(initialScreen, tabs, initialTab) { tab, args ->
                 with(tabComposer(tab as MainBottomTab)) {
                     composeNavGraph(args)
                 }

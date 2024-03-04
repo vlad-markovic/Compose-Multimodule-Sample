@@ -6,6 +6,7 @@ package com.vladmarkovic.sample.shared_presentation.ui.drawer
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,12 +25,19 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+fun defaultDrawer(
+    scaffoldState: ScaffoldState,
+    mainScope: CoroutineScope,
+    drawerData: DrawerData?
+): (@Composable ColumnScope.() -> Unit)? {
+    if (drawerData == null || drawerData.items.isEmpty()) return null
+    else return { DefaultDrawer(scaffoldState, mainScope, drawerData) }
+}
+
 @Composable
-fun DefaultDrawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope, drawerData: DrawerData?) {
-    drawerData?.items?.takeIf { it.isNotEmpty() }?.let {
-        DefaultDrawer(it) {
-            mainScope.launch { scaffoldState.drawerState.close() }
-        }
+fun DefaultDrawer(scaffoldState: ScaffoldState, mainScope: CoroutineScope, drawerData: DrawerData) {
+    DefaultDrawer(drawerData.items) {
+        mainScope.launch { scaffoldState.drawerState.close() }
     }
 }
 

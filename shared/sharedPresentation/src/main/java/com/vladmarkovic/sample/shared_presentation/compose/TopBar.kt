@@ -44,16 +44,25 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
+fun defaultTopBar(topBarData: TopBarData?): (@Composable () -> Unit)? {
+    if (topBarData == null) return null
+    return {
+        DefaultTopBar(
+            title = topBarData.title,
+            upButton = topBarData.upButton,
+            menuItems = topBarData.menuItems,
+        )
+    }
+}
+
+
 @Composable
 fun DefaultTopBar(topBarData: TopBarData?) {
     if (topBarData == null) return
     DefaultTopBar(
         title = topBarData.title,
-        modifier = topBarData.modifier,
-        textAlign = topBarData.textAlign,
         upButton = topBarData.upButton,
         menuItems = topBarData.menuItems,
-        elevation = topBarData.elevation,
     )
 }
 

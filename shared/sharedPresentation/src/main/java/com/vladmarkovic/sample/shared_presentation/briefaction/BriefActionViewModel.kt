@@ -8,4 +8,4 @@ import javax.inject.Inject
 
 /** Base [ViewModel] which can send [BriefAction]s. */
 @HiltViewModel
-open class BriefActionViewModel @Inject constructor() : ViewModel(), BriefActionable by BriefActionerHolder()
+open class BriefActionViewModel @Inject constructor() : ViewModel(), BriefActionable by BriefActioner()

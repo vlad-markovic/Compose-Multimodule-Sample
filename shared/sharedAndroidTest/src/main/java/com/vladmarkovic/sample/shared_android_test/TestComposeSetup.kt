@@ -14,7 +14,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
@@ -43,16 +42,13 @@ fun TestCompose(
                 route = tab.initialScreen.name,
                 arguments = emptyList(),
             ) { _ ->
-                val scaffoldChange: (ScaffoldChange) -> Unit = {
-
-                }
                 val composeArgs = ComposeArgs(navController, scaffoldState, mainScope)
                 val actionHandler: (BriefAction) -> Unit = {
 
                 }
-                val screenArgs = ScreenArgs(composeArgs, scaffoldChange, actionHandler)
+                val screenArgs = ScreenArgs(composeArgs, actionHandler)
 
-                viewModel.apply { actioner.SetupWith(actionHandler) }
+                viewModel.SetupWith(actionHandler)
 
                 content(screenArgs)
             }

@@ -17,6 +17,7 @@ import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -40,6 +41,21 @@ val <T> StateFlow<T>.safeValue: T @Composable get() = collectAsStateLifecycleAwa
 @Composable
 fun <T> StateFlow<T>.safeValue(initial: T): T = collectAsStateLifecycleAware(initial).value
 
+fun <T> MutableStateFlow<T>.update(state: State<T>) {
+    update(state.value)
+}
+
+fun <T> MutableStateFlow<T?>.updateNullable(state: State<T?>) {
+    updateNullable(state.value)
+}
+
+fun <T> MutableStateFlow<T>.update(value: T) {
+    if (this.value != value) this.value = value
+}
+
+fun <T> MutableStateFlow<T?>.updateNullable(value: T?) {
+    if (this.value != value) this.value = value
+}
 
 /**
  * Copied from androidx.lifecycle.compose.collectAsStateWithLifecycle

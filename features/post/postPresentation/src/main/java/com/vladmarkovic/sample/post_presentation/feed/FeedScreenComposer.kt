@@ -9,8 +9,9 @@ import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource.REMOTE
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -31,20 +32,17 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel>()
     override fun viewModel(args: ScreenArgs): FeedViewModel =
         actionViewModel<FeedViewModel>(args.bubbleUp)
 
+    override fun scaffoldChange(viewModel: FeedViewModel): ScreenChange = change(
+        topBarChange = topBarChange(
+            title = StrOrRes.res(feed_screen_title),
+            upButton = UpButton.DrawerButton(viewModel),
+        ),
+        drawerItems = defaultDrawerItems(viewModel)
+    )
+
     @Composable
     override fun Content(args: ScreenArgs, viewModel: FeedViewModel) {
         super.Content(args, viewModel)
-
-        SetupScreen(
-            args.screenSetup,
-            change(
-                topBarChange = topBarChange(
-                    title = StrOrRes.res(feed_screen_title),
-                    upButton = UpButton.DrawerButton(viewModel),
-                ),
-                drawerItems = defaultDrawerItems(viewModel)
-            )
-        )
 
         AnimateSlide(args.navController.isScreenVisible(screen.name)) {
             FeedScreen(

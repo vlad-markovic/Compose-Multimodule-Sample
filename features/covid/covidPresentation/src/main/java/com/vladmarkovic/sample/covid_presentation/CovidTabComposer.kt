@@ -4,8 +4,6 @@ package com.vladmarkovic.sample.covid_presentation
 
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CovidCountryComparisonScreenComposer
 import com.vladmarkovic.sample.covid_presentation.country_info.CovidCountryInfoScreenComposer
-import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenManager
-import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenMonitor
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
@@ -18,10 +16,11 @@ import javax.inject.Inject
 class CovidTabComposer @Inject constructor(
     private val comparisonComposer: CovidCountryComparisonScreenComposer,
     private val dataComposer: CovidCountryInfoScreenComposer
-) : ScreenHolderComposer<CovidScreen>,
-    CurrentScreenMonitor<CovidScreen> by CurrentScreenManager(CovidScreen.entries) {
+) : ScreenHolderComposer<CovidScreen> {
 
     override val type: ScreenHolderType = ScreenHolderType.TAB
+
+    override val allScreens: List<CovidScreen> = CovidScreen.entries
 
     override fun composer(screen: CovidScreen): ScreenComposer<*> =
         when (screen) {

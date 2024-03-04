@@ -6,8 +6,9 @@ import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -27,19 +28,16 @@ class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel>()
     override fun viewModel(args: ScreenArgs): PostViewModel =
         actionViewModel<PostViewModel>(args.bubbleUp)
 
+    override fun scaffoldChange(viewModel: PostViewModel): ScreenChange = change(
+        topBarChange = topBarChange(
+            title = StrOrRes.res(R.string.post_screen_title),
+            upButton = BackButton(viewModel),
+        )
+    )
+
     @Composable
     override fun Content(args: ScreenArgs, viewModel: PostViewModel) {
         super.Content(args, viewModel)
-
-        SetupScreen(
-            args.screenSetup,
-            change(
-                topBarChange = topBarChange(
-                    title = StrOrRes.res(R.string.post_screen_title),
-                    upButton = BackButton(viewModel),
-                )
-            )
-        )
 
         AnimateSlide(args.navController.isScreenVisible(screen.name), -1) {
             PostScreen(

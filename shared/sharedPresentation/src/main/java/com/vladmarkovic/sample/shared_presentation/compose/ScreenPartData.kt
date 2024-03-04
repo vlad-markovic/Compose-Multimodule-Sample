@@ -1,9 +1,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose
 
-import androidx.compose.material.AppBarDefaults
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
@@ -12,38 +9,29 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-sealed interface ScaffoldPartData
-sealed interface ScaffoldPartChange
+sealed interface ScreenPartData
+sealed interface ScreenPartChange
 
 // region TopBar
 data class TopBarData(
     val screen: Screen,
     val title: StrOrRes?,
-    val modifier: Modifier = Modifier,
-    val textAlign: TextAlign = TextAlign.Start,
     val upButton: UpButton? = null,
     val menuItems: List<MenuItem>? = null,
-    val elevation: Dp = AppBarDefaults.TopAppBarElevation
-) : ScaffoldPartData
+) : ScreenPartData
 
 data class TopBarChange(
     val screen: Screen? = null,
     val title: Optional<StrOrRes>? = null,
-    val modifier: Modifier? = null,
-    val textAlign: TextAlign? = null,
     val upButton:  Optional<UpButton>? = null,
     val menuItems:  Optional<List<MenuItem>>? = null,
-    val elevation: Dp? = null
-) : ScaffoldPartChange {
+) : ScreenPartChange {
     companion object {
         fun default(screen: Screen? = null, title: StrOrRes? = null): TopBarChange = TopBarChange(
             screen = screen,
             title = Optional.ofNullable(title),
-            modifier = Modifier,
-            textAlign = TextAlign.Start,
             upButton = null,
             menuItems = null,
-            elevation = AppBarDefaults.TopAppBarElevation
         )
     }
 
@@ -62,11 +50,8 @@ data class TopBarChange(
 fun TopBarChange.toData(): TopBarData = TopBarData(
     screen = screen!!,
     title = title?.getOrNull(),
-    modifier = modifier ?: Modifier,
-    textAlign = textAlign ?: TextAlign.Start,
     upButton = upButton?.getOrNull(),
     menuItems = menuItems?.getOrNull(),
-    elevation = elevation ?: AppBarDefaults.TopAppBarElevation,
 )
 
 /**
@@ -76,21 +61,18 @@ fun TopBarChange.toData(): TopBarData = TopBarData(
 fun TopBarData.updateWith(change: TopBarChange): TopBarData = copy(
     screen = change.screen ?: screen,
     title = title.updateWithOptional(change.title),
-    modifier = change.modifier ?: modifier,
-    textAlign = change.textAlign ?: textAlign,
     upButton = upButton.updateWithOptional(change.upButton),
     menuItems = menuItems.updateWithOptional(change.menuItems),
-    elevation = change.elevation ?: elevation,
 )
 // endregion TopBar
 
 // region Drawer
-data class DrawerData(val items: List<DrawerItem>) : ScaffoldPartData
+data class DrawerData(val items: List<DrawerItem>) : ScreenPartData
 /**
  * For non-nullable values, null means no change, value means replace.
  * For nullable values, null Optional means no change. Empty optional means remove. Optional with value means replace.
  */
-data class DrawerChange(val items: List<DrawerItem>?) : ScaffoldPartChange
+data class DrawerChange(val items: List<DrawerItem>?) : ScreenPartChange
 
 fun DrawerChange.toData(): DrawerData = DrawerData(items = items!!,)
 
@@ -99,18 +81,18 @@ fun DrawerData.updateWith(change: DrawerChange): DrawerData = copy(
 )
 // endregion Drawer
 
-// region ScaffoldChange
-data class ScaffoldChange(
-    val screenChange: Screen,
+// region ScreenChange
+data class ScreenChange(
+    val screen: Screen,
     val topBarChange: Optional<TopBarChange>? = null,
     val drawerChange: Optional<DrawerChange>? = null,
-) {
+) : BriefAction {
     constructor(screenChange: Screen, drawerChange: DrawerChange) :
-            this(screenChange = screenChange, drawerChange = Optional.of(drawerChange))
+            this(screen = screenChange, drawerChange = Optional.of(drawerChange))
     constructor(screenChange: Screen, topBarChange: TopBarChange, drawerChange: DrawerChange? = null) :
-            this(screenChange = screenChange, topBarChange = Optional.of(topBarChange), drawerChange = Optional.ofNullable(drawerChange))
+            this(screen = screenChange, topBarChange = Optional.of(topBarChange), drawerChange = Optional.ofNullable(drawerChange))
 }
-// endregion ScaffoldChange
+// endregion ScreenChange
 
 // region mapping utils
 private inline fun <reified T, reified R> T.updateWith(other: R?): T = when (other) {
@@ -124,7 +106,7 @@ private inline fun <reified T> T?.updateWithOptional(other: Optional<T>?): T? =
     if (other == null) this
     else (other as Optional<*>).getOrNull() as T?
 
-inline fun <reified C : ScaffoldPartChange, reified D : ScaffoldPartData> Optional<C>?.toData(current: D?): D? =
+inline fun <reified C : ScreenPartChange, reified D : ScreenPartData> Optional<C>?.toData(current: D?): D? =
     if (this == null) current
     else {
         val change = (this as Optional<*>).getOrNull() as C?
@@ -133,13 +115,13 @@ inline fun <reified C : ScaffoldPartChange, reified D : ScaffoldPartData> Option
         else changeToData(change)
     }
 
-inline fun <reified D : ScaffoldPartData> updateDataWithChange(data: D, change: ScaffoldPartChange): D =
+inline fun <reified D : ScreenPartData> updateDataWithChange(data: D, change: ScreenPartChange): D =
     when (change) {
         is TopBarChange -> (data as TopBarData).updateWith(change) as D
         is DrawerChange -> (data as DrawerData).updateWith(change) as D
     }
 
-inline fun <reified D : ScaffoldPartData> changeToData(change: ScaffoldPartChange): D =
+inline fun <reified D : ScreenPartData> changeToData(change: ScreenPartChange): D =
     when (change) {
         is TopBarChange -> change.toData() as D
         is DrawerChange -> change.toData() as D

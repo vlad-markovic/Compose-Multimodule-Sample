@@ -1,11 +1,11 @@
 package com.vladmarkovic.sample.shared_presentation.compose
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,39 +23,49 @@ import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
+import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigable
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigator
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DefaultDrawer
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
 import com.vladmarkovic.sample.shared_presentation.util.handleAction
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
+import com.vladmarkovic.sample.shared_presentation.util.scaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.util.update
+import com.vladmarkovic.sample.shared_presentation.util.tabNavigator
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun ScreensHolder(
+    initialScreen: Screen,
     navController: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     mainScope: CoroutineScope = rememberCoroutineScope(),
     topBar: @Composable (TopBarData?) -> Unit = { topBarData -> DefaultTopBar(topBarData) },
-    drawer: @Composable (DrawerData?) -> Unit = { topBarData -> DefaultDrawer(scaffoldState, mainScope, topBarData) },
+    drawer: (DrawerData?) -> (@Composable ColumnScope.() -> Unit)? = { drawerData ->
+        defaultDrawer(scaffoldState, mainScope, drawerData)
+    },
     bubbleUp: (BriefAction) -> Unit = { throw IllegalStateException("Unhandled action: $it")},
     scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit
 ) {
-    ScaffoldHolder(navController, scaffoldState, mainScope, topBar, drawer, bottomBar = {}, scaffoldContent, bubbleUp)
+    ScaffoldHolder(initialScreen, navController, scaffoldState, mainScope, topBar, drawer, bottomBar = {}, scaffoldContent, bubbleUp)
 }
 
 @Composable
 fun Tabs(
+    initialScreen: Screen,
     tabs: List<Tab<*>>,
     initialTab: Tab<*> = tabs.first(),
     navGraph: NavGraphBuilder.(tab: Tab<*>, ScreenArgs) -> Unit
 ) {
-    TabsHolder(tabs, initialTab) { args, modifier ->
+    TabsHolder(initialScreen, tabs, initialTab) { args, modifier ->
         NavHost(
             navController = args.navController,
             startDestination = initialTab.name,
@@ -73,25 +83,25 @@ fun Tabs(
     }
 }
 
-data class ScreenHolderChange(val holderType: ScreenHolderType) : BriefAction
-
 @Composable
 fun TabsHolder(
+    initialScreen: Screen,
     tabs: List<Tab<*>>,
     initialTab: Tab<*>,
-    tabNav: TabNavigable = tabNavViewModel(initialTab = initialTab),
+    tabNav: TabNavViewModel = tabNavViewModel(tabNavigator(initialTab)),
     navController: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     mainScope: CoroutineScope = rememberCoroutineScope(),
     topBar: @Composable (TopBarData?) -> Unit = { topBarData -> DefaultTopBar(topBarData) },
-    drawer: @Composable (DrawerData?) -> Unit = { topBarData -> DefaultDrawer(scaffoldState, mainScope, topBarData) },
-    bottomBar: @Composable () -> Unit = { DefaultBottomBar(tabs, tabNav.tab, tabNav::navigate) },
+    drawer: (DrawerData?) -> (@Composable ColumnScope.() -> Unit)? = { drawerData ->
+        defaultDrawer(scaffoldState, mainScope, drawerData)
+    },
+    bottomBar: @Composable () -> Unit = { DefaultBottomBar(tabs, tabNav.currentTab, tabNav::navigate) },
     bubbleUp: (BriefAction) -> Unit = { throw IllegalStateException("Unhandled action: $it")},
     scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit
-
 ) {
-    SetupTabsNavigation(tabs = tabNav.tab, navController = navController)
-    ScaffoldHolder(navController, scaffoldState, mainScope, topBar, drawer, bottomBar, scaffoldContent) { action ->
+    SetupTabsNavigation(tabs = tabNav.currentTab, navController = navController)
+    ScaffoldHolder(initialScreen, navController, scaffoldState, mainScope, topBar, drawer, bottomBar, scaffoldContent) { action ->
         when (action) {
             is Tab<*> ->  tabNav.navigate(action)
             else -> bubbleUp(action)
@@ -100,48 +110,54 @@ fun TabsHolder(
 }
 
 @Composable
-private inline fun ScaffoldHolder(
+private fun ScaffoldHolder(
+    initialScreen: Screen,
     navController: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     mainScope: CoroutineScope = rememberCoroutineScope(),
-    crossinline topBar: @Composable (TopBarData?) -> Unit = { topBarData -> DefaultTopBar(topBarData) },
-    crossinline drawer: @Composable (DrawerData?) -> Unit = { topBarData -> DefaultDrawer(scaffoldState, mainScope, topBarData) },
-    noinline bottomBar: @Composable () -> Unit = {},
-    crossinline scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit,
-    noinline bubbleUp: (BriefAction) -> Unit
+    topBar: @Composable (TopBarData?) -> Unit = { topBarData -> DefaultTopBar(topBarData) },
+    drawer: (DrawerData?) -> (@Composable ColumnScope.() -> Unit)? = { drawerData ->
+        defaultDrawer(scaffoldState, mainScope, drawerData)
+    },
+    bottomBar: @Composable () -> Unit = {},
+    scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit,
+    bubbleUp: (BriefAction) -> Unit
 ) {
-    val topBarData: MutableState<TopBarData?> = remember { mutableStateOf(null) }
-    val drawerData: MutableState<DrawerData?> = remember { mutableStateOf(null) }
+    val scaffoldData: ScaffoldDataManager = scaffoldDataManager(initialScreen)
+
+    val actionHandler: (BriefAction) -> Unit = remember {{ action ->
+        when (action) {
+            is ScreenChange -> scaffoldData.update(action)
+            else -> bubbleUp(action)
+        }
+    }}
 
     AppTheme {
         Scaffold(
             scaffoldState = scaffoldState,
-            topBar = { topBar(topBarData.value) },
+            topBar = { topBar(scaffoldData.topBar.safeValue) },
             bottomBar = bottomBar,
-            drawerContent = { drawer(drawerData.value) }
+            drawerContent = drawer(scaffoldData.drawer.safeValue)
         ) { paddingValues ->
             val systemUiController = rememberSystemUiController()
             systemUiController.setSystemBarsColor(Color.Black)
 
             val composeArgs = ComposeArgs(navController, scaffoldState, mainScope)
 
-            val screen = remember { mutableStateOf<Screen?>(null) }
             var holderType by remember { mutableStateOf(ScreenHolderType.STANDALONE) }
 
             scaffoldContent(
                 ScreenArgs(
                     composeArgs = composeArgs,
-                    screenSetup = { scaffoldChange ->
-                        screen.update(scaffoldChange.screenChange)
-                        topBarData.update(scaffoldChange.topBarChange.toData(topBarData.value))
-                        drawerData.update(scaffoldChange.drawerChange.toData(drawerData.value))
-                    },
                     bubbleUp = { action ->
                         Lumber.i("action: $action")
-                        if (action is ScreenHolderChange) {
-                           if (holderType != action.holderType) holderType = action.holderType
-                        } else {
-                            composeArgs.handleAction(holderType, action, bubbleUp)
+                        when (action) {
+                            is ScreenHolderChange -> {
+                                if (holderType != action.holderType) holderType = action.holderType
+                            }
+                            else -> {
+                                composeArgs.handleAction(holderType, action, actionHandler)
+                            }
                         }
                     }
                 ),
@@ -149,7 +165,7 @@ private inline fun ScaffoldHolder(
             )
 
             androidx.activity.compose.BackHandler {
-                composeArgs.handleAction(holderType, CommonNavigationAction.Back, bubbleUp)
+                composeArgs.handleAction(holderType, CommonNavigationAction.Back, actionHandler)
             }
         }
     }

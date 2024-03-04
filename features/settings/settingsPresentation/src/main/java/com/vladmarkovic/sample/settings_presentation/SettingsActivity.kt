@@ -8,8 +8,6 @@ import androidx.navigation.compose.NavHost
 import com.vladmarkovic.sample.settings_presentation.main.SettingsMainScreenComposer
 import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScreenComposer
 import com.vladmarkovic.sample.shared_presentation.compose.ScreensHolder
-import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenManager
-import com.vladmarkovic.sample.shared_presentation.composer.CurrentScreenMonitor
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
@@ -20,11 +18,11 @@ import javax.inject.Inject
 
 /** [ScreenHolderComposer] holding [SettingsScreen]s. */
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity(),
-    ScreenHolderComposer<SettingsScreen>,
-    CurrentScreenMonitor<SettingsScreen> by CurrentScreenManager(SettingsScreen.entries) {
+class SettingsActivity : AppCompatActivity(), ScreenHolderComposer<SettingsScreen> {
 
     override val type: ScreenHolderType = ScreenHolderType.STANDALONE
+
+    override val allScreens: List<SettingsScreen> = SettingsScreen.entries
 
     @Inject
     lateinit var settingsMainScreenComposer: SettingsMainScreenComposer
@@ -36,10 +34,11 @@ class SettingsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
 
         setComposeContentView {
-            ScreensHolder { args, modifier ->
+            val firstScreen = allScreens.first()
+            ScreensHolder(firstScreen) { args, modifier ->
                 NavHost(
                     navController = args.navController,
-                    startDestination = initialScreen.name,
+                    startDestination = firstScreen.name,
                     modifier = modifier,
                 ) {
                     composeNavGraph(args)
