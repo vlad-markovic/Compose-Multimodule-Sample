@@ -1,11 +1,10 @@
 package com.vladmarkovic.sample.shared_presentation.navigation
 
-import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.DrawerData
 import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.compose.TopBarData
 import com.vladmarkovic.sample.shared_presentation.compose.toData
-import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.update
@@ -16,7 +15,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +36,9 @@ class ScaffoldDataManager @AssistedInject constructor(
     private val _screen: MutableStateFlow<Screen> = MutableStateFlow(initialScreen)
     override val currentScreen: StateFlow<Screen> = _screen.asStateFlow()
 
+    private val _holderType: MutableStateFlow<ScreenHolderType> = MutableStateFlow(ScreenHolderType.TAB)
+    override val holderType: StateFlow<ScreenHolderType> = _holderType.asStateFlow()
+
     private val _topBar: MutableStateFlow<TopBarData?> = MutableStateFlow(null)
     override val topBar: StateFlow<TopBarData?> = _topBar.asStateFlow()
 
@@ -45,7 +46,8 @@ class ScaffoldDataManager @AssistedInject constructor(
     override val drawer: StateFlow<DrawerData?> = _drawer.asStateFlow()
 
     override fun update(change: ScreenChange) {
-        _screen.update(change.screen)
+        _screen.update(change.screenChange.screen)
+        _holderType.update(change.screenChange.holderType)
         _topBar.updateNullable(change.topBarChange.toData(_topBar.value))
         _drawer.updateNullable(change.drawerChange.toData(_drawer.value))
     }

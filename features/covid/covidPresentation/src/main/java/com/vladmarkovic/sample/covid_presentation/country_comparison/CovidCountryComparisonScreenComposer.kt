@@ -9,8 +9,9 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -29,7 +30,8 @@ class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenCompose
     override fun viewModel(args: ScreenArgs): CountryComparisonViewModel =
         actionViewModel<CountryComparisonViewModel>(args.bubbleUp)
 
-    override fun scaffoldChange(viewModel: CountryComparisonViewModel): ScreenChange = change(
+    override fun scaffoldChange(viewModel: CountryComparisonViewModel, holderType: ScreenHolderType): ScreenChange = change(
+        holderType = holderType,
         topBarChange = topBarChange(
             title = StrOrRes.res(country_comparison_screen_title),
             upButton = UpButton.BackButton(viewModel),
@@ -43,8 +45,6 @@ class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenCompose
 
     @Composable
     override fun Content(args: ScreenArgs, viewModel: CountryComparisonViewModel) {
-        super.Content(args, viewModel)
-
         CountryComparisonScreen(
             showLoading = viewModel.showLoading.safeValue,
             items = viewModel.items.safeValue,

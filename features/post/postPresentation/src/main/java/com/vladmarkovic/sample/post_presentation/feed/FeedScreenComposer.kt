@@ -12,6 +12,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
 import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -32,7 +33,8 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel>()
     override fun viewModel(args: ScreenArgs): FeedViewModel =
         actionViewModel<FeedViewModel>(args.bubbleUp)
 
-    override fun scaffoldChange(viewModel: FeedViewModel): ScreenChange = change(
+    override fun scaffoldChange(viewModel: FeedViewModel, holderType: ScreenHolderType): ScreenChange = change(
+        holderType = holderType,
         topBarChange = topBarChange(
             title = StrOrRes.res(feed_screen_title),
             upButton = UpButton.DrawerButton(viewModel),
@@ -42,8 +44,6 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel>()
 
     @Composable
     override fun Content(args: ScreenArgs, viewModel: FeedViewModel) {
-        super.Content(args, viewModel)
-
         AnimateSlide(args.navController.isScreenVisible(screen.name)) {
             FeedScreen(
                 loading = viewModel.loading.safeValue,

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
@@ -21,13 +22,11 @@ class CovidCountryInfoScreenComposer @Inject constructor() : ScreenComposer<Covi
     override fun viewModel(args: ScreenArgs): CovidCountryInfoViewModel =
         actionViewModel<CovidCountryInfoViewModel>(args.bubbleUp)
 
-    override fun scaffoldChange(viewModel: CovidCountryInfoViewModel): ScreenChange =
-        change(title = viewModel.info.country.str)
+    override fun scaffoldChange(viewModel: CovidCountryInfoViewModel, holderType: ScreenHolderType): ScreenChange =
+        change(holderType, title = viewModel.info.country.str)
 
     @Composable
     override fun Content(args: ScreenArgs, viewModel: CovidCountryInfoViewModel) {
-        super.Content(args, viewModel)
-
         CountryCovidInfoScreen(viewModel.info)
     }
 }

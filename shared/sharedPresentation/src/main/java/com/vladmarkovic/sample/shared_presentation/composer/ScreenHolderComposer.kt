@@ -35,13 +35,9 @@ interface ScreenHolderComposer<S: Screen> {
             ) { _ ->
 //                updateCurrentScreen(screen) TODO?
                 with(composer(screen)) {
-                    Content(args) {
-                        OnStart { args.bubbleUp(ScreenHolderChange(type)) }
-                    }
+                    Content(args, type)
                 }
             }
         }
     }
 }
-
-data class ScreenHolderChange(val holderType: ScreenHolderType) : BriefAction

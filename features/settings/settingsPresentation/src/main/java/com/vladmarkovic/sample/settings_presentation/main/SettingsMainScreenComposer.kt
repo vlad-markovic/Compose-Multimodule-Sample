@@ -12,8 +12,9 @@ import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
@@ -30,7 +31,8 @@ class SettingsMainScreenComposer @Inject constructor() : ScreenComposer<BriefAct
     override fun viewModel(args: ScreenArgs): BriefActionViewModel =
         actionViewModel<BriefActionViewModel>(args.bubbleUp)
 
-    override fun scaffoldChange(viewModel: BriefActionViewModel): ScreenChange = change(
+    override fun scaffoldChange(viewModel: BriefActionViewModel, holderType: ScreenHolderType): ScreenChange = change(
+        holderType = holderType,
         topBarChange = topBarChange(
             title = "Settings".str,
             upButton = UpButton.BackButton(viewModel),
@@ -39,8 +41,6 @@ class SettingsMainScreenComposer @Inject constructor() : ScreenComposer<BriefAct
 
     @Composable
     override fun Content(args: ScreenArgs, viewModel: BriefActionViewModel) {
-        super.Content(args, viewModel)
-
         Column (Modifier.padding(16.dp)) {
             Button({ viewModel.navigate(ToSecondSettingsScreen) }) {
                 Text("Go To Settings Two")

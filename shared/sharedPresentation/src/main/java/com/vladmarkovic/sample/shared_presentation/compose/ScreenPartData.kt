@@ -1,6 +1,7 @@
 package com.vladmarkovic.sample.shared_presentation.compose
 
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
@@ -14,7 +15,6 @@ sealed interface ScreenPartChange
 
 // region TopBar
 data class TopBarData(
-    val screen: Screen,
     val title: StrOrRes?,
     val upButton: UpButton? = null,
     val menuItems: List<MenuItem>? = null,
@@ -48,7 +48,6 @@ data class TopBarChange(
 }
 
 fun TopBarChange.toData(): TopBarData = TopBarData(
-    screen = screen!!,
     title = title?.getOrNull(),
     upButton = upButton?.getOrNull(),
     menuItems = menuItems?.getOrNull(),
@@ -59,7 +58,6 @@ fun TopBarChange.toData(): TopBarData = TopBarData(
  * For nullable values, change null Optional means no change, empty Optional means remove, Optional value means replace.
  */
 fun TopBarData.updateWith(change: TopBarChange): TopBarData = copy(
-    screen = change.screen ?: screen,
     title = title.updateWithOptional(change.title),
     upButton = upButton.updateWithOptional(change.upButton),
     menuItems = menuItems.updateWithOptional(change.menuItems),
@@ -83,15 +81,17 @@ fun DrawerData.updateWith(change: DrawerChange): DrawerData = copy(
 
 // region ScreenChange
 data class ScreenChange(
-    val screen: Screen,
+    val screenChange: ScreenData,
     val topBarChange: Optional<TopBarChange>? = null,
     val drawerChange: Optional<DrawerChange>? = null,
 ) : BriefAction {
-    constructor(screenChange: Screen, drawerChange: DrawerChange) :
-            this(screen = screenChange, drawerChange = Optional.of(drawerChange))
-    constructor(screenChange: Screen, topBarChange: TopBarChange, drawerChange: DrawerChange? = null) :
-            this(screen = screenChange, topBarChange = Optional.of(topBarChange), drawerChange = Optional.ofNullable(drawerChange))
+    constructor(screenChange: ScreenData, drawerChange: DrawerChange) :
+            this(screenChange = screenChange, drawerChange = Optional.of(drawerChange))
+    constructor(screenChange: ScreenData, topBarChange: TopBarChange, drawerChange: DrawerChange? = null) :
+            this(screenChange = screenChange, topBarChange = Optional.of(topBarChange), drawerChange = Optional.ofNullable(drawerChange))
 }
+
+data class ScreenData(val screen: Screen, val holderType: ScreenHolderType)
 // endregion ScreenChange
 
 // region mapping utils

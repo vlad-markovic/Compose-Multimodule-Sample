@@ -6,11 +6,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraphBuilder
@@ -19,19 +16,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigator
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.ui.drawer.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
@@ -123,6 +116,11 @@ private fun ScaffoldHolder(
     scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit,
     bubbleUp: (BriefAction) -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(Color.Black)
+
+    val composeArgs = ComposeArgs(navController, scaffoldState, mainScope)
+
     val scaffoldData: ScaffoldDataManager = scaffoldDataManager(initialScreen)
 
     val actionHandler: (BriefAction) -> Unit = remember {{ action ->
@@ -139,34 +137,20 @@ private fun ScaffoldHolder(
             bottomBar = bottomBar,
             drawerContent = drawer(scaffoldData.drawer.safeValue)
         ) { paddingValues ->
-            val systemUiController = rememberSystemUiController()
-            systemUiController.setSystemBarsColor(Color.Black)
-
-            val composeArgs = ComposeArgs(navController, scaffoldState, mainScope)
-
-            var holderType by remember { mutableStateOf(ScreenHolderType.STANDALONE) }
-
+            val holderType = scaffoldData.holderType.safeValue
             scaffoldContent(
-                ScreenArgs(
-                    composeArgs = composeArgs,
-                    bubbleUp = { action ->
-                        Lumber.i("action: $action")
-                        when (action) {
-                            is ScreenHolderChange -> {
-                                if (holderType != action.holderType) holderType = action.holderType
-                            }
-                            else -> {
-                                composeArgs.handleAction(holderType, action, actionHandler)
-                            }
-                        }
-                    }
-                ),
+                ScreenArgs(composeArgs) { composeArgs.handleAction(holderType, it, actionHandler) },
                 Modifier.padding(paddingValues)
             )
-
-            androidx.activity.compose.BackHandler {
-                composeArgs.handleAction(holderType, CommonNavigationAction.Back, actionHandler)
-            }
         }
+
+        BackHandler(composeArgs, scaffoldData.holderType.safeValue, actionHandler)
+    }
+}
+
+@Composable
+private fun BackHandler(composeArgs: ComposeArgs, holderType: ScreenHolderType, actionHandler: (BriefAction) -> Unit) {
+    androidx.activity.compose.BackHandler {
+        composeArgs.handleAction(holderType, CommonNavigationAction.Back, actionHandler)
     }
 }

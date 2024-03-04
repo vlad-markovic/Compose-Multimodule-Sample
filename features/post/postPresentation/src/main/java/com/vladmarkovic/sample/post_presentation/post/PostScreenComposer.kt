@@ -9,6 +9,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
 import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -28,7 +29,8 @@ class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel>()
     override fun viewModel(args: ScreenArgs): PostViewModel =
         actionViewModel<PostViewModel>(args.bubbleUp)
 
-    override fun scaffoldChange(viewModel: PostViewModel): ScreenChange = change(
+    override fun scaffoldChange(viewModel: PostViewModel, holderType: ScreenHolderType): ScreenChange = change(
+        holderType = holderType,
         topBarChange = topBarChange(
             title = StrOrRes.res(R.string.post_screen_title),
             upButton = BackButton(viewModel),
@@ -37,8 +39,6 @@ class PostScreenComposer @Inject constructor() : ScreenComposer<PostViewModel>()
 
     @Composable
     override fun Content(args: ScreenArgs, viewModel: PostViewModel) {
-        super.Content(args, viewModel)
-
         AnimateSlide(args.navController.isScreenVisible(screen.name), -1) {
             PostScreen(
                 viewModel.post,

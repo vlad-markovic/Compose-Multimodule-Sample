@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
@@ -33,10 +34,13 @@ fun ComposeArgs.handleAction(
     type: ScreenHolderType,
     action: BriefAction,
     bubbleUp: (BriefAction) -> Unit
-) = when (action) {
-    is NavigationAction -> navigate(type, action, bubbleUp)
-    is CommonDisplayAction -> handleCommonDisplayAction(action)
-    else -> bubbleUp(action)
+) {
+    Lumber.i("action: ${action.javaClass.simpleName}")
+    return when (action) {
+        is NavigationAction -> navigate(type, action, bubbleUp)
+        is CommonDisplayAction -> handleCommonDisplayAction(action)
+        else -> bubbleUp(action)
+    }
 }
 
 /** Branch out handling of different types of [NavigationAction]s. */
