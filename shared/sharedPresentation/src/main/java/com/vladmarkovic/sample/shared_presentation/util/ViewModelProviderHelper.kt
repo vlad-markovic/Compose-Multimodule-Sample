@@ -24,7 +24,6 @@ import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActioner
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManagerFactoryProvider
@@ -88,7 +87,7 @@ inline fun <reified VM : ViewModel> stackHiltViewModel(
 //
 
 @Composable
-inline fun <reified P> activityAssistedFactoryProvider(): P {
+inline fun <reified P> activityFactoryProvider(): P {
     return EntryPointAccessors.fromActivity(LocalContext.current.asActivity, P::class.java)
 }
 
@@ -138,14 +137,14 @@ fun tabNavViewModel(tabNav: TabNavigator, key: String? = null): TabNavViewModel 
 
 @Composable
 fun tabNavigator(initialTab: Tab<*>, key: String? = null): TabNavigator {
-    val factory = activityAssistedFactoryProvider<TabNavigatorFactoryProvider>().provideTabNavigatorFactory()
+    val factory = activityFactoryProvider<TabNavigatorFactoryProvider>().provideTabNavigatorFactory()
     return remember(key) { factory.create(initialTab) }
 }
 
 
 @Composable
-fun scaffoldDataManager(initialScreen: Screen, key: String? = null): ScaffoldDataManager {
-    val factory = activityAssistedFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
+fun scaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
+    val factory = activityFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
     return remember(key) { factory.create(initialScreen) }
 }
 

@@ -15,4 +15,5 @@ sealed class CommonDisplayAction : DisplayAction {
         constructor(@StringRes res: Int): this(StrOrRes.res(res))
     }
     data object OpenDrawer : CommonDisplayAction()
+    data object CloseDrawer : CommonDisplayAction()
 }

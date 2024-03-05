@@ -1,9 +1,8 @@
 package com.vladmarkovic.sample.shared_presentation.navigation
 
-import com.vladmarkovic.sample.shared_presentation.compose.DrawerData
-import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
-import com.vladmarkovic.sample.shared_presentation.compose.TopBarData
-import com.vladmarkovic.sample.shared_presentation.compose.toData
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.runtime.Composable
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -30,32 +29,32 @@ import kotlinx.coroutines.flow.asStateFlow
 //}
 
 class ScaffoldDataManager @AssistedInject constructor(
-    @Assisted initialScreen: Screen
-) : ScaffoldDataUpdater, ScaffoldDataMonitor {
+    @Assisted initialScreen: Screen?
+) : ScaffoldDataMonitor, ScaffoldDataUpdater {
 
-    private val _screen: MutableStateFlow<Screen> = MutableStateFlow(initialScreen)
-    override val currentScreen: StateFlow<Screen> = _screen.asStateFlow()
+    private val _screen: MutableStateFlow<Screen?> = MutableStateFlow(initialScreen)
+    override val currentScreen: StateFlow<Screen?> = _screen.asStateFlow()
 
     private val _holderType: MutableStateFlow<ScreenHolderType> = MutableStateFlow(ScreenHolderType.TAB)
     override val holderType: StateFlow<ScreenHolderType> = _holderType.asStateFlow()
 
-    private val _topBar: MutableStateFlow<TopBarData?> = MutableStateFlow(null)
-    override val topBar: StateFlow<TopBarData?> = _topBar.asStateFlow()
+    private val _topBar: MutableStateFlow<(@Composable () -> Unit)?> = MutableStateFlow(null)
+    override val topBar: StateFlow<(@Composable () -> Unit)?> = _topBar.asStateFlow()
 
-    private val _drawer: MutableStateFlow<DrawerData?> = MutableStateFlow(null)
-    override val drawer: StateFlow<DrawerData?> = _drawer.asStateFlow()
+    private val _drawer: MutableStateFlow<(@Composable ColumnScope.() -> Unit)?> = MutableStateFlow(null)
+    override val drawer: StateFlow<(@Composable ColumnScope.() -> Unit)?> = _drawer.asStateFlow()
 
-    override fun update(change: ScreenChange) {
-        _screen.update(change.screenChange.screen)
-        _holderType.update(change.screenChange.holderType)
-        _topBar.updateNullable(change.topBarChange.toData(_topBar.value))
-        _drawer.updateNullable(change.drawerChange.toData(_drawer.value))
+    override fun update(change: ScaffoldChange) {
+        _screen.update(change.screen)
+        _holderType.update(change.holderType)
+        _topBar.updateNullable(change.topBar)
+        _drawer.updateNullable(change.drawer)
     }
 }
 
 @AssistedFactory
-interface ScaffoldDataManagerFactory : BaseAssistedFactory<ScaffoldDataManager, Screen> {
-    override fun create(assistedInput: Screen): ScaffoldDataManager
+interface ScaffoldDataManagerFactory : BaseAssistedFactory<ScaffoldDataManager, Screen?> {
+    override fun create(assistedInput: Screen?): ScaffoldDataManager
 }
 
 @EntryPoint

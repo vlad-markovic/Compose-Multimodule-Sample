@@ -16,6 +16,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
+import com.vladmarkovic.sample.shared_presentation.composer.closeDrawer
 import com.vladmarkovic.sample.shared_presentation.composer.onBack
 import com.vladmarkovic.sample.shared_presentation.composer.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
@@ -99,6 +100,9 @@ private fun ComposeArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
         }
         is CommonDisplayAction.OpenDrawer -> {
             openDrawer()
+        }
+        is CommonDisplayAction.CloseDrawer -> {
+            closeDrawer()
         }
     }
 

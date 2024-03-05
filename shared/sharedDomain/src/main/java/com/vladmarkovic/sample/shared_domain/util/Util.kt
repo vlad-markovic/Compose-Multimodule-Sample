@@ -5,9 +5,10 @@ package com.vladmarkovic.sample.shared_domain.util
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Convenience extension for function which don't return Unit
@@ -39,3 +40,6 @@ inline fun <T, R : Comparable<R>> Iterable<T>.sortedBy(
 ): List<T> =
     if (ascending) sortedBy { selector(it) }
     else sortedByDescending { selector(it) }
+
+inline fun <T: Any, R: Any> Optional<T>?.convertTo(converter: (T) -> R): Optional<R> =
+    Optional.ofNullable(this?.getOrNull()?.let { converter(it) })

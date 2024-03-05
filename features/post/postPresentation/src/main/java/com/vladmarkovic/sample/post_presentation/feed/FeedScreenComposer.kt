@@ -2,6 +2,7 @@
 
 package com.vladmarkovic.sample.post_presentation.feed
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.post_presentation.R.string.feed_screen_title
 import com.vladmarkovic.sample.post_presentation.feed.compose.FeedScreen
@@ -9,10 +10,8 @@ import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource.REMOTE
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.AnimateSlide
-import com.vladmarkovic.sample.shared_presentation.compose.ScreenChange
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -22,6 +21,7 @@ import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.isScreenVisible
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import java.util.Optional
 import javax.inject.Inject
 
 @ActivityRetainedScoped
@@ -29,18 +29,15 @@ class FeedScreenComposer @Inject constructor() : ScreenComposer<FeedViewModel>()
 
     override val screen: Screen = PostsScreen.FEED_SCREEN
 
+    override fun topBarChange(args: ScreenArgs, viewModel: FeedViewModel): Optional<@Composable (() -> Unit)> =
+        defaultTopBarChange(StrOrRes.res(feed_screen_title), upButton = UpButton.DrawerButton(viewModel))
+
+    override fun drawerChange(args: ScreenArgs, viewModel: FeedViewModel): Optional<@Composable (ColumnScope.() -> Unit)> =
+        defaultDrawerChange(defaultDrawerItems(viewModel))
+
     @Composable
     override fun viewModel(args: ScreenArgs): FeedViewModel =
         actionViewModel<FeedViewModel>(args.bubbleUp)
-
-    override fun scaffoldChange(viewModel: FeedViewModel, holderType: ScreenHolderType): ScreenChange = change(
-        holderType = holderType,
-        topBarChange = topBarChange(
-            title = StrOrRes.res(feed_screen_title),
-            upButton = UpButton.DrawerButton(viewModel),
-        ),
-        drawerItems = defaultDrawerItems(viewModel)
-    )
 
     @Composable
     override fun Content(args: ScreenArgs, viewModel: FeedViewModel) {
