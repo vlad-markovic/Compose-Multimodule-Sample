@@ -65,18 +65,19 @@ private fun ComposeArgs.navigate(type: ScreenHolderType, action: CommonNavigatio
 fun NavController.onBack(type: ScreenHolderType, scaffoldState: ScaffoldState, scope: CoroutineScope) {
     when {
         scaffoldState.drawerState.isOpen -> scope.launch { scaffoldState.drawerState.close() }
-        isInitialStackFirstScreen(type) -> context.asActivity.finish()
+        isStackFirstScreen -> context.asActivity.finish() // TODO circular if onBackPress is called; how to do for Fragments?
         else -> popBackStack()
     }
 }
 
-fun NavController.isInitialStackFirstScreen(type: ScreenHolderType): Boolean =
+fun NavController.isStackFirstScreen(type: ScreenHolderType): Boolean =
     currentBackStackEntry?.isStackFirstScreen == true && backQueue.size <= type.initialBackstackSize
+
+val NavController.isStackFirstScreen: Boolean
+    get() = currentBackStackEntry?.isStackFirstScreen == true
 
 val NavBackStackEntry.isStackFirstScreen: Boolean
     get() = destination.parent?.startDestinationRoute == destination.route
-
-
 
 /** Enables separate back stack navigation per tab. */
 fun NavController.navigate(tab: Tab<*>) {
