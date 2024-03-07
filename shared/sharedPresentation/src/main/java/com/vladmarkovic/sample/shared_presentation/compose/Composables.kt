@@ -135,9 +135,8 @@ private fun ScaffoldHolder(
                 ScreenArgs(composeArgs) { composeArgs.handleAction(holderType, it, actionHandler) },
                 Modifier.padding(paddingValues)
             )
+            BackHandler(composeArgs, holderType, actionHandler)
         }
-
-        BackHandler(composeArgs, scaffoldData.holderType.safeValue, actionHandler)
     }
 }
 
