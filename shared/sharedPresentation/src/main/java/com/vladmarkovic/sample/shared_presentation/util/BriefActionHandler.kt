@@ -31,38 +31,30 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 
-fun ComposeArgs.handleAction(
-    type: ScreenHolderType,
-    action: BriefAction,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun ComposeArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
     Lumber.i("action: ${action.javaClass.simpleName}")
     return when (action) {
-        is NavigationAction -> navigate(type, action, bubbleUp)
+        is NavigationAction -> navigate(action, bubbleUp)
         is CommonDisplayAction -> handleCommonDisplayAction(action)
         else -> bubbleUp(action)
     }
 }
 
 /** Branch out handling of different types of [NavigationAction]s. */
-private fun ComposeArgs.navigate(
-    type: ScreenHolderType,
-    action: NavigationAction,
-    bubbleUp: (BriefAction) -> Unit
-) = when(action) {
+private fun ComposeArgs.navigate(action: NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
     is ToScreen -> navController.navigate(action.route)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
-    is CommonNavigationAction -> navigate(type, action)
+    is CommonNavigationAction -> navigate(action)
     else -> bubbleUp(action)
 }
 
-private fun ComposeArgs.navigate(type: ScreenHolderType, action: CommonNavigationAction) {
+private fun ComposeArgs.navigate(action: CommonNavigationAction) {
     when (action) {
-        is CommonNavigationAction.Back -> onBack(type)
+        is CommonNavigationAction.Back -> onBack()
     }
 }
 
-fun NavController.onBack(type: ScreenHolderType, scaffoldState: ScaffoldState, scope: CoroutineScope) {
+fun NavController.onBack(scaffoldState: ScaffoldState, scope: CoroutineScope) {
     when {
         scaffoldState.drawerState.isOpen -> scope.launch { scaffoldState.drawerState.close() }
         isStackFirstScreen -> context.asActivity.finish() // TODO circular if onBackPress is called; how to do for Fragments?

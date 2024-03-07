@@ -29,6 +29,6 @@ fun ComposeArgs.openDrawer() {
     mainScope.launch { scaffoldState.drawerState.open() }
 }
 
-fun ComposeArgs.onBack(type: ScreenHolderType) {
-    navController.onBack(type, scaffoldState, mainScope)
+fun ComposeArgs.onBack() {
+    navController.onBack(scaffoldState, mainScope)
 }

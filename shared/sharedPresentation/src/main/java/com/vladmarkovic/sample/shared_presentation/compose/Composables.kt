@@ -130,19 +130,18 @@ private fun ScaffoldHolder(
             bottomBar = bottomBar,
             drawerContent = scaffoldData.drawer.safeValue
         ) { paddingValues ->
-            val holderType = scaffoldData.holderType.safeValue
             scaffoldContent(
-                ScreenArgs(composeArgs) { composeArgs.handleAction(holderType, it, actionHandler) },
+                ScreenArgs(composeArgs) { composeArgs.handleAction(it, actionHandler) },
                 Modifier.padding(paddingValues)
             )
-            BackHandler(composeArgs, holderType, actionHandler)
+            composeArgs.BackHandler(actionHandler)
         }
     }
 }
 
 @Composable
-private fun BackHandler(composeArgs: ComposeArgs, holderType: ScreenHolderType, actionHandler: (BriefAction) -> Unit) {
+private fun ComposeArgs.BackHandler(actionHandler: (BriefAction) -> Unit) {
     androidx.activity.compose.BackHandler {
-        composeArgs.handleAction(holderType, CommonNavigationAction.Back, actionHandler)
+        handleAction(CommonNavigationAction.Back, actionHandler)
     }
 }
