@@ -15,8 +15,6 @@ import com.vladmarkovic.sample.shared_presentation.screen.route
  */
 interface ScreenHolderComposer<S: Screen> {
 
-    val type: ScreenHolderType
-
     val allScreens: List<S>
 
     /**

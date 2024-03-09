@@ -10,7 +10,6 @@ import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScree
 import com.vladmarkovic.sample.shared_presentation.compose.ScreensHolder
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,8 +18,6 @@ import javax.inject.Inject
 /** [ScreenHolderComposer] holding [SettingsScreen]s. */
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity(), ScreenHolderComposer<SettingsScreen> {
-
-    override val type: ScreenHolderType = ScreenHolderType.STANDALONE
 
     override val allScreens: List<SettingsScreen> = SettingsScreen.entries
 

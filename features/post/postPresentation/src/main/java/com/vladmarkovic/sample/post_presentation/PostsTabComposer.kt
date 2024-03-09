@@ -6,7 +6,6 @@ import com.vladmarkovic.sample.post_presentation.feed.FeedScreenComposer
 import com.vladmarkovic.sample.post_presentation.post.PostScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.FEED_SCREEN
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen.POST_SCREEN
@@ -18,8 +17,6 @@ class PostsTabComposer @Inject constructor(
     private val feedScreenComposer: FeedScreenComposer,
     private val postScreenComposer: PostScreenComposer
 ) : ScreenHolderComposer<PostsScreen> {
-
-    override val type: ScreenHolderType = ScreenHolderType.INITIAL_TAB
 
     override val allScreens: List<PostsScreen> = PostsScreen.entries
 
