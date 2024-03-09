@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.briefaction.action
 import com.vladmarkovic.sample.shared_presentation.compose.DefaultTopBar
@@ -26,27 +27,33 @@ abstract class ScreenComposer<VM> where VM : BriefActionable, VM : ViewModel {
 
     @Composable
     fun Content(args: ScreenArgs, holderType: ScreenHolderType) {
-        val viewModel = viewModel(args)
+        val viewModel = viewModel(args.bubbleUp)
         val scaffoldChange = remember {
-            ScaffoldChange(screen, holderType, topBarChange(args, viewModel), drawerChange(args, viewModel))
+            ScaffoldChange(screen, holderType, topBarChange(viewModel), drawerChange(viewModel))
         }
         OnStart { viewModel.action(scaffoldChange) }
 
         // BackHandler(viewModel) // TODO? If cannot, otherwise remove [viewModel] method, and let each inject VM.
-        Content(args, viewModel)
+        Content(viewModel)
     }
 
 
+    /** Override to specify a [Composable] content for this screen. TODO Remove, and remove passing down ScreenArgs and ScreenHolderType */
+    @Composable
+    protected open fun Content(args: ScreenArgs, viewModel: VM) {
+        Content(viewModel)
+    }
+
     /** Override to specify a [Composable] content for this screen. */
     @Composable
-    protected abstract fun Content(args: ScreenArgs, viewModel: VM)
+    protected abstract fun Content(viewModel: VM)
 
     @Composable
-    abstract fun viewModel(args: ScreenArgs): VM
+    abstract fun viewModel(bubbleUp: (BriefAction) -> Unit): VM
 
-    abstract fun topBarChange(args: ScreenArgs, viewModel: VM): Optional<(@Composable () -> Unit)>?
+    abstract fun topBarChange(viewModel: VM): Optional<(@Composable () -> Unit)>?
 
-    open fun drawerChange(args: ScreenArgs, viewModel: VM): Optional<(@Composable ColumnScope.() -> Unit)>? =
+    open fun drawerChange(viewModel: VM): Optional<(@Composable ColumnScope.() -> Unit)>? =
         Optional.empty() // no-drawer; null optional means no change
 
     protected fun defaultTopBarChange(

@@ -9,9 +9,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
@@ -27,14 +27,14 @@ class SettingsMainScreenComposer @Inject constructor() : ScreenComposer<BriefAct
     override val screen: Screen = SettingsScreen.MAIN
 
     @Composable
-    override fun viewModel(args: ScreenArgs): BriefActionViewModel =
-        actionViewModel<BriefActionViewModel>(args.bubbleUp)
+    override fun viewModel(bubbleUp: (BriefAction) -> Unit): BriefActionViewModel =
+        actionViewModel<BriefActionViewModel>(bubbleUp)
 
-    override fun topBarChange(args: ScreenArgs, viewModel: BriefActionViewModel): Optional<@Composable () -> Unit> =
+    override fun topBarChange(viewModel: BriefActionViewModel): Optional<@Composable () -> Unit> =
         defaultTopBarChange("Settings".str, upButton = UpButton.BackButton(viewModel))
 
     @Composable
-    override fun Content(args: ScreenArgs, viewModel: BriefActionViewModel) {
+    override fun Content(viewModel: BriefActionViewModel) {
         Column (Modifier.padding(16.dp)) {
             Button({ viewModel.navigate(ToSecondSettingsScreen) }) {
                 Text("Go To Settings Two")

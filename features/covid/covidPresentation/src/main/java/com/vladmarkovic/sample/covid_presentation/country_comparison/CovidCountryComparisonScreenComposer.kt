@@ -8,8 +8,8 @@ import com.vladmarkovic.sample.covid_presentation.R.string.country_comparison_sc
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.GroupByContinent
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonMenu.Sort
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
@@ -27,10 +27,10 @@ class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenCompose
     override val screen: Screen = CovidScreen.COVID_COUNTRY_COMPARISON
 
     @Composable
-    override fun viewModel(args: ScreenArgs): CountryComparisonViewModel =
-        actionViewModel<CountryComparisonViewModel>(args.bubbleUp)
+    override fun viewModel(bubbleUp: (BriefAction) -> Unit): CountryComparisonViewModel =
+        actionViewModel<CountryComparisonViewModel>(bubbleUp)
 
-    override fun topBarChange(args: ScreenArgs, viewModel: CountryComparisonViewModel): Optional<@Composable (() -> Unit)> =
+    override fun topBarChange(viewModel: CountryComparisonViewModel): Optional<@Composable (() -> Unit)> =
         defaultTopBarChange(
             title = StrOrRes.res(country_comparison_screen_title),
             upButton = UpButton.BackButton(viewModel),
@@ -40,11 +40,11 @@ class CovidCountryComparisonScreenComposer @Inject constructor() : ScreenCompose
             )
         )
 
-    override fun drawerChange(args: ScreenArgs, viewModel: CountryComparisonViewModel):
-            Optional<@Composable() (ColumnScope.() -> Unit)> = defaultDrawerChange(defaultDrawerItems(viewModel))
+    override fun drawerChange(viewModel: CountryComparisonViewModel):
+            Optional<@Composable (ColumnScope.() -> Unit)> = defaultDrawerChange(defaultDrawerItems(viewModel))
 
     @Composable
-    override fun Content(args: ScreenArgs, viewModel: CountryComparisonViewModel) {
+    override fun Content(viewModel: CountryComparisonViewModel) {
         CountryComparisonScreen(
             showLoading = viewModel.showLoading.safeValue,
             items = viewModel.items.safeValue,

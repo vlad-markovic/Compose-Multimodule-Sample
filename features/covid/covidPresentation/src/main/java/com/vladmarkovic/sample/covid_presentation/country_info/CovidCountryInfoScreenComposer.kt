@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.covid_presentation.country_info
 
 import androidx.compose.runtime.Composable
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
@@ -18,14 +18,14 @@ class CovidCountryInfoScreenComposer @Inject constructor() : ScreenComposer<Covi
     override val screen: Screen = CovidScreen.COVID_COUNTRY_INFO
 
     @Composable
-    override fun viewModel(args: ScreenArgs): CovidCountryInfoViewModel =
-        actionViewModel<CovidCountryInfoViewModel>(args.bubbleUp)
+    override fun viewModel(bubbleUp: (BriefAction) -> Unit): CovidCountryInfoViewModel =
+        actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
 
-    override fun topBarChange(args: ScreenArgs, viewModel: CovidCountryInfoViewModel): Optional<@Composable (() -> Unit)> =
+    override fun topBarChange(viewModel: CovidCountryInfoViewModel): Optional<@Composable (() -> Unit)> =
         defaultTopBarChange(viewModel.info.country.str)
 
     @Composable
-    override fun Content(args: ScreenArgs, viewModel: CovidCountryInfoViewModel) {
+    override fun Content(viewModel: CovidCountryInfoViewModel) {
         CountryCovidInfoScreen(viewModel.info)
     }
 }
