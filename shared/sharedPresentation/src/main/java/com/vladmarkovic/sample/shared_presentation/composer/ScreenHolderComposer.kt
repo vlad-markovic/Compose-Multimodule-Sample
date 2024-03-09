@@ -5,7 +5,6 @@ package com.vladmarkovic.sample.shared_presentation.composer
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.OnStart
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
@@ -27,15 +26,14 @@ interface ScreenHolderComposer<S: Screen> {
     fun composer(screen: S): ScreenComposer<*>
 
     /** Composes screens and a "navigation branch" with "composable" function for each screen. */
-    fun NavGraphBuilder.composeNavGraph(args: ScreenArgs) {
+    fun NavGraphBuilder.composeNavGraph(bubbleUp: (BriefAction) -> Unit) {
         allScreens.forEach { screen ->
             composable(
                 route = screen.route,
                 arguments = screen.namedArgs,
-            ) { _ ->
-//                updateCurrentScreen(screen) TODO?
+            ) {
                 with(composer(screen)) {
-                    Content(args, type)
+                    Content(bubbleUp)
                 }
             }
         }

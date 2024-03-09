@@ -3,7 +3,6 @@ package com.vladmarkovic.sample.shared_presentation.navigation
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.update
@@ -35,9 +34,6 @@ class ScaffoldDataManager @AssistedInject constructor(
     private val _screen: MutableStateFlow<Screen?> = MutableStateFlow(initialScreen)
     override val currentScreen: StateFlow<Screen?> = _screen.asStateFlow()
 
-    private val _holderType: MutableStateFlow<ScreenHolderType> = MutableStateFlow(ScreenHolderType.TAB)
-    override val holderType: StateFlow<ScreenHolderType> = _holderType.asStateFlow()
-
     private val _topBar: MutableStateFlow<(@Composable () -> Unit)?> = MutableStateFlow(null)
     override val topBar: StateFlow<(@Composable () -> Unit)?> = _topBar.asStateFlow()
 
@@ -46,7 +42,6 @@ class ScaffoldDataManager @AssistedInject constructor(
 
     override fun update(change: ScaffoldChange) {
         _screen.update(change.screen)
-        _holderType.update(change.holderType)
         _topBar.updateNullable(change.topBar)
         _drawer.updateNullable(change.drawer)
     }

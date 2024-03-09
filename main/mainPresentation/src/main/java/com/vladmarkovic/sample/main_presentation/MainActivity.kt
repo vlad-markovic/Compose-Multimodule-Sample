@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
         val initialScreen = tabComposer(initialTab).allScreens.first()
 
         setComposeContentView {
-            Tabs(initialScreen, tabs, initialTab) { tab, args ->
+            Tabs(initialScreen, tabs, initialTab) { tab, bubbleUp ->
                 with(tabComposer(tab as MainBottomTab)) {
-                    composeNavGraph(args)
+                    composeNavGraph(bubbleUp)
                 }
             }
         }

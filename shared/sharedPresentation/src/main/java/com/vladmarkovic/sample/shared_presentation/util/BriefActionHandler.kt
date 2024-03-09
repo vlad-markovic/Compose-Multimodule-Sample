@@ -10,12 +10,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.composer.closeDrawer
 import com.vladmarkovic.sample.shared_presentation.composer.onBack
 import com.vladmarkovic.sample.shared_presentation.composer.openDrawer
@@ -24,6 +25,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAc
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.route
+import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +33,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 
-fun ComposeArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
+internal fun ComposeArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
     Lumber.i("action: ${action.javaClass.simpleName}")
     return when (action) {
         is NavigationAction -> navigate(action, bubbleUp)
@@ -62,14 +64,28 @@ fun NavController.onBack(scaffoldState: ScaffoldState, scope: CoroutineScope) {
     }
 }
 
-fun NavController.isStackFirstScreen(type: ScreenHolderType): Boolean =
-    currentBackStackEntry?.isStackFirstScreen == true && backQueue.size <= type.initialBackstackSize
+fun NavController.isInitialStackFirstScreen(initialScreen: Screen): Boolean =
+    currentBackStackEntry?.isInitialStackFirstScreen(initialScreen) == true
 
 val NavController.isStackFirstScreen: Boolean
     get() = currentBackStackEntry?.isStackFirstScreen == true
 
+fun NavBackStackEntry.isInitialStackFirstScreen(initialScreen: Screen): Boolean =
+    isStackFirstScreen && destination.parent?.startDestinationRoute == initialScreen.name
+
 val NavBackStackEntry.isStackFirstScreen: Boolean
     get() = destination.parent?.startDestinationRoute == destination.route
+
+private val NavDestination.topParent: NavGraph? get() = parent?.topParent()?.takeIf { it != this }
+
+private fun NavGraph.topParent(): NavGraph {
+    parentCounter++
+    Lumber.e("Parent$parentCounter: route: $$route, parent: ${parent?.route}, start: $startDestinationRoute")
+    return parent?.topParent() ?: this
+}
+
+private var parentCounter = 0
+
 
 /** Enables separate back stack navigation per tab. */
 fun NavController.navigate(tab: Tab<*>) {

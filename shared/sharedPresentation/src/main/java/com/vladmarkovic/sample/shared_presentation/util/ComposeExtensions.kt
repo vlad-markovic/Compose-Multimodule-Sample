@@ -5,6 +5,7 @@ package com.vladmarkovic.sample.shared_presentation.util
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.vladmarkovic.sample.shared_domain.log.Lumber
@@ -22,9 +23,12 @@ fun Modifier.padding(
 
 @Composable
 fun LogComposition(what: String) {
-    DisposableEffect(Unit) {
-        Lumber.e("COMPOSE $what")
-        onDispose { Lumber.e("DECOMPOSE $what") }
+    val s = remember {
+        val str = "a"
+        Lumber.e("COMPOSE $what, str:${str.hashCode()}"); str
     }
-    Lumber.e("RECOMPOSE $what")
+    DisposableEffect(Unit) {
+        onDispose { Lumber.e("DECOMPOSE $what, str:${s.hashCode()}") }
+    }
+    Lumber.e("RECOMPOSE $what, str:${s.hashCode()}")
 }

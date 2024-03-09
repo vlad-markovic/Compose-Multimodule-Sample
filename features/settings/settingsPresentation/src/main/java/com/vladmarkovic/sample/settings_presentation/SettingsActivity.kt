@@ -35,13 +35,13 @@ class SettingsActivity : AppCompatActivity(), ScreenHolderComposer<SettingsScree
 
         setComposeContentView {
             val firstScreen = allScreens.first()
-            ScreensHolder(firstScreen) { args, modifier ->
+            ScreensHolder(firstScreen) { navController, modifier, bubbleUp ->
                 NavHost(
-                    navController = args.navController,
+                    navController = navController,
                     startDestination = firstScreen.name,
                     modifier = modifier,
                 ) {
-                    composeNavGraph(args)
+                    composeNavGraph(bubbleUp)
                 }
             }
         }

@@ -18,8 +18,6 @@ import androidx.navigation.navigation
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenArgs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderType
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
@@ -40,7 +38,7 @@ fun ScreensHolder(
     initialScreen: Screen,
     navController: NavHostController = rememberNavController(),
     bubbleUp: (BriefAction) -> Unit = { throw IllegalStateException("Unhandled action: $it")},
-    scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit
+    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
     ScaffoldHolder(initialScreen, bottomBar = {}, navController, scaffoldContent, bubbleUp)
 }
@@ -50,11 +48,11 @@ fun Tabs(
     initialScreen: Screen,
     tabs: List<Tab<*>>,
     initialTab: Tab<*> = tabs.first(),
-    navGraph: NavGraphBuilder.(tab: Tab<*>, ScreenArgs) -> Unit
+    navGraph: NavGraphBuilder.(tab: Tab<*>, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
-    TabsHolder(initialScreen, tabs, initialTab) { args, modifier ->
+    TabsHolder(initialScreen, tabs, initialTab) { navController, modifier, bubbleUp ->
         NavHost(
-            navController = args.navController,
+            navController = navController,
             startDestination = initialTab.name,
             modifier = modifier
         ) {
@@ -63,7 +61,7 @@ fun Tabs(
                     startDestination = tab.initialScreen.name,
                     route = tab.name
                 ) {
-                    navGraph(tab, args)
+                    navGraph(tab, bubbleUp)
                 }
             }
         }
@@ -79,7 +77,7 @@ fun TabsHolder(
     navController: NavHostController = rememberNavController(),
     bottomBar: @Composable () -> Unit = { DefaultBottomBar(tabs, tabNav.currentTab, tabNav::navigate) },
     bubbleUp: (BriefAction) -> Unit = { throw IllegalStateException("Unhandled action: $it")},
-    scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit
+    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
     SetupTabsNavigation(tabs = tabNav.currentTab, navController = navController)
     ScaffoldHolder(initialScreen, bottomBar, navController, scaffoldContent) { action ->
@@ -92,7 +90,6 @@ fun TabsHolder(
 
 data class ScaffoldChange(
     val screen: Screen,
-    val holderType: ScreenHolderType,
     val topBar: Optional<@Composable () -> Unit>?,
     val drawer: Optional<(@Composable ColumnScope.() -> Unit)>?,
 ) : BriefAction
@@ -103,18 +100,18 @@ private fun ScaffoldHolder(
     initialScreen: Screen,
     bottomBar: @Composable () -> Unit,
     navController: NavHostController = rememberNavController(),
-    scaffoldContent: @Composable (args: ScreenArgs, modifier: Modifier) -> Unit,
+    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit,
     bubbleUp: (BriefAction) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(Color.Black)
 
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val mainScope: CoroutineScope = rememberCoroutineScope()
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
 
     val scaffoldData: ScaffoldDataManager = scaffoldDataManager(initialScreen)
 
-    val composeArgs = ComposeArgs(navController, scaffoldState, mainScope)
+    val composeArgs = ComposeArgs(navController, mainScope, scaffoldState)
 
     val actionHandler: (BriefAction) -> Unit = remember {{ action ->
         when (action) {
@@ -130,10 +127,8 @@ private fun ScaffoldHolder(
             bottomBar = bottomBar,
             drawerContent = scaffoldData.drawer.safeValue
         ) { paddingValues ->
-            scaffoldContent(
-                ScreenArgs(composeArgs) { composeArgs.handleAction(it, actionHandler) },
-                Modifier.padding(paddingValues)
-            )
+            scaffoldContent(navController, Modifier.padding(paddingValues)) { composeArgs.handleAction(it, actionHandler) }
+
             composeArgs.BackHandler(actionHandler)
         }
     }
