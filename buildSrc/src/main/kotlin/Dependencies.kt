@@ -54,7 +54,6 @@ object Dependencies {
     val composeUi = composeUi("ui")
     val composeUiToolingPreview = composeUi("ui-tooling-preview")
     val composeMaterial = dependency("androidx.compose.material", "material")
-    val composeRuntimeLiveData = dependency("androidx.compose.runtime", "runtime-livedata")
     val composeSwipeRefresh = googleAccompanist("accompanist-swiperefresh")
     val composeSystemUiController = googleAccompanist("accompanist-systemuicontroller")
 
@@ -81,7 +80,6 @@ object Dependencies {
     val androidxCoreExtensions = dependency("androidx.core", "core-ktx", Versions.androidxCoreExtensions)
     val lifecycleViewModel = lifecycle("lifecycle-viewmodel-ktx")
     val lifecycleRuntimeExtensions = lifecycle("lifecycle-runtime-ktx")
-    val lifecycleLiveDataExtensions = lifecycle("lifecycle-livedata-ktx")
     val fragmentExtensions = dependency("androidx.fragment", "fragment-ktx", Versions.fragmentVersion)
 
     private fun lifecycle(module: String, version: String = Versions.lifecycle) =

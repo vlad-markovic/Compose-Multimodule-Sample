@@ -23,7 +23,6 @@ class CountryComparisonViewModelTest {
         @Suppress("Unused")
         val testSetupExtension: CustomizableEachTestSetupExtension =
             CustomizableEachTestSetupExtension(UnconfinedTestDispatcher())
-                .setupLiveData()
                 .setupCoroutines()
                 .setupLogger()
     }

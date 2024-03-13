@@ -30,7 +30,7 @@ There are three branches:
 
 ## BriefAction
 
-- `LiveAction` is custom `LiveData` which can "consume" value only once. Used for actions of non-persistent nature, such as:
+- `BriefAction` is action "consumed" only once. Used for actions of non-persistent nature, such as:
     - `NavigationAction` - navigating to another screen or tab.
     - `DisplayAction` - like showing of a non persistent message.
 - `BriefActioner` - holds `MutableLiveAction<BriefAction>` and a function for "sending" actions, and can be included in a `ViewModel` a pre-setup structure.

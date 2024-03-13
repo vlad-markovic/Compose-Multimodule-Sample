@@ -36,7 +36,6 @@ class PostViewModelTest {
         val testSetupExtension: CustomizableAllTestSetupExtension =
             CustomizableAllTestSetupExtension()
                 .setupCoroutines(testDispatcher)
-                .setupLiveData()
                 .setupLogger()
     }
 

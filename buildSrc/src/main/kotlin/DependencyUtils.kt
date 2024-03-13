@@ -19,7 +19,6 @@ internal fun DependencyHandler.implementationPresentationBase() {
     implementation(Dependencies.androidxCoreExtensions)
     implementation(Dependencies.lifecycleRuntimeExtensions)
     implementation(Dependencies.lifecycleViewModel)
-    implementation(Dependencies.lifecycleLiveDataExtensions)
     implementation(Dependencies.fragmentExtensions)
 }
 
@@ -62,7 +61,6 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.composeMaterial)
-    implementation(Dependencies.composeRuntimeLiveData)
     implementation(Dependencies.composeSwipeRefresh)
     implementation(Dependencies.composeSystemUiController)
 }
