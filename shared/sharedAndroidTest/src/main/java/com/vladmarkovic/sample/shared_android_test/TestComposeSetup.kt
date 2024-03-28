@@ -18,9 +18,9 @@ import com.vladmarkovic.sample.shared_presentation.util.SetupWith
 fun TestCompose(
     tab: Tab<*>,
     viewModel: BriefActionViewModel,
-    navController: NavHostController = rememberNavController(),
     scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
+    val navController: NavHostController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = tab.name,

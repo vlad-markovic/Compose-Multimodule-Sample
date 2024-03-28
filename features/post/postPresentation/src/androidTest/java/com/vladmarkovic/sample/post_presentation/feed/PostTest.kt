@@ -7,19 +7,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.*
-import com.vladmarkovic.sample.post_presentation.FakeAuthorRepository.Companion.FAKE_FETCH_DELAY
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_android_test.TestCompose
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.ArgKeys
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
+import com.vladmarkovic.sample.shared_presentation.util.collectAsStateLifecycleAware
 import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
 import com.vladmarkovic.sample.shared_test.setupTestLogger
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +32,7 @@ class PostTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private val testDispatchers = TestDispatcherProvider(testDispatcher)
     private val fakePostRepository = FakePostRepository()
     private val fakeAuthorRepository = FakeAuthorRepository()
@@ -59,8 +59,10 @@ class PostTest {
             TestCompose(
                 tab = MainBottomTab.POSTS_TAB,
                 viewModel = viewModel
-            ) {
-                PostScreen(fakePost, viewModel.authorResult, viewModel::getDetails, viewModel::deletePost)
+            ) { navController, modifier, bubbleUp ->
+                val authorResult = viewModel.authorResult.collectAsStateLifecycleAware()
+
+                PostScreen(fakePost, authorResult.value, viewModel::getDetails, viewModel::deletePost)
             }
         }
     }
@@ -76,7 +78,7 @@ class PostTest {
         composeTestRule.onNodeWithText(fakeAuthor.email).assertDoesNotExist()
         composeTestRule.onNodeWithText("Delete Post").assertDoesNotExist()
 
-        testDispatcher.advanceTimeBy(FAKE_FETCH_DELAY)
+        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         composeTestRule.onNodeWithText(fakeAuthor.name).assertExists()
         composeTestRule.onNodeWithText(fakeAuthor.email).assertExists()
