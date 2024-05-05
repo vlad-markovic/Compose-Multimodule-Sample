@@ -2,21 +2,17 @@
 
 package com.vladmarkovic.sample.shared_presentation.screen
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 
-/**
- * A representation of a screen with defined [name] for navigation,
- * and defined [argNames] for arguments it expects, if any.
- */
-@Stable
-@Immutable
-sealed interface Screen {
-    val name: String
-    val argNames: List<String>? get() = null
+
+val Screen.argNames: List<String>? get() = when(this) {
+    MainScreen.PostsScreen.POST_SCREEN -> listOf(ScreenArgKeys.POST.name)
+    MainScreen.CovidScreen.COVID_COUNTRY_INFO -> listOf(ScreenArgKeys.COUNTRY_INFO.name)
+    else -> null
 }
 
 /** i.e. POSTS?POST={post-json} */

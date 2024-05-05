@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.update
 import com.vladmarkovic.sample.shared_presentation.util.updateNullable
 import dagger.assisted.Assisted

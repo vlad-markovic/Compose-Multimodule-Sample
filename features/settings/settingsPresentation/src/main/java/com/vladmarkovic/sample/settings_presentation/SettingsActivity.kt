@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelector
 import com.vladmarkovic.sample.shared_presentation.composer.ScreensNavGraph
 import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
-import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
+import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.OnStart
 import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem

@@ -25,8 +25,8 @@ import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAc
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.route
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
+import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop

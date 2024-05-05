@@ -6,7 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
-import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
+import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 
 val Context.asActivity: Activity get() = asActivity<Activity>()
 

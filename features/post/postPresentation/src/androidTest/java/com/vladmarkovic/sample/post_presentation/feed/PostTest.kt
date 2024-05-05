@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.post_presentation.*
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_android_test.TestCompose
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.ArgKeys
+import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.util.collectAsStateLifecycleAware
 import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
@@ -44,8 +44,8 @@ class PostTest {
     @Before
     fun init() {
         setupTestLogger()
-        every { mockSavedStateHandle.get<String>(ArgKeys.POST.name) }.returns(postJson)
-        every { mockSavedStateHandle.set<Post>(ArgKeys.POST.name, fakePost) }.answers { }
+        every { mockSavedStateHandle.get<String>(ScreenArgKeys.POST.name) }.returns(postJson)
+        every { mockSavedStateHandle.set<Post>(ScreenArgKeys.POST.name, fakePost) }.answers { }
 
         viewModel = PostViewModel(
             fakePostRepository,

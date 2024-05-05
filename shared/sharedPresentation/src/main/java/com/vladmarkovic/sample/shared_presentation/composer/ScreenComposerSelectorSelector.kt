@@ -16,7 +16,7 @@ import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
 import com.vladmarkovic.sample.shared_presentation.di.inject
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
 import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.util.tabNavigator

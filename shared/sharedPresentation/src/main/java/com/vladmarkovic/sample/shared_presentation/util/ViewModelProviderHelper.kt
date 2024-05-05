@@ -32,7 +32,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewM
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigator
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigatorFactoryProvider
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.flow.Flow

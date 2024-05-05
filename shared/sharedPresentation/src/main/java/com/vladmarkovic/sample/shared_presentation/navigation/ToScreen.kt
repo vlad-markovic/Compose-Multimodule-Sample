@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.navigation
 
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.routeArgs
 
 /** For typing and scoping screen navigation actions for navigating to [Screen]. */

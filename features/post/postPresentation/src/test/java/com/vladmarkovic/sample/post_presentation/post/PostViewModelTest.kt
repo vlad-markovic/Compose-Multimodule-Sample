@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.ArgKeys
+import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
 import com.vladmarkovic.sample.shared_test.*
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,7 +55,7 @@ class PostViewModelTest {
 
         val mockJsonString = "{\"id\":$fakePostId,\"userId\":$fakePostUserId,\"title\":\"" +
                 "$fakePostTitle\",\"content\":\"$fakePostContent\"}"
-        every { mockSavedStateHandle.get<String>(ArgKeys.POST.name) }.returns(mockJsonString)
+        every { mockSavedStateHandle.get<String>(ScreenArgKeys.POST.name) }.returns(mockJsonString)
 
         viewModel = PostViewModel(
             fakePostRepository,

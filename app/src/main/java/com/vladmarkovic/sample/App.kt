@@ -7,7 +7,7 @@ import android.app.Application
 import com.vladmarkovic.sample.di.AndroidAppEntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
-import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
+import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject

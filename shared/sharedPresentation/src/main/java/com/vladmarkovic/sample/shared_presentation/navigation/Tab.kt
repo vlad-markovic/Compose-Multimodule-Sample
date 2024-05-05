@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.shared_presentation.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 
 interface Tab : NavigationAction {
     val name: String

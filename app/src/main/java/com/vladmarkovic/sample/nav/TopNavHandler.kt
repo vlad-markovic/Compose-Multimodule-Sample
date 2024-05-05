@@ -7,8 +7,8 @@ import android.content.Intent
 import com.vladmarkovic.sample.settings_presentation.SettingsActivity
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
-import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
-import com.vladmarkovic.sample.shared_presentation.screen.ToScreenGroup
+import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
+import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,7 +18,7 @@ class TopNavHandler @Inject constructor() : TopNavigationActionHandler {
 
     override fun handleTopScreenNavigationAction(activity: Activity, action: ToScreenGroup) =
         when (action) {
-            is SettingsScreen.ToSettings -> activity.startActivity<SettingsActivity>()
+            is ToSettings -> activity.startActivity<SettingsActivity>()
         }
 
     private inline fun <reified T> Activity.startActivity() {

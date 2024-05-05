@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.display
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
-import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen.ToSettings
+import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
 
 sealed class MainDrawerItem(

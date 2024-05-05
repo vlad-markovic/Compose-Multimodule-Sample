@@ -12,8 +12,8 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen.CovidScreen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel

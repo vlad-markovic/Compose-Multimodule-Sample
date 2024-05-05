@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.NavScaffold
 import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
 import com.vladmarkovic.sample.shared_presentation.di.inject
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.screen.namedArgs
 import com.vladmarkovic.sample.shared_presentation.screen.route
 

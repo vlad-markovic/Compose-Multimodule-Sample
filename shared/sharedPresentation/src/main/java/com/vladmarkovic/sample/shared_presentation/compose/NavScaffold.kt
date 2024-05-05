@@ -17,7 +17,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.handleAction
 import com.vladmarkovic.sample.shared_presentation.util.safeValue

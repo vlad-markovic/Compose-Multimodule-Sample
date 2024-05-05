@@ -6,11 +6,10 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
 import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen
 
 enum class MainBottomTab(
     override val screens: List<MainScreen>,

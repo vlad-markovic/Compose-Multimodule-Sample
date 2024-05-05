@@ -8,8 +8,8 @@ import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen.PostsScreen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton.BackButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.safeValue

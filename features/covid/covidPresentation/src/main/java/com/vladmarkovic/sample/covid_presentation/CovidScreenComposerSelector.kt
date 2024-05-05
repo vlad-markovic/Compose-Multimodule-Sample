@@ -6,7 +6,7 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CovidCountr
 import com.vladmarkovic.sample.covid_presentation.country_info.CovidCountryInfoScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelector
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen.CovidScreen
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 

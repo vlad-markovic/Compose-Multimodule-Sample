@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
-import com.vladmarkovic.sample.shared_presentation.screen.Screen
-import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
+import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str

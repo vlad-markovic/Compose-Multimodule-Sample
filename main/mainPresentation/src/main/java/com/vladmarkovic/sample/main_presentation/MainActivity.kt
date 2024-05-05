@@ -8,8 +8,8 @@ import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelect
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelectorSelector
 import com.vladmarkovic.sample.shared_presentation.composer.TabsNavGraph
 import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen.CovidScreen
+import com.vladmarkovic.sample.shared_domain.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
