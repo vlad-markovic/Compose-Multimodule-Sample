@@ -6,10 +6,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 
-interface Tab<S: Screen> : NavigationAction {
+interface Tab : NavigationAction {
     val name: String
-    val initialScreen: S
-    val screens: List<S>
+    val screens: List<Screen>
+    val initialScreen: Screen get() = screens.first()
     val icon: ImageVector
     val textRes: Int
 }

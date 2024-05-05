@@ -4,46 +4,45 @@ package com.vladmarkovic.sample.main_presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.vladmarkovic.sample.shared_presentation.compose.Tabs
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
-import com.vladmarkovic.sample.shared_presentation.screen.MainScreen
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelector
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelectorSelector
+import com.vladmarkovic.sample.shared_presentation.composer.TabsNavGraph
+import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.PostsScreen
 import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 /** Main holder activity, holding composers for Composable-s. */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var postsScreenHolderComposer: ScreenHolderComposer<PostsScreen>
-
-    @Inject
-    lateinit var covidTabComposer: ScreenHolderComposer<CovidScreen>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val tabs = MainBottomTab.entries
-        val initialTab = tabs.first()
-        val initialScreen = tabComposer(initialTab).allScreens.first()
-
         setComposeContentView {
-            Tabs(initialScreen, tabs, initialTab) { tab, bubbleUp ->
-                with(tabComposer(tab as MainBottomTab)) {
-                    composeNavGraph(bubbleUp)
-                }
-            }
+            TabsNavGraph<MainBottomTab, MainBottomTabComposerSelectorSelector, MainBottomTabComposerSelectorSelectorProvider>()
         }
     }
+}
 
-    @Suppress("UNCHECKED_CAST")
-    private fun tabComposer(tab: MainBottomTab): ScreenHolderComposer<MainScreen> =
-        when (tab) {
-            MainBottomTab.POSTS_TAB -> postsScreenHolderComposer as ScreenHolderComposer<MainScreen>
-            MainBottomTab.COVID_TAB -> covidTabComposer as ScreenHolderComposer<MainScreen>
+
+@ViewModelScoped
+class MainBottomTabComposerSelectorSelector @Inject constructor(
+    private val postsScreenComposerSelector: ScreenComposerSelector<PostsScreen>,
+    private val covidScreenComposerSelector: ScreenComposerSelector<CovidScreen>
+) : ScreenComposerSelectorSelector<MainBottomTab> {
+    override val allTabs: List<MainBottomTab> get() = MainBottomTab.entries
+    override val MainBottomTab.screenComposerSelector: ScreenComposerSelector<*>
+        get() = when (this) {
+            MainBottomTab.POSTS_TAB -> postsScreenComposerSelector
+            MainBottomTab.COVID_TAB -> covidScreenComposerSelector
         }
 }
+
+@HiltViewModel
+class MainBottomTabComposerSelectorSelectorProvider @Inject constructor(
+    selector: MainBottomTabComposerSelectorSelector
+) : ProviderViewModel<MainBottomTabComposerSelectorSelector>(selector)

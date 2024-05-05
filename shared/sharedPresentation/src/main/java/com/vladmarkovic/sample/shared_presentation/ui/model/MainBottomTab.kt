@@ -15,9 +15,8 @@ import com.vladmarkovic.sample.shared_presentation.screen.MainScreen
 enum class MainBottomTab(
     override val screens: List<MainScreen>,
     override val icon: ImageVector,
-    @StringRes override val textRes: Int,
-    override val initialScreen: MainScreen = screens.first()
-) : Tab<MainScreen> {
+    @StringRes override val textRes: Int
+) : Tab {
     POSTS_TAB(
         MainScreen.PostsScreen.entries as List<MainScreen>,
         Icons.AutoMirrored.Filled.List,

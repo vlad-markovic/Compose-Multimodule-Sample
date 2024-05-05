@@ -2,8 +2,8 @@
 
 package com.vladmarkovic.sample.covid_presentation.di
 
-import com.vladmarkovic.sample.covid_presentation.CovidTabComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
+import com.vladmarkovic.sample.covid_presentation.CovidScreenComposerSelector
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelector
 import com.vladmarkovic.sample.shared_presentation.screen.MainScreen.CovidScreen
 import dagger.Binds
 import dagger.Module
@@ -15,5 +15,5 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 interface CovidInfoTabComposerModule {
 
     @Binds
-    fun bindCovidInfoTabComposer(tabComposer: CovidTabComposer) : ScreenHolderComposer<CovidScreen>
+    fun bindCovidInfoTabComposer(tabComposer: CovidScreenComposerSelector) : ScreenComposerSelector<CovidScreen>
 }

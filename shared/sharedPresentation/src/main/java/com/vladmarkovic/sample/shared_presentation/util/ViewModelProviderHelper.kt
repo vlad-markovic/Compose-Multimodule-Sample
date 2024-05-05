@@ -136,7 +136,7 @@ fun tabNavViewModel(tabNav: TabNavigator, key: String? = null): TabNavViewModel 
     assistedViewModel<TabNavViewModel, TabNavigator, TabNavViewModelFactory>(assistedInput = tabNav, key = key)
 
 @Composable
-fun tabNavigator(initialTab: Tab<*>, key: String? = null): TabNavigator {
+fun tabNavigator(initialTab: Tab, key: String? = null): TabNavigator {
     val factory = activityFactoryProvider<TabNavigatorFactoryProvider>().provideTabNavigatorFactory()
     return remember(key) { factory.create(initialTab) }
 }

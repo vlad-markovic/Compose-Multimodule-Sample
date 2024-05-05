@@ -4,48 +4,44 @@ package com.vladmarkovic.sample.settings_presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.compose.NavHost
 import com.vladmarkovic.sample.settings_presentation.main.SettingsMainScreenComposer
 import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScreenComposer
-import com.vladmarkovic.sample.shared_presentation.compose.ScreensHolder
 import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposer
-import com.vladmarkovic.sample.shared_presentation.composer.ScreenHolderComposer
+import com.vladmarkovic.sample.shared_presentation.composer.ScreenComposerSelector
+import com.vladmarkovic.sample.shared_presentation.composer.ScreensNavGraph
+import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
 import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
-/** [ScreenHolderComposer] holding [SettingsScreen]s. */
+/** [ScreenComposerSelector] holding [SettingsScreen]s. */
 @AndroidEntryPoint
-class SettingsActivity : AppCompatActivity(), ScreenHolderComposer<SettingsScreen> {
-
-    override val allScreens: List<SettingsScreen> = SettingsScreen.entries
-
-    @Inject
-    lateinit var settingsMainScreenComposer: SettingsMainScreenComposer
-
-    @Inject
-    lateinit var settingsTwoScreenComposer: SettingsTwoScreenComposer
-
+class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setComposeContentView {
-            val firstScreen = allScreens.first()
-            ScreensHolder(firstScreen) { navController, modifier, bubbleUp ->
-                NavHost(
-                    navController = navController,
-                    startDestination = firstScreen.name,
-                    modifier = modifier,
-                ) {
-                    composeNavGraph(bubbleUp)
-                }
-            }
+            ScreensNavGraph<SettingsScreensComposerSelector, SettingsScreensHolderProvider>()
         }
     }
-
-    override fun composer(screen: SettingsScreen): ScreenComposer<*> = when (screen) {
-        SettingsScreen.MAIN -> settingsMainScreenComposer
-        SettingsScreen.SECOND -> settingsTwoScreenComposer
-    }
 }
+
+@ViewModelScoped
+class SettingsScreensComposerSelector @Inject constructor(
+    private val settingsMainScreenComposer: SettingsMainScreenComposer,
+    private val settingsTwoScreenComposer: SettingsTwoScreenComposer
+) : ScreenComposerSelector<SettingsScreen> {
+    override val allScreens: List<SettingsScreen> = SettingsScreen.entries
+    override val SettingsScreen.screenComposer: ScreenComposer<*>
+        get() = when (this) {
+            SettingsScreen.MAIN -> settingsMainScreenComposer
+            SettingsScreen.SECOND -> settingsTwoScreenComposer
+        }
+}
+
+@HiltViewModel
+class SettingsScreensHolderProvider @Inject constructor(
+    selector: SettingsScreensComposerSelector
+) : ProviderViewModel<SettingsScreensComposerSelector>(selector)

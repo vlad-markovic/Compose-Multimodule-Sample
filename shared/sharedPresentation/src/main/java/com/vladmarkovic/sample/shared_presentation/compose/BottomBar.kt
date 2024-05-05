@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun DefaultBottomBar(
-    tabs: List<Tab<*>>,
-    currentTabFlow: StateFlow<Tab<*>>,
-    onTabSelected: (Tab<*>) -> Unit,
+    tabs: List<Tab>,
+    currentTabFlow: StateFlow<Tab>,
+    onTabSelected: (Tab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // Don't show tabs if there is none or only one.

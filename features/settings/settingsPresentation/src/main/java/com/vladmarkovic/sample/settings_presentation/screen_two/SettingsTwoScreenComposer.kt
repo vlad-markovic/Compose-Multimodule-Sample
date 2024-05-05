@@ -12,10 +12,12 @@ import com.vladmarkovic.sample.shared_presentation.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str
+import dagger.hilt.android.scopes.ViewModelScoped
 import java.util.Optional
 import javax.inject.Inject
 
 /** Defines Compose UI and elements for second settings screen. */
+@ViewModelScoped
 class SettingsTwoScreenComposer @Inject constructor() : ScreenComposer<BriefActionViewModel>() {
 
     override val screen: Screen = SettingsScreen.SECOND

@@ -88,7 +88,7 @@ private var parentCounter = 0
 
 
 /** Enables separate back stack navigation per tab. */
-fun NavController.navigate(tab: Tab<*>) {
+fun NavController.navigate(tab: Tab) {
     navigate(tab.name) {
         // Separate stacks per tab.
         popUpTo(graph.findStartDestination().id) {
@@ -116,7 +116,7 @@ private fun ComposeArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
     }
 
 @Composable
-fun SetupTabsNavigation(tabs: Flow<Tab<*>>, navController: NavController) {
+fun SetupTabsNavigation(tabs: Flow<Tab>, navController: NavController) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         tabs.drop(1).collectWith(context.asActivity<ComponentActivity>()) {

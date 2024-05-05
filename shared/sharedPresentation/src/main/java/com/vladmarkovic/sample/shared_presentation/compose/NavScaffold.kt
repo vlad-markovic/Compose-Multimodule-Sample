@@ -10,83 +10,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
-import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
 import com.vladmarkovic.sample.shared_presentation.util.handleAction
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import com.vladmarkovic.sample.shared_presentation.util.scaffoldDataManager
-import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.util.tabNavigator
 import kotlinx.coroutines.CoroutineScope
 import java.util.Optional
 
-@Composable
-fun ScreensHolder(
-    initialScreen: Screen,
-    navController: NavHostController = rememberNavController(),
-    bubbleUp: (BriefAction) -> Unit = { throw IllegalStateException("Unhandled action: $it")},
-    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
-) {
-    ScaffoldHolder(initialScreen, bottomBar = {}, navController, scaffoldContent, bubbleUp)
-}
-
-@Composable
-fun Tabs(
-    initialScreen: Screen,
-    tabs: List<Tab<*>>,
-    initialTab: Tab<*> = tabs.first(),
-    navGraph: NavGraphBuilder.(tab: Tab<*>, bubbleUp: (BriefAction) -> Unit) -> Unit
-) {
-    TabsHolder(initialScreen, tabs, initialTab) { navController, modifier, bubbleUp ->
-        NavHost(
-            navController = navController,
-            startDestination = initialTab.name,
-            modifier = modifier
-        ) {
-            tabs.forEach { tab ->
-                navigation(
-                    startDestination = tab.initialScreen.name,
-                    route = tab.name
-                ) {
-                    navGraph(tab, bubbleUp)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun TabsHolder(
-    initialScreen: Screen,
-    tabs: List<Tab<*>>,
-    initialTab: Tab<*>,
-    tabNav: TabNavViewModel = tabNavViewModel(tabNavigator(initialTab)),
-    navController: NavHostController = rememberNavController(),
-    bottomBar: @Composable () -> Unit = { DefaultBottomBar(tabs, tabNav.currentTab, tabNav::navigate) },
-    bubbleUp: (BriefAction) -> Unit = { throw IllegalStateException("Unhandled action: $it")},
-    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
-) {
-    SetupTabsNavigation(tabs = tabNav.currentTab, navController = navController)
-    ScaffoldHolder(initialScreen, bottomBar, navController, scaffoldContent) { action ->
-        when (action) {
-            is Tab<*> ->  tabNav.navigate(action)
-            else -> bubbleUp(action)
-        }
-    }
-}
 
 data class ScaffoldChange(
     val screen: Screen,
@@ -96,12 +34,12 @@ data class ScaffoldChange(
 
 
 @Composable
-private fun ScaffoldHolder(
+fun NavScaffold(
     initialScreen: Screen,
     bottomBar: @Composable () -> Unit,
+    bubbleUp: (BriefAction) -> Unit,
     navController: NavHostController = rememberNavController(),
-    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
+    navHost: @Composable (modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(Color.Black)
@@ -127,7 +65,7 @@ private fun ScaffoldHolder(
             bottomBar = bottomBar,
             drawerContent = scaffoldData.drawer.safeValue
         ) { paddingValues ->
-            scaffoldContent(navController, Modifier.padding(paddingValues)) { composeArgs.handleAction(it, actionHandler) }
+            navHost(Modifier.padding(paddingValues)) { composeArgs.handleAction(it, actionHandler) }
 
             composeArgs.BackHandler(actionHandler)
         }

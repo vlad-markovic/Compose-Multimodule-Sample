@@ -11,5 +11,5 @@ import com.vladmarkovic.sample.shared_presentation.navigation.Tab
  * or inherit from [TabNavViewModel].
  */
 interface TabNavigable {
-    fun navigate(tab: Tab<*>)
+    fun navigate(tab: Tab)
 }

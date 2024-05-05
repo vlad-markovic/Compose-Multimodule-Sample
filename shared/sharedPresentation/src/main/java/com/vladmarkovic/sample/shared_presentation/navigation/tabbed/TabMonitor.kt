@@ -6,5 +6,5 @@ import com.vladmarkovic.sample.shared_presentation.navigation.Tab
 import kotlinx.coroutines.flow.StateFlow
 
 interface TabMonitor  {
-    val currentTab: StateFlow<Tab<*>>
+    val currentTab: StateFlow<Tab>
 }

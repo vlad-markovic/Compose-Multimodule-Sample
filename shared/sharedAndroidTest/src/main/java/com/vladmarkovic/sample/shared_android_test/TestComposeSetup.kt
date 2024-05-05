@@ -16,7 +16,7 @@ import com.vladmarkovic.sample.shared_presentation.util.SetupWith
 
 @Composable
 fun TestCompose(
-    tab: Tab<*>,
+    tab: Tab,
     viewModel: BriefActionViewModel,
     scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {

@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /** Manages tab navigation on tab press. State-full (uses StateFlow) to keep track of current tab. */
-class TabNavigator @AssistedInject constructor(@Assisted initialTab: Tab<*>) : TabNavigable, TabMonitor  {
+class TabNavigator @AssistedInject constructor(@Assisted initialTab: Tab) : TabNavigable, TabMonitor  {
 
     private val tab = MutableStateFlow(initialTab)
-    override val currentTab: StateFlow<Tab<*>> = tab.asStateFlow()
+    override val currentTab: StateFlow<Tab> = tab.asStateFlow()
 
-    override fun navigate(tab: Tab<*>) {
+    override fun navigate(tab: Tab) {
         if (this.tab.value != tab) {
             this.tab.value = tab
         }
@@ -28,8 +28,8 @@ class TabNavigator @AssistedInject constructor(@Assisted initialTab: Tab<*>) : T
 }
 
 @AssistedFactory
-interface TabNavigatorFactory : BaseAssistedFactory<TabNavigator, Tab<*>> {
-    override fun create(assistedInput: Tab<*>): TabNavigator
+interface TabNavigatorFactory : BaseAssistedFactory<TabNavigator, Tab> {
+    override fun create(assistedInput: Tab): TabNavigator
 }
 
 @EntryPoint
