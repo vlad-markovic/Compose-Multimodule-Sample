@@ -31,8 +31,8 @@ val Screen.routeArgs: String
     } ?: ""
 
 /** i.e. ?POST=[post-json] */
-fun Screen.routeArgs(args: List<String>): String {
-    if (args.isEmpty()) return ""
+fun Screen.routeArgs(args: List<String>?): String {
+    if (args.isNullOrEmpty()) return ""
     if (args.size != (this.argNames?.size ?: 0)) throw IllegalArgumentException()
     return String.format(routeArgsFormat, *args.toTypedArray())
 }

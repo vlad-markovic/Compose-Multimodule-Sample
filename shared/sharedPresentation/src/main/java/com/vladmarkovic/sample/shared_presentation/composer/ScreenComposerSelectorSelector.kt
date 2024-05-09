@@ -14,9 +14,10 @@ import com.vladmarkovic.sample.shared_presentation.compose.DefaultBottomBar
 import com.vladmarkovic.sample.shared_presentation.compose.NavScaffold
 import com.vladmarkovic.sample.shared_presentation.di.ProviderViewModel
 import com.vladmarkovic.sample.shared_presentation.di.inject
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
 import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.util.tabNavigator
@@ -31,7 +32,7 @@ inline fun <reified T: Tab, reified H : ScreenComposerSelectorSelector<T>, reifi
 ) {
     val tabNavHandler: (BriefAction) -> Unit = remember {{ action ->
         when (action) {
-            is Tab ->  tabNav.navigate(action)
+            is ToTab -> tabNav.navigate(action.tab)
             else -> actionHandler(action)
         }
     }}

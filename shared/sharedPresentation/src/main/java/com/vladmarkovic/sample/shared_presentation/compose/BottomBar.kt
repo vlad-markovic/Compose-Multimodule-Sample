@@ -10,7 +10,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
+import com.vladmarkovic.sample.shared_presentation.tab.icon
+import com.vladmarkovic.sample.shared_presentation.tab.textRes
 import kotlinx.coroutines.flow.StateFlow
 
 

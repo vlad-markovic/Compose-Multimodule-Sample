@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 
 /**
  * For decorating a ViewModel to give it functionality to send [Tab]s as [NavigationAction]s,

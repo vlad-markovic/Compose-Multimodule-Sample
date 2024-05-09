@@ -11,7 +11,7 @@ import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_android_test.TestCompose
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
-import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
+import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.util.collectAsStateLifecycleAware
 import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity

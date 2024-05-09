@@ -9,6 +9,4 @@ import com.vladmarkovic.sample.shared_presentation.screen.routeArgs
 /** For typing and scoping screen navigation actions for navigating to [Screen]. */
 abstract class ToScreen(val screen: Screen, val jsonArgs: List<String>? = null) : NavigationAction
 
-val ToScreen.route: String get() = screen.name + (jsonArgs?.let {
-    screen.routeArgs(it)
-} ?: "")
+val ToScreen.route: String get() = screen.name + screen.routeArgs(jsonArgs)

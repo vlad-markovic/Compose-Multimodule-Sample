@@ -22,11 +22,12 @@ import com.vladmarkovic.sample.shared_presentation.composer.onBack
 import com.vladmarkovic.sample.shared_presentation.composer.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.route
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
+import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
@@ -44,6 +45,7 @@ internal fun ComposeArgs.handleAction(action: BriefAction, bubbleUp: (BriefActio
 
 /** Branch out handling of different types of [NavigationAction]s. */
 private fun ComposeArgs.navigate(action: NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
+    is ToTab -> navController.navigate(action.tab)
     is ToScreen -> navController.navigate(action.route)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
     is CommonNavigationAction -> navigate(action)

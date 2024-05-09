@@ -27,7 +27,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManagerFactoryProvider
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigator

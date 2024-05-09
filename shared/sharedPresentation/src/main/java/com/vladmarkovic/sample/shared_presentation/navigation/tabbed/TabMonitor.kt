@@ -2,7 +2,7 @@
 
 package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import kotlinx.coroutines.flow.StateFlow
 
 interface TabMonitor  {

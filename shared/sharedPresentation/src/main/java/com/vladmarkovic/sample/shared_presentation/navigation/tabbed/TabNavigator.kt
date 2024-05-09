@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
-import com.vladmarkovic.sample.shared_presentation.navigation.Tab
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

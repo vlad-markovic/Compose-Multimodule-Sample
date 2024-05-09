@@ -14,7 +14,8 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
-import com.vladmarkovic.sample.shared_presentation.ui.model.MainBottomTab
+import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
+import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 
 sealed class MainDrawerItem(
     override val icon: ImageVector,
@@ -37,11 +38,11 @@ sealed class MainDrawerItem(
 fun defaultDrawerItems(viewModel: BriefActionViewModel) = listOf(
     MainDrawerItem.ItemPostsTab {
         viewModel.display(CommonDisplayAction.CloseDrawer)
-        viewModel.navigate(MainBottomTab.POSTS_TAB)
+        viewModel.navigate(ToTab(MainBottomTab.POSTS_TAB))
     },
     MainDrawerItem.ItemCovidTab {
         viewModel.display(CommonDisplayAction.CloseDrawer)
-        viewModel.navigate(MainBottomTab.COVID_TAB)
+        viewModel.navigate(ToTab(MainBottomTab.COVID_TAB))
     },
     MainDrawerItem.ItemToast {
         viewModel.display(CommonDisplayAction.CloseDrawer)
