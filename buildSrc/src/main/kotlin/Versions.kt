@@ -2,6 +2,7 @@
 
 import org.gradle.api.JavaVersion
 
+@Suppress("ConstPropertyName")
 internal object  Versions {
 
     // region Global
@@ -12,19 +13,18 @@ internal object  Versions {
     const val minSdk = 24
     // endregion Global
 
-    const val gradleBuildTools = "8.2.2"
+    const val gradleBuildTools = "8.4.0"
 
     // region Kotlin
-    const val kotlin = "1.9.22"
-    const val ktor = "2.3.8"
-    const val kotlinCoroutines = "1.8.0"
+    const val kotlin = "2.0.0"
+    const val ktor = "2.3.12"
+    const val kotlinCoroutines = "1.9.0-RC"
     const val kotlinSerialization = "1.6.3"
     // endregion Kotlin
 
     // region Android / Google
-    const val hilt = "2.50"
-    const val androidXHilt = "1.2.0"
-    const val androidXHiltNavCompose = "1.2.0"
+    const val dagger = "2.50"
+    const val hilt = "1.2.0"
 
     const val googleMaterial = "1.11.0"
     const val appCompat = "1.6.1"
@@ -33,9 +33,7 @@ internal object  Versions {
     const val androidxArchCore = "2.1.0"
     const val androidxCoreExtensions = "1.12.0"
 
-    const val composeBom = "2024.02.01"
-    const val compose = "1.5.10"
-    const val kotlinCompilerExtension = compose
+    const val composeBom = "2024.06.00"
     const val googleAccompanist = "0.34.0"
     const val room = "2.6.1"
 

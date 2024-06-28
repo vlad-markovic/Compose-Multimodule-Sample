@@ -19,7 +19,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class BriefActioner @Inject constructor() : BriefActionable {
 
-    // For ensuring ViewModels are able send actions even from init (before collection is set up)
+    // For ensuring ViewModels are able to send actions even from init (before collection is set up)
     private val initialCache: Queue<BriefAction> = LinkedList()
 
     private val _action = MutableSharedFlow<BriefAction>()
@@ -29,7 +29,7 @@ class BriefActioner @Inject constructor() : BriefActionable {
             initialCache.clear()
         }
 
-    override suspend fun asyncAction(action: BriefAction) {
+    override suspend fun actionAsync(action: BriefAction) {
         _action.emit(action)
         if (_action.subscriptionCount.value == 0) {
             initialCache.offer(action)

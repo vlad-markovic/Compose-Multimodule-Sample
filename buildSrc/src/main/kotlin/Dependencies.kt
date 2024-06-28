@@ -2,75 +2,99 @@
 
 object Dependencies {
 
-    // region Kotlin
-    val kotlinGradlePlugin: String = kotlinDependency("kotlin-gradle-plugin")
-    val kotlinReflect = kotlinDependency("kotlin-reflect")
-    val kotlinSerialization = kotlinDependency("kotlin-serialization")
+    val kotlin = Kotlin
+    val hilt = Hilt
+    val ktor = Ktor
+    val room = Room
+    val compose = Compose
 
-    val kotlinxCoroutinesCore: String = jetbrainsKotlinx("kotlinx-coroutines-core")
-    val kotlinxSerializationCore: String = jetbrainsKotlinx("kotlinx-serialization-core", Versions.kotlinSerialization)
+    object Kotlin {
+        val gradlePlugin: String = kotlinDependency("kotlin-gradle-plugin")
+        val reflect = kotlinDependency("kotlin-reflect")
+        val serialization = kotlinDependency("kotlin-serialization")
+
+        val x = X
+        object X {
+            val coroutinesCore: String = jetbrainsKotlinx("kotlinx-coroutines-core")
+            val serializationCore: String = jetbrainsKotlinx("kotlinx-serialization-core", Versions.kotlinSerialization)
+
+            private fun jetbrainsKotlinx(module: String, version: String = Versions.kotlinCoroutines): String =
+                dependency("org.jetbrains.kotlinx", module, version)
+        }
+
+        private fun kotlinDependency(module: String, version: String? = Versions.kotlin): String =
+            dependency("org.jetbrains.kotlin", module, version)
+    }
+
 
     private fun jetbrainsKotlin(module: String, version: String? = null): String =
         dependency("org.jetbrains.kotlin", module, version)
 
-    private fun jetbrainsKotlinx(module: String, version: String = Versions.kotlinCoroutines): String =
-        dependency("org.jetbrains.kotlinx", module, version)
-    // endregion Kotlin
+    object Ktor {
+        val clientCore = ktor("ktor-client-core")
+        val clientCio = ktor("ktor-client-cio")
+        val clientSerialization = ktor("ktor-client-serialization")
+        val clientContentNegotiation = ktor("ktor-client-content-negotiation")
+        val serializationKotlinxJson = ktor("ktor-serialization-kotlinx-json")
 
-    // region Ktor
-    val ktorClientCore = ktor("ktor-client-core")
-    val ktorClientCio = ktor("ktor-client-cio")
-    val ktorClientSerialization = ktor("ktor-client-serialization")
-    val ktorClientContentNegotiation = ktor("ktor-client-content-negotiation")
-    val ktorSerializationKotlinxJson = ktor("ktor-serialization-kotlinx-json")
+        private fun ktor(module: String, version: String = Versions.ktor): String =
+            dependency("io.ktor", module, version)
+    }
 
-    private fun ktor(module: String, version: String = Versions.ktor): String =
-        dependency("io.ktor", module, version)
-    // endregion Ktor
+    object Hilt {
+        val dagger = Dagger
+        val androidx = AndroidX
 
-    // region Hilt injection
-    val hiltCore = hilt("hilt-core")
-    val hiltPlugin = hilt("hilt-android-gradle-plugin")
-    val hiltAndroid = hilt("hilt-android")
-    val hiltAndroidCompiler = hilt("hilt-android-compiler")
-    val androidXHiltCompiler = androidxHilt("hilt-compiler", Versions.androidXHilt)
-    val hiltNavCompose = androidxHilt("hilt-navigation-compose", Versions.androidXHiltNavCompose)
+        object Dagger {
+            val core = dagger("hilt-core")
+            //    val hiltPlugin = hilt("hilt-android-gradle-plugin")
+            val android = dagger("hilt-android")
+            val androidCompiler = dagger("hilt-android-compiler")
+        }
 
-    private fun androidxHilt(module: String, version: String) =
-        dependency("androidx.hilt", module, version)
+        object AndroidX {
+            val compiler = androidxHilt("hilt-compiler", Versions.hilt)
+            val navCompose = androidxHilt("hilt-navigation-compose", Versions.hilt)
 
-    private fun hilt(module: String, version: String = Versions.hilt) =
-        dagger(module, version)
+            private fun androidxHilt(module: String, version: String) =
+                dependency("androidx.hilt", module, version)
+        }
+    }
 
-    private fun dagger(module: String, version: String) =
+    private fun dagger(module: String, version: String = Versions.dagger) =
         dependency("com.google.dagger", module, version)
-    // endregion Hilt injection
 
-    // region Compose
-    val composeBom = dependency("androidx.compose", "compose-bom", Versions.composeBom)
-    val composeCompiler = dependency("androidx.compose.compiler", "compiler", Versions.compose)
-    val composeActivity = dependency("androidx.activity", "activity-compose")
-    val composeLifecycle = dependency("androidx.lifecycle", "lifecycle-runtime-compose")
-    val composeUi = composeUi("ui")
-    val composeUiToolingPreview = composeUi("ui-tooling-preview")
-    val composeMaterial = dependency("androidx.compose.material", "material")
-    val composeSwipeRefresh = googleAccompanist("accompanist-swiperefresh")
-    val composeSystemUiController = googleAccompanist("accompanist-systemuicontroller")
+    object Compose {
+        val bom = dependency("androidx.compose", "compose-bom", Versions.composeBom)
+        //    val composeCompiler = dependency("androidx.compose.compiler", "compiler", Versions.compose)
+        val activity = dependency("androidx.activity", "activity-compose")
+        val lifecycle = dependency("androidx.lifecycle", "lifecycle-runtime-compose")
+        val material = dependency("androidx.compose.material", "material")
+        val ui = UI
+        val accompanist = Accompanist
 
-    private fun composeUi(module: String) = dependency("androidx.compose.ui", module)
+        object UI : SimpleCharSequence(composeUi("ui")) {
+            val toolingPreview = composeUi("ui-tooling-preview")
+        }
+        fun composeUi(module: String) = dependency("androidx.compose.ui", module)
 
-    private fun googleAccompanist(module: String, version: String = Versions.googleAccompanist) =
-        dependency("com.google.accompanist", module, version)
-    // endregion Compose
+        object Accompanist {
+            val swipeRefresh = googleAccompanist("accompanist-swiperefresh")
+            val systemUiController = googleAccompanist("accompanist-systemuicontroller")
 
-    // region Room
-    val roomRuntime = room("room-runtime")
-    val roomCompiler = room("room-compiler")
-    val roomExtensions = room("room-ktx")
+            private fun googleAccompanist(module: String, version: String = Versions.googleAccompanist) =
+                dependency("com.google.accompanist", module, version)
+        }
+    }
 
-    private fun room(module: String, version: String = Versions.room) =
-        dependency("androidx.room", module, version)
-    // endregion Room
+    object Room {
+        val runtime = room("room-runtime")
+        val compiler = room("room-compiler")
+        val extensions = room("room-ktx")
+
+        private fun room(module: String, version: String = Versions.room) =
+            dependency("androidx.room", module, version)
+    }
 
     // region Android
     val gradleBuildTools: String = dependency("com.android.tools.build", "gradle", Versions.gradleBuildTools)
@@ -88,22 +112,24 @@ object Dependencies {
     val timber: String = dependency("com.jakewharton.timber", "timber", Versions.timber)
     // endregion Android
 
+    val javaPoet: String = dependency("com.squareup", "javapoet", "1.13.0")
+
     // region Test
     // Unit Tests
-    val junitJupiterApi =  junitJupiter("junit-jupiter-api")
-    val junitJupiterEngine =  junitJupiter("junit-jupiter-engine")
-    val junitJupiterParams =  junitJupiter("junit-jupiter-params")
-    val kotlinTest =  jetbrainsKotlin("kotlin-test")
-    val kotlinTestJunit5 =  jetbrainsKotlin("kotlin-test-junit5", Versions.kotlin)
-    val kotlinTestRunnerJunit5 =  dependency("io.kotlintest","kotlintest-runner-junit5", Versions.kotlinTestRunnerJunit5)
-    val mockk =  dependency("io.mockk","mockk", Versions.mockk)
-    val mockkAndroid =  dependency("io.mockk","mockk-android", Versions.mockk)
+    val junitJupiterApi = junitJupiter("junit-jupiter-api")
+    val junitJupiterEngine = junitJupiter("junit-jupiter-engine")
+    val junitJupiterParams = junitJupiter("junit-jupiter-params")
+    val kotlinTest = jetbrainsKotlin("kotlin-test")
+    val kotlinTestJunit5 = jetbrainsKotlin("kotlin-test-junit5", Versions.kotlin)
+    val kotlinTestRunnerJunit5 = dependency("io.kotlintest","kotlintest-runner-junit5", Versions.kotlinTestRunnerJunit5)
+    val mockk = dependency("io.mockk","mockk", Versions.mockk)
+    val mockkAndroid = dependency("io.mockk","mockk-android", Versions.mockk)
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
-    val slf4jNop =  dependency("org.slf4j","slf4j-nop", Versions.slf4jNop)
-    val archCoreTesting =  dependency("androidx.arch.core", "core-testing", Versions.androidxArchCore)
+    val slf4jNop = dependency("org.slf4j","slf4j-nop", Versions.slf4jNop)
+    val archCoreTesting = dependency("androidx.arch.core", "core-testing", Versions.androidxArchCore)
     val lifecycleRuntimeTesting = lifecycle("lifecycle-runtime-testing", "2.3.0-alpha01")
     val coroutinesTesting = dependency("org.jetbrains.kotlinx","kotlinx-coroutines-test", Versions.coroutinesTesting)
-    val hiltAndroidTesting = hilt("hilt-android-testing")
+    val hiltAndroidTesting = dagger("hilt-android-testing")
 
     // UI Tests
     val androidxTestCore = androidxTest("core")
@@ -111,10 +137,10 @@ object Dependencies {
     val androidxTestRules = androidxTest("rules")
     val androidxTestExtJunit = androidxTestExt("junit", Versions.androidxTestExtJunit)
     val androidxTestExtTruth = androidxTestExt("truth")
-    val composeUiTest = composeUi("ui-test-junit4")
+    val composeUiTest = Compose.composeUi("ui-test-junit4")
     // Needed for createComposeRule
-    val composeUiTestManifest = composeUi("ui-test-manifest")
-    val composeUiTooling = composeUi("ui-tooling")
+    val composeUiTestManifest = Compose.composeUi("ui-test-manifest")
+    val composeUiTooling = Compose.composeUi("ui-tooling")
     val fragmentTesting = dependency("androidx.fragment","fragment-testing", Versions.fragmentVersion)
     // Espresso
     val espressoCore = androidxTestEspresso("espresso-core")
@@ -127,9 +153,6 @@ object Dependencies {
 
     private fun dependency(group: String, module: String, version: String? = null): String =
         "$group:$module" + version?.let { ":$it" }.orEmpty()
-
-    private fun kotlinDependency(module: String, version: String? = Versions.kotlin): String =
-        dependency("org.jetbrains.kotlin", module, version)
 
     private fun androidxTest(module: String, version: String? = Versions.androidxTest): String =
         dependency("androidx.test", module, version)

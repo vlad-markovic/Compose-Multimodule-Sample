@@ -40,8 +40,8 @@ fun DependencyHandler.kaptAndroidTest(dependencyNotation: Any) {
 
 // region Gradle Project extensions
 /** Applies a Gradle plugin with [id], if it has not been applied before. */
-fun GradleProject.applyPlugin(id: String): Plugin<Any> =
-    (plugins.findPlugin(id) ?: plugins.apply(id))
+fun GradleProject.applyPlugin(id: CharSequence): Plugin<Any> =
+    (plugins.findPlugin(id.toString()) ?: plugins.apply(id.toString()))
 
 /** Use as android block where not accessible in Gradle utils */
 fun GradleProject.androidLibrary(action: LibraryExtension.() -> Unit) {

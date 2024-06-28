@@ -1,12 +1,23 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
+@Suppress("ConstPropertyName")
 object Plugins {
-    const val hilt =  "dagger.hilt.android.plugin"
-    const val androidLibrary =  "com.android.library"
-    const val javaLibrary = "java-library"
 
-    const val kotlin = "kotlin"
-    const val kotlinKapt = "kotlin-kapt"
-    const val kotlinAndroid = "kotlin-android"
-    const val kotlinSerialization = "org.jetbrains.kotlin.plugin.serialization"
+    val kotlin = Kotlin
+    val android = Android
+
+    const val javaLibrary = "java-library"
+    const val hilt = "com.google.dagger.hilt.android"
+
+    object Kotlin : SimpleCharSequence("kotlin") {
+        const val kapt = "kotlin-kapt"
+        const val serialization = "org.jetbrains.kotlin.plugin.serialization"
+        const val android = "org.jetbrains.kotlin.android"
+        const val composeCompiler = "org.jetbrains.kotlin.plugin.compose"
+    }
+
+    object Android {
+        const val application = "com.android.application"
+        const val library =  "com.android.library"
+    }
 }

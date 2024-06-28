@@ -6,13 +6,13 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 
 internal fun DependencyHandler.implementationPresentationBase() {
     // Kotlin
-    implementation(Dependencies.kotlinxSerializationCore)
-    implementation(Dependencies.ktorClientSerialization)
-    implementation(Dependencies.kotlinReflect)
+    implementation(Dependencies.kotlin.x.serializationCore)
+    implementation(Dependencies.ktor.clientSerialization)
+    implementation(Dependencies.kotlin.reflect)
 
     // Android / Google
-    kapt(Dependencies.androidXHiltCompiler)
-    implementation(Dependencies.hiltNavCompose)
+    kapt(Dependencies.hilt.androidx.compiler)
+    implementation(Dependencies.hilt.androidx.navCompose)
     implementation(Dependencies.appCompat)
     implementation(Dependencies.googleMaterial)
     implementation(Dependencies.androidxArchCoreCommon)
@@ -30,39 +30,38 @@ fun DependencyHandler.implementationDataBase() {
 }
 
 fun DependencyHandler.implementationPlainKotlinBase() {
-    implementation(Dependencies.hiltCore)
-    implementation(Dependencies.kotlinxSerializationCore)
+    implementation(Dependencies.hilt.dagger.core)
+    implementation(Dependencies.kotlin.x.serializationCore)
     implementationKotlinCoroutines()
 }
 
 private fun DependencyHandler.implementationKtor() {
-    implementation(Dependencies.ktorClientCore)
-    implementation(Dependencies.ktorClientCio)
-    implementation(Dependencies.ktorClientSerialization)
-    implementation(Dependencies.ktorClientContentNegotiation)
-    implementation(Dependencies.ktorSerializationKotlinxJson)
+    implementation(Dependencies.ktor.clientCore)
+    implementation(Dependencies.ktor.clientCio)
+    implementation(Dependencies.ktor.clientSerialization)
+    implementation(Dependencies.ktor.clientContentNegotiation)
+    implementation(Dependencies.ktor.serializationKotlinxJson)
 }
 
 fun DependencyHandler.implementationKotlinCoroutines() {
-    implementation(Dependencies.kotlinxCoroutinesCore)
+    implementation(Dependencies.kotlin.x.coroutinesCore)
 }
 
 fun DependencyHandler.implementationRoom() {
-    implementation(Dependencies.roomRuntime)
-    kapt(Dependencies.roomCompiler)
-    implementation(Dependencies.roomExtensions)
+    implementation(Dependencies.room.runtime)
+    kapt(Dependencies.room.compiler)
+    implementation(Dependencies.room.extensions)
 }
 
 fun DependencyHandler.implementationCompose() {
-    implementation(Dependencies.composeBom)
-    implementation(Dependencies.composeCompiler)
-    implementation(Dependencies.composeActivity)
-    implementation(Dependencies.composeLifecycle)
-    implementation(Dependencies.composeUi)
-    implementation(Dependencies.composeUiToolingPreview)
-    implementation(Dependencies.composeMaterial)
-    implementation(Dependencies.composeSwipeRefresh)
-    implementation(Dependencies.composeSystemUiController)
+    implementation(Dependencies.compose.bom)
+    implementation(Dependencies.compose.activity)
+    implementation(Dependencies.compose.lifecycle)
+    implementation(Dependencies.compose.ui)
+    implementation(Dependencies.compose.ui.toolingPreview)
+    implementation(Dependencies.compose.material)
+    implementation(Dependencies.compose.accompanist.swipeRefresh)
+    implementation(Dependencies.compose.accompanist.systemUiController)
 }
 
 fun DependencyHandler.testImplementationAll() {
@@ -75,7 +74,7 @@ fun DependencyHandler.testImplementationAll() {
     testImplementation(Dependencies.mockk)
     testImplementation(Dependencies.archCoreTesting)
     testImplementation(Dependencies.lifecycleRuntimeTesting)
-    testImplementation(Dependencies.kotlinxCoroutinesCore)
+    testImplementation(Dependencies.kotlin.x.coroutinesCore)
     testImplementation(Dependencies.coroutinesTesting)
     // removes error: Failed to load class "org.slf4j.impl.StaticLoggerBinder"
     testImplementation(Dependencies.slf4jNop)
@@ -95,8 +94,8 @@ fun DependencyHandler.androidTestImplementationAll() {
     debugImplementation(Dependencies.composeUiTestManifest)
     debugImplementation(Dependencies.composeUiTooling)
     debugImplementation(Dependencies.fragmentTesting)
-    kaptAndroidTest(Dependencies.hiltAndroidCompiler)
-    kaptAndroidTest(Dependencies.androidXHiltCompiler)
+    kaptAndroidTest(Dependencies.hilt.dagger.androidCompiler)
+    kaptAndroidTest(Dependencies.hilt.androidx.compiler)
     // Espresso
     androidTestImplementation(Dependencies.espressoCore)
     androidTestImplementation(Dependencies.espressoContrib)

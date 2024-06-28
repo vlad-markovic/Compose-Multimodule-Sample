@@ -23,7 +23,7 @@ fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
 
 /** Common plugins and dependencies for any plain kotlin (domain) module. */
 private fun GradleProject.configurePlainKotlinModule() {
-    applyPlugin(Plugins.kotlinSerialization)
+    applyPlugin(Plugins.kotlin.serialization)
     applyPlugin(Plugins.javaLibrary)
     applyPlugin(Plugins.kotlin)
 
@@ -83,10 +83,10 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
 
 /** Common for data and domain modules. */
 fun GradleProject.configureAndroidModule() {
-    applyPlugin(Plugins.androidLibrary)
-    applyPlugin(Plugins.kotlinAndroid)
-    applyPlugin(Plugins.kotlinKapt)
-    applyPlugin(Plugins.kotlinSerialization)
+    applyPlugin(Plugins.android.library)
+    applyPlugin(Plugins.kotlin.android)
+    applyPlugin(Plugins.kotlin.kapt)
+    applyPlugin(Plugins.kotlin.serialization)
     applyPlugin(Plugins.hilt)
 
     version = "1.0"
@@ -98,8 +98,8 @@ fun GradleProject.configureAndroidModule() {
 
         dependencies {
             implementation(Dependencies.androidxCoreExtensions)
-            implementation(Dependencies.hiltAndroid)
-            kapt(Dependencies.hiltAndroidCompiler)
+            implementation(Dependencies.hilt.dagger.android)
+            kapt(Dependencies.hilt.dagger.androidCompiler)
         }
     }
 }
@@ -130,6 +130,7 @@ fun GradleProject.configureJavaVersion() {
 }
 
 fun GradleProject.configureComposeInModule() {
+    applyPlugin(Plugins.kotlin.composeCompiler)
     enableCompose()
     dependencies { implementationCompose() }
 }
@@ -138,9 +139,6 @@ fun GradleProject.enableCompose() {
     androidLibrary {
         buildFeatures {
             compose = true
-        }
-        composeOptions {
-            kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtension
         }
     }
 }

@@ -15,5 +15,6 @@ sourceSets.main {
         setSrcDirs(setOf(projectDir.parentFile.resolve("src/main/kotlin")))
         include("Versions.kt")
         include("Dependencies.kt")
+        include("SimpleCharSequence.kt")
     }
 }

@@ -55,8 +55,8 @@ sealed interface Project: Named {
 
     val modules: List<String> get() = when (this) {
         is Layered -> listOf(data.module, domain.module, presentation.module)
-        is Organised -> listOf(module)
         is NameOrganised -> listOf(module)
+        is Organised -> listOf(module)
         is Top -> listOf(module)
     }
 

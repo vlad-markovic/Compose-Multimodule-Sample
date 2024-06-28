@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
  */
 interface BriefActionable {
     val action: Flow<BriefAction>
-    suspend fun asyncAction(action: BriefAction)
+    suspend fun actionAsync(action: BriefAction)
 }
 
 fun <T> T.navigate(action: NavigationAction) where T: ViewModel, T: BriefActionable = action(action)
 fun <T> T.display(action: DisplayAction) where T: ViewModel, T: BriefActionable = action(action)
 fun <T> T.action(action: BriefAction) where T: ViewModel, T: BriefActionable {
-    viewModelScope.launch { asyncAction(action) }
+    viewModelScope.launch { actionAsync(action) }
 }

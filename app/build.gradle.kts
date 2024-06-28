@@ -1,10 +1,11 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    id(Plugins.kotlinKapt)
+    id(Plugins.android.application)
+    id(Plugins.kotlin.android)
+    id(Plugins.kotlin.kapt)
     id(Plugins.hilt)
+    id(Plugins.kotlin.composeCompiler)
 }
 
 android {
@@ -47,9 +48,6 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = GlobalVersions.kotlinCompilerExtension
-    }
 
     packaging {
         resources.excludes.addAll(excludePackagingOptions)
@@ -65,17 +63,17 @@ dependencies {
     implementationProject(Project.Feature.Covid)
 
     // Kotlin
-    implementation(Dependencies.kotlinReflect)
+    implementation(Dependencies.kotlin.reflect)
 
     // Injection
-    implementation(Dependencies.hiltAndroid)
-    kapt(Dependencies.hiltAndroidCompiler)
-    kapt(Dependencies.androidXHiltCompiler)
+    implementation(Dependencies.hilt.dagger.android)
+    kapt(Dependencies.hilt.dagger.androidCompiler)
+    kapt(Dependencies.hilt.androidx.compiler)
 
     // Android / Google
     implementation(Dependencies.appCompat)
     implementation(Dependencies.googleMaterial)
-    implementation(Dependencies.composeActivity)
+    implementation(Dependencies.compose.activity)
 
     // Logging
     implementation(Dependencies.timber)

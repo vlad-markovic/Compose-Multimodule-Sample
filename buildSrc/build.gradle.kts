@@ -11,17 +11,18 @@ repositories {
 
 dependencies {
     implementation(Dependencies.gradleBuildTools)
-    implementation(Dependencies.kotlinGradlePlugin)
-    implementation("com.squareup:javapoet:1.13.0")
+    implementation(Dependencies.kotlin.gradlePlugin)
+    implementation(Dependencies.javaPoet)
 }
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + listOf(
+        compilerOptions {
+            freeCompilerArgs.addAll(
                 "-XXLanguage:+TopLevelSealedInheritance",
                 "-XXLanguage:+AllowSealedInheritorsInDifferentFilesOfSamePackage",
-                "-XXLanguage:+SealedInterfaces"
+                "-XXLanguage:+SealedInterfaces",
+                "-Xcontext-receivers"
             )
         }
     }

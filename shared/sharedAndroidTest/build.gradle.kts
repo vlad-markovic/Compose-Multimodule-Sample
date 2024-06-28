@@ -18,5 +18,5 @@ dependencies {
     implementation(Dependencies.archCoreTesting)
     implementation(Dependencies.kotlinTest)
     implementation(Dependencies.coroutinesTesting)
-    implementation(Dependencies.hiltNavCompose)
+    implementation(Dependencies.hilt.androidx.navCompose)
 }
