@@ -16,7 +16,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
-import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
+import com.vladmarkovic.sample.shared_presentation.navigation.ComposeScaffoldDataManager
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.handleAction
@@ -26,11 +26,11 @@ import kotlinx.coroutines.CoroutineScope
 import java.util.Optional
 
 
-data class ScaffoldChange(
-    val screen: Screen,
-    val topBar: Optional<@Composable () -> Unit>?,
-    val drawer: Optional<(@Composable ColumnScope.() -> Unit)>?,
-) : BriefAction
+sealed class ScaffoldChange : BriefAction.DisplayAction {
+    data class ScreenChange(val screen: Screen) : ScaffoldChange()
+    data class TopBarChange(val topBar: Optional<@Composable () -> Unit>?) : ScaffoldChange()
+    data class DrawerChange(val drawer: Optional<(@Composable ColumnScope.() -> Unit)>?) : ScaffoldChange()
+}
 
 
 @Composable
@@ -47,7 +47,7 @@ fun NavScaffold(
     val mainScope: CoroutineScope = rememberCoroutineScope()
     val scaffoldState: ScaffoldState = rememberScaffoldState()
 
-    val scaffoldData: ScaffoldDataManager = scaffoldDataManager(initialScreen)
+    val scaffoldData: ComposeScaffoldDataManager = scaffoldDataManager(initialScreen)
 
     val composeArgs = ComposeArgs(navController, mainScope, scaffoldState)
 

@@ -19,37 +19,45 @@ import kotlinx.coroutines.flow.asStateFlow
 
 //@HiltViewModel // TODO ScaffoldViewModel is it needed?
 //class ScaffoldViewModel @AssistedInject constructor(
-//    @Assisted dataManager: ScaffoldDataManager
+//    @Assisted dataManager: ComposeScaffoldDataManager
 //) : ViewModel(), ScaffoldDataUpdater by dataManager, ScaffoldDataMonitor by dataManager
 //
 //@AssistedFactory
-//interface ScaffoldViewModelFactory : AssistedViewModelFactory<ScaffoldViewModel, ScaffoldDataManager> {
-//    override fun create(assistedInput: ScaffoldDataManager): ScaffoldViewModel
+//interface ScaffoldViewModelFactory : AssistedViewModelFactory<ScaffoldViewModel, ComposeScaffoldDataManager> {
+//    override fun create(assistedInput: ComposeScaffoldDataManager): ScaffoldViewModel
 //}
 
-class ScaffoldDataManager @AssistedInject constructor(
+class ComposeScaffoldDataManager @AssistedInject constructor(
     @Assisted initialScreen: Screen?
-) : ScaffoldDataMonitor, ScaffoldDataUpdater {
+) {
 
     private val _screen: MutableStateFlow<Screen?> = MutableStateFlow(initialScreen)
-    override val currentScreen: StateFlow<Screen?> = _screen.asStateFlow()
+    val currentScreen: StateFlow<Screen?> = _screen.asStateFlow()
 
     private val _topBar: MutableStateFlow<(@Composable () -> Unit)?> = MutableStateFlow(null)
-    override val topBar: StateFlow<(@Composable () -> Unit)?> = _topBar.asStateFlow()
+    val topBar: StateFlow<(@Composable () -> Unit)?> = _topBar.asStateFlow()
 
     private val _drawer: MutableStateFlow<(@Composable ColumnScope.() -> Unit)?> = MutableStateFlow(null)
-    override val drawer: StateFlow<(@Composable ColumnScope.() -> Unit)?> = _drawer.asStateFlow()
+    val drawer: StateFlow<(@Composable ColumnScope.() -> Unit)?> = _drawer.asStateFlow()
 
-    override fun update(change: ScaffoldChange) {
-        _screen.update(change.screen)
-        _topBar.updateNullable(change.topBar)
-        _drawer.updateNullable(change.drawer)
+    fun update(change: ScaffoldChange) {
+        when (change) {
+            is ScaffoldChange.ScreenChange -> {
+                _screen.update(change.screen)
+            }
+            is ScaffoldChange.TopBarChange -> {
+                _topBar.updateNullable(change.topBar)
+            }
+            is ScaffoldChange.DrawerChange -> {
+                _drawer.updateNullable(change.drawer)
+            }
+        }
     }
 }
 
 @AssistedFactory
-interface ScaffoldDataManagerFactory : BaseAssistedFactory<ScaffoldDataManager, Screen?> {
-    override fun create(assistedInput: Screen?): ScaffoldDataManager
+interface ScaffoldDataManagerFactory : BaseAssistedFactory<ComposeScaffoldDataManager, Screen?> {
+    override fun create(assistedInput: Screen?): ComposeScaffoldDataManager
 }
 
 @EntryPoint

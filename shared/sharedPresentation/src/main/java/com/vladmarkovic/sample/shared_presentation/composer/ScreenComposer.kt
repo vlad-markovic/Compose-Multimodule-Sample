@@ -28,10 +28,14 @@ abstract class ScreenComposer<VM> where VM : BriefActionable, VM : ViewModel {
     @Composable
     fun Content(bubbleUp: (BriefAction) -> Unit) {
         val viewModel = viewModel(bubbleUp)
-        val scaffoldChange = remember {
-            ScaffoldChange(screen, topBarChange(viewModel), drawerChange(viewModel))
+        val (screenChange, topBarChange, drawerChange) = remember {
+            Triple(screen, topBarChange(viewModel), drawerChange(viewModel))
         }
-        OnStart { viewModel.action(scaffoldChange) }
+        OnStart {
+            viewModel.action(ScaffoldChange.ScreenChange(screenChange))
+            topBarChange?.let { viewModel.action(ScaffoldChange.TopBarChange(it)) }
+            drawerChange?.let { viewModel.action(ScaffoldChange.DrawerChange(it)) }
+        }
 
         // BackHandler(viewModel) // TODO? If cannot, otherwise remove [viewModel] method, and let each inject VM.
         Content(viewModel)

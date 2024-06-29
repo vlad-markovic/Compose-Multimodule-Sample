@@ -25,7 +25,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
-import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManager
+import com.vladmarkovic.sample.shared_presentation.navigation.ComposeScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.navigation.ScaffoldDataManagerFactoryProvider
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
@@ -143,7 +143,7 @@ fun tabNavigator(initialTab: Tab, key: String? = null): TabNavigator {
 
 
 @Composable
-fun scaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
+fun scaffoldDataManager(initialScreen: Screen?, key: String? = null): ComposeScaffoldDataManager {
     val factory = activityFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
     return remember(key) { factory.create(initialScreen) }
 }
