@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.composer
+package com.vladmarkovic.sample.shared_presentation.compose
 
 import androidx.compose.material.ScaffoldState
 import androidx.navigation.NavHostController

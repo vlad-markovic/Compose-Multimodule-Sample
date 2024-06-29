@@ -13,13 +13,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
+import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.padding
+import com.vladmarkovic.sample.shared_presentation.util.str
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 @Composable
-fun CountryCovidInfoScreen(info: CountryCovidInfo) {
+fun CountryCovidInfoScreen(
+    updateScaffold: (ScaffoldChange) -> Unit,
+    bubbleUp: (BriefAction) -> Unit
+) {
+    val viewModel = actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
+    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
+    updateScaffold(ScaffoldChange.TopBarChange.Title(viewModel.info.country.str))
+    CountryCovidInfoScreen(viewModel.info)
+}
+
+@Composable
+private fun CountryCovidInfoScreen(info: CountryCovidInfo) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier

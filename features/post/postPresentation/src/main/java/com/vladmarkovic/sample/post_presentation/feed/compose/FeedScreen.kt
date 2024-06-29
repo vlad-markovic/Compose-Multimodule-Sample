@@ -16,14 +16,49 @@ import androidx.compose.ui.res.stringResource
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.vladmarkovic.sample.post_domain.model.Post
+import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.error_on_posts_fetch
+import com.vladmarkovic.sample.post_presentation.feed.FeedViewModel
+import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
+import com.vladmarkovic.sample.shared_domain.model.DataSource
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.Error
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerLambda
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
+import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.padding
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
+
 
 @Composable
 fun FeedScreen(
+    updateScaffold: (ScaffoldChange) -> Unit,
+    bubbleUp: (BriefAction) -> Unit
+) {
+    val viewModel = actionViewModel<FeedViewModel>(bubbleUp)
+    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
+    updateScaffold(ScaffoldChange.TopBarChange.Title(StrOrRes.res(R.string.feed_screen_title)))
+    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.DrawerButton(viewModel)))
+    updateScaffold(ScaffoldChange.DrawerChange.MaybeCompose(defaultDrawerLambda()))
+    updateScaffold(ScaffoldChange.DrawerChange.DrawerItems(defaultDrawerItems(viewModel)))
+    FeedScreen(
+        loading = viewModel.loading.safeValue,
+        posts = viewModel.posts.safeValue,
+        error = viewModel.error.safeValue,
+        onRefresh = { viewModel.refreshPosts(DataSource.REMOTE) },
+        onPostClick = { viewModel.navigate(ToPostScreen(it)) }
+    )
+}
+
+@Composable
+private fun FeedScreen(
     loading: Boolean,
     posts: List<Post>,
     error: Boolean,

@@ -16,16 +16,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
+import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.delete_post_button_label
+import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
+import com.vladmarkovic.sample.post_presentation.post.PostViewModel
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.Error
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
+import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.padding
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import java.io.IOException
 
 @Composable
 fun PostScreen(
+    updateScaffold: (ScaffoldChange) -> Unit,
+    bubbleUp: (BriefAction) -> Unit
+) {
+    val viewModel = actionViewModel<PostViewModel>(bubbleUp)
+    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
+    updateScaffold(ScaffoldChange.TopBarChange.Title(StrOrRes.res(R.string.post_screen_title)))
+    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.BackButton(viewModel)))
+    PostScreen(
+        viewModel.post,
+        viewModel.authorResult.safeValue,
+        viewModel::getDetails,
+        viewModel::deletePost
+    )
+}
+
+@Composable
+private fun PostScreen(
     post: Post,
     authorResult: Result<Author>?,
     onFetchAuthor: () -> Unit,

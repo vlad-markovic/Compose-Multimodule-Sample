@@ -33,14 +33,52 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
+import com.vladmarkovic.sample.covid_presentation.R
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.CountryDetails
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.CountryDetails.Grouped
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.GroupHeader
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
+import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_domain.log.Lumber
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
+import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
+import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerLambda
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
 @Composable
 fun CountryComparisonScreen(
+    updateScaffold: (ScaffoldChange) -> Unit,
+    bubbleUp: (BriefAction) -> Unit
+) {
+    val viewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
+    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
+    updateScaffold(ScaffoldChange.TopBarChange.Title(StrOrRes.res(R.string.country_comparison_screen_title)))
+    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.BackButton(viewModel)))
+    updateScaffold(ScaffoldChange.TopBarChange.MenuItems(listOf(
+        CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
+        CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
+    )))
+    updateScaffold(ScaffoldChange.DrawerChange.MaybeCompose(defaultDrawerLambda()))
+    updateScaffold(ScaffoldChange.DrawerChange.DrawerItems(defaultDrawerItems(viewModel)))
+    CountryComparisonScreen(
+        showLoading = viewModel.showLoading.safeValue,
+        items = viewModel.items.safeValue,
+        sortBy = viewModel.sortBy.safeValue,
+        onSortByChanged = viewModel::sortBy,
+        onOpenCountryDetail = { countryCovidInfo ->
+            viewModel.navigate(ToCountryInfoScreen(countryCovidInfo))
+        }
+    )
+}
+
+@Composable
+private fun CountryComparisonScreen(
     showLoading: Boolean,
     items: List<CountryComparisonItem>,
     sortBy: CountryComparisonSort,

@@ -16,10 +16,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.composer.ComposeArgs
-import com.vladmarkovic.sample.shared_presentation.composer.closeDrawer
-import com.vladmarkovic.sample.shared_presentation.composer.onBack
-import com.vladmarkovic.sample.shared_presentation.composer.openDrawer
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeArgs
+import com.vladmarkovic.sample.shared_presentation.compose.closeDrawer
+import com.vladmarkovic.sample.shared_presentation.compose.onBack
+import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_domain.tab.Tab

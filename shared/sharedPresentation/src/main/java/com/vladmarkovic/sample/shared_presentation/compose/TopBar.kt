@@ -43,8 +43,36 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
+import kotlinx.coroutines.flow.StateFlow
 
 
+fun defaultTopBarLambda(): @Composable (
+    title: StateFlow<StrOrRes?>,
+    modifier: StateFlow<Modifier>,
+    textAlign: StateFlow<TextAlign>,
+    upButton: StateFlow<UpButton?>,
+    menuItems: StateFlow<List<MenuItem>?>,
+    elevation: StateFlow<Dp?>,
+    background: StateFlow<Color?>
+) -> Unit = { title, modifier, align, up, menuItems, elevation, background ->
+    DefaultTopBar(title, modifier, align, up, menuItems, elevation, background)
+}
+
+@Composable
+fun DefaultTopBar(
+    title: StateFlow<StrOrRes?>,
+    modifier: StateFlow<Modifier>,
+    textAlign: StateFlow<TextAlign>,
+    upButton: StateFlow<UpButton?>,
+    menuItems: StateFlow<List<MenuItem>?>,
+    elevation: StateFlow<Dp?>,
+    background: StateFlow<Color?>
+) {
+    DefaultTopBar(
+        title.safeValue, modifier.safeValue, textAlign.safeValue, upButton.safeValue,
+        menuItems.safeValue, elevation.safeValue ?: AppBarDefaults.TopAppBarElevation,
+    )
+}
 @Composable
 fun DefaultTopBar(
     title: StrOrRes?,
