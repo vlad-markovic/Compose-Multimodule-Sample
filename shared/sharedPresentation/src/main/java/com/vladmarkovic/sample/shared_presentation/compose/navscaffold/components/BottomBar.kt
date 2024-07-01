@@ -1,4 +1,4 @@
-package com.vladmarkovic.sample.shared_presentation.compose
+package com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components
 
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation

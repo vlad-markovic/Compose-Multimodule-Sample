@@ -24,11 +24,9 @@ import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.Error
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
-import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerLambda
+import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
@@ -38,16 +36,15 @@ import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
 
 @Composable
-fun FeedScreen(
-    updateScaffold: (ScaffoldChange) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun FeedScreen(bubbleUp: (BriefAction) -> Unit) {
     val viewModel = actionViewModel<FeedViewModel>(bubbleUp)
-    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
-    updateScaffold(ScaffoldChange.TopBarChange.Title(StrOrRes.res(R.string.feed_screen_title)))
-    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.DrawerButton(viewModel)))
-    updateScaffold(ScaffoldChange.DrawerChange.MaybeCompose(defaultDrawerLambda()))
-    updateScaffold(ScaffoldChange.DrawerChange.DrawerItems(defaultDrawerItems(viewModel)))
+    bubbleUp(
+        ScaffoldData(
+            topBarTitle = StrOrRes.res(R.string.feed_screen_title),
+            upButton = UpButton.DrawerButton(viewModel),
+            drawerItems = defaultDrawerItems(viewModel)
+        )
+    )
     FeedScreen(
         loading = viewModel.loading.safeValue,
         posts = viewModel.posts.safeValue,

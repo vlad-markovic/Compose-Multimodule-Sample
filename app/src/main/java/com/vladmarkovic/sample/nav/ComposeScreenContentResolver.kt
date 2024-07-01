@@ -13,7 +13,6 @@ import com.vladmarkovic.sample.shared_domain.screen.MainScreen
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,15 +20,12 @@ import javax.inject.Singleton
 @Singleton
 class ComposeScreenContentResolver @Inject constructor(): ScreenContentResolver {
     @Composable
-    override fun Screen.Content(
-        scaffoldChangeHandler: (ScaffoldChange) -> Unit,
-        bubbleUp: (BriefAction) -> Unit
-    ) = when (this) {
-        MainScreen.PostsScreen.FEED_SCREEN -> FeedScreen(scaffoldChangeHandler, bubbleUp)
-        MainScreen.PostsScreen.POST_SCREEN -> PostScreen(scaffoldChangeHandler, bubbleUp)
-        MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> CountryComparisonScreen(scaffoldChangeHandler, bubbleUp)
-        MainScreen.CovidScreen.COVID_COUNTRY_INFO -> CountryCovidInfoScreen(scaffoldChangeHandler, bubbleUp)
-        SettingsScreen.MAIN -> SettingsMainScreen(scaffoldChangeHandler, bubbleUp)
-        SettingsScreen.SECOND -> SettingsTwoScreen(scaffoldChangeHandler, bubbleUp)
+    override fun Screen.Content(bubbleUp: (BriefAction) -> Unit) = when (this) {
+        MainScreen.PostsScreen.FEED_SCREEN -> FeedScreen(bubbleUp)
+        MainScreen.PostsScreen.POST_SCREEN -> PostScreen(bubbleUp)
+        MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> CountryComparisonScreen(bubbleUp)
+        MainScreen.CovidScreen.COVID_COUNTRY_INFO -> CountryCovidInfoScreen(bubbleUp)
+        SettingsScreen.MAIN -> SettingsMainScreen(bubbleUp)
+        SettingsScreen.SECOND -> SettingsTwoScreen(bubbleUp)
     }
 }

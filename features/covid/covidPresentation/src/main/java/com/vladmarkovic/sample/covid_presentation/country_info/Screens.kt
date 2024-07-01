@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.padding
@@ -24,13 +24,14 @@ import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 @Composable
-fun CountryCovidInfoScreen(
-    updateScaffold: (ScaffoldChange) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun CountryCovidInfoScreen(bubbleUp: (BriefAction) -> Unit) {
     val viewModel = actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
-    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
-    updateScaffold(ScaffoldChange.TopBarChange.Title(viewModel.info.country.str))
+    bubbleUp(
+        ScaffoldData(
+            topBarTitle = viewModel.info.country.str,
+            upButton = UpButton.BackButton(viewModel),
+        )
+    )
     CountryCovidInfoScreen(viewModel.info)
 }
 

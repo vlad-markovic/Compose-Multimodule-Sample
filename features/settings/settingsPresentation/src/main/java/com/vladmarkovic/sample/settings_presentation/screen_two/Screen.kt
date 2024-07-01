@@ -6,22 +6,21 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str
 
 
 @Composable
-fun SettingsTwoScreen(
-    updateScaffold: (ScaffoldChange) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun SettingsTwoScreen(bubbleUp: (BriefAction) -> Unit) {
     val viewModel = actionViewModel<BriefActionViewModel>(bubbleUp)
-    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
-    updateScaffold(ScaffoldChange.TopBarChange.Title("Settings Two".str))
-    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.BackButton(viewModel)))
+    bubbleUp(
+        ScaffoldData(
+            topBarTitle = "Settings Two".str,
+            upButton = UpButton.BackButton(viewModel),
+        )
+    )
     SettingsTwoScreen()
 }
 

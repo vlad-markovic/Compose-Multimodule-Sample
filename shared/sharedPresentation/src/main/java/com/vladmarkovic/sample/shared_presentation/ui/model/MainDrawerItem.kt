@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.ui.drawer
+package com.vladmarkovic.sample.shared_presentation.ui.model
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -15,6 +15,7 @@ import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 
 sealed class MainDrawerItem(

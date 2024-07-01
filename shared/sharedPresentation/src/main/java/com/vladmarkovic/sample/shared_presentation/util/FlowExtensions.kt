@@ -58,17 +58,16 @@ fun <T> MutableStateFlow<T?>.updateNullable(value: T?) {
     if (this.value != value) this.value = value
 }
 
-fun <T> MutableStateFlow<T>.update(value: Optional<T>) {
-    if (value.isPresent) {
-        this.value = value.get()
+fun <T> MutableStateFlow<T>.update(value: Optional<T>?) {
+    if (value != null && value.isPresent) {
+        update(value.get())
     }
 }
 
 fun <T> MutableStateFlow<T?>.updateNullable(value: Optional<T>?) {
     if (value != null) {
         if (value.isPresent) {
-            val actual = value.get()
-            if (this.value != actual) this.value = actual
+            update(value.get())
         } else {
             if (this.value != null) this.value = null
         }

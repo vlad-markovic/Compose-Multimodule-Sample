@@ -22,8 +22,7 @@ import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.Error
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
@@ -34,14 +33,14 @@ import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import java.io.IOException
 
 @Composable
-fun PostScreen(
-    updateScaffold: (ScaffoldChange) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun PostScreen(bubbleUp: (BriefAction) -> Unit) {
     val viewModel = actionViewModel<PostViewModel>(bubbleUp)
-    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
-    updateScaffold(ScaffoldChange.TopBarChange.Title(StrOrRes.res(R.string.post_screen_title)))
-    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.BackButton(viewModel)))
+    bubbleUp(
+        ScaffoldData(
+            topBarTitle = StrOrRes.res(R.string.post_screen_title),
+            upButton = UpButton.BackButton(viewModel),
+        )
+    )
     PostScreen(
         viewModel.post,
         viewModel.authorResult.safeValue,

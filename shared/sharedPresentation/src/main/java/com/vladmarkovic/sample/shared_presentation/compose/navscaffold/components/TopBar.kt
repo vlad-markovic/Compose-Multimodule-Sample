@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.compose
+package com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Box
@@ -43,55 +43,26 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
-import kotlinx.coroutines.flow.StateFlow
 
-
-fun defaultTopBarLambda(): @Composable (
-    title: StateFlow<StrOrRes?>,
-    modifier: StateFlow<Modifier>,
-    textAlign: StateFlow<TextAlign>,
-    upButton: StateFlow<UpButton?>,
-    menuItems: StateFlow<List<MenuItem>?>,
-    elevation: StateFlow<Dp?>,
-    background: StateFlow<Color?>
-) -> Unit = { title, modifier, align, up, menuItems, elevation, background ->
-    DefaultTopBar(title, modifier, align, up, menuItems, elevation, background)
-}
 
 @Composable
 fun DefaultTopBar(
-    title: StateFlow<StrOrRes?>,
-    modifier: StateFlow<Modifier>,
-    textAlign: StateFlow<TextAlign>,
-    upButton: StateFlow<UpButton?>,
-    menuItems: StateFlow<List<MenuItem>?>,
-    elevation: StateFlow<Dp?>,
-    background: StateFlow<Color?>
-) {
-    DefaultTopBar(
-        title.safeValue, modifier.safeValue, textAlign.safeValue, upButton.safeValue,
-        menuItems.safeValue, elevation.safeValue ?: AppBarDefaults.TopAppBarElevation,
-    )
-}
-@Composable
-fun DefaultTopBar(
-    title: StrOrRes?,
+    data: TopBarData?,
+    backgroundColor: Color,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
-    upButton: UpButton? = null,
-    menuItems: List<MenuItem>? = null,
     elevation: Dp = AppBarDefaults.TopAppBarElevation
 ) {
     TopAppBar(
         modifier = modifier,
-        backgroundColor = AppColor.Grey900,
-        navigationIcon = { upButton?.let { UpButton(it) } },
-        actions = { menuItems?.let { DefaultMenu(it) } },
+        backgroundColor = backgroundColor,
+        navigationIcon = { data?.upButton?.let { UpButton(it) } },
+        actions = { data?.menuItems?.let { DefaultMenu(it) } },
         elevation = elevation,
         title = {
             Text(
                 modifier = modifier.then(Modifier.fillMaxWidth()),
-                text = title?.get(LocalContext.current).orEmpty(),
+                text = data?.title?.get(LocalContext.current).orEmpty(),
                 textAlign = textAlign,
                 style = AppTheme.typography.h5,
                 fontWeight = FontWeight.Bold,
@@ -117,7 +88,7 @@ fun UpButton(upButton: UpButton?) {
 @Preview
 @Composable
 private fun PreviewTopBar() {
-    DefaultTopBar(StrOrRes.str("Top Title"))
+    DefaultTopBar(TopBarData(StrOrRes.str("Top Title")), AppColor.Grey900)
 }
 
 @Composable

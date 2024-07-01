@@ -12,28 +12,22 @@ import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str
 
 @Composable
-fun SettingsMainScreen(
-    updateScaffold: (ScaffoldChange) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun SettingsMainScreen(bubbleUp: (BriefAction) -> Unit) {
     val viewModel = actionViewModel<BriefActionViewModel>(bubbleUp)
-    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
-    updateScaffold(ScaffoldChange.TopBarChange.Title("Settings".str))
-    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.BackButton(viewModel)))
-    SettingsMainScreen { viewModel.navigate(ToSecondSettingsScreen) }
-}
-
-@Composable
-private fun SettingsMainScreen(navToSecondScreen: () -> Unit) {
+    bubbleUp(
+        ScaffoldData(
+            topBarTitle = "Settings".str,
+            upButton = UpButton.BackButton(viewModel),
+        )
+    )
     Column (Modifier.padding(16.dp)) {
-        Button(navToSecondScreen) {
+        Button({ viewModel.navigate(ToSecondSettingsScreen) }) {
             Text("Go To Settings Two")
         }
     }

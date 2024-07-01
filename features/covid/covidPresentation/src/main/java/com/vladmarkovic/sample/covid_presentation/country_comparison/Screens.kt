@@ -42,30 +42,25 @@ import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.compose.ScaffoldChange
-import com.vladmarkovic.sample.shared_presentation.compose.defaultTopBarLambda
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerItems
-import com.vladmarkovic.sample.shared_presentation.ui.drawer.defaultDrawerLambda
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 
 @Composable
-fun CountryComparisonScreen(
-    updateScaffold: (ScaffoldChange) -> Unit,
-    bubbleUp: (BriefAction) -> Unit
-) {
+fun CountryComparisonScreen(bubbleUp: (BriefAction) -> Unit) {
     val viewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
-    updateScaffold(ScaffoldChange.TopBarChange.MaybeCompose(defaultTopBarLambda()))
-    updateScaffold(ScaffoldChange.TopBarChange.Title(StrOrRes.res(R.string.country_comparison_screen_title)))
-    updateScaffold(ScaffoldChange.TopBarChange.ButtonUp(UpButton.BackButton(viewModel)))
-    updateScaffold(ScaffoldChange.TopBarChange.MenuItems(listOf(
-        CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
-        CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
-    )))
-    updateScaffold(ScaffoldChange.DrawerChange.MaybeCompose(defaultDrawerLambda()))
-    updateScaffold(ScaffoldChange.DrawerChange.DrawerItems(defaultDrawerItems(viewModel)))
+    bubbleUp(
+        ScaffoldData(
+            topBarTitle = StrOrRes.res(R.string.country_comparison_screen_title),
+            upButton = UpButton.BackButton(viewModel),
+            menuItems = listOf(
+                CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
+                CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
+            )
+        )
+    )
     CountryComparisonScreen(
         showLoading = viewModel.showLoading.safeValue,
         items = viewModel.items.safeValue,
@@ -90,7 +85,7 @@ private fun CountryComparisonScreen(
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     } else {
-        Column(Modifier.padding(8.dp)) {
+        Column {
             SortByDropdown(sortBy, onSortByChanged)
             CountryList(items, sortBy, onOpenCountryDetail)
         }
@@ -105,7 +100,7 @@ fun CountryList(
 ) {
     val listState = rememberLazyListState()
 
-    LazyColumn(state = listState, modifier = Modifier.padding(start = 8.dp, bottom = 48.dp)) {
+    LazyColumn(state = listState) {
         items(items.size) { index ->
             when (val item = items[index]) {
                 is GroupHeader -> {
@@ -114,13 +109,13 @@ fun CountryList(
                         text = item.continent,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp)
+                            .padding(12.dp)
                     )
                 }
                 is CountryDetails -> {
                     Row(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(12.dp)
                         .clickable { onOpenCountryDetail(item.info) }
                     ) {
                         if (sort != COUNTRY_NAME) {
@@ -129,21 +124,21 @@ fun CountryList(
                                     item.inContinentOrdinal.toString(),
                                     Modifier
                                         .width(40.dp)
-                                        .padding(end = 10.dp)
+                                        .padding(end = 12.dp)
                                 )
                             }
                             Text(
                                 item.ordinal.toString(),
                                 Modifier
                                     .width(40.dp)
-                                    .padding(end = 10.dp)
+                                    .padding(end = 12.dp)
                             )
                             Text(item.sortField,
                                 Modifier
                                     .width(90.dp)
-                                    .padding(end = 10.dp))
+                                    .padding(end = 12.dp))
                         }
-                        Text(item.info.country, Modifier.padding(end = 10.dp))
+                        Text(item.info.country, Modifier.padding(end = 12.dp))
                     }
                 }
             }
@@ -158,7 +153,7 @@ fun SortByDropdown(sort: CountryComparisonSort, onSortChanged: (CountryCompariso
     Box {
         Button(
             onClick = { expanded = !expanded },
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(top = 10.dp, start = 10.dp)
         ) {
             Text("Sort by: ${sort.display}")
             Icon(Icons.Filled.ArrowDropDown, null)

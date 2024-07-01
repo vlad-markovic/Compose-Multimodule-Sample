@@ -2,11 +2,10 @@
 
 @file:Suppress("FunctionName")
 
-package com.vladmarkovic.sample.shared_presentation.ui.drawer
+package com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,38 +17,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
-import kotlinx.coroutines.flow.StateFlow
 
-
-fun defaultDrawerLambda(): @Composable ColumnScope.(
-    drawerItems: StateFlow<List<DrawerItem>?>,
-    modifier: StateFlow<Modifier>,
-    background: StateFlow<Color?>,
-) -> Unit = { drawerItems, modifier, background ->
-    DefaultDrawer(drawerItems, modifier, background)
-}
 
 @Composable
-fun DefaultDrawer(
-    drawerItems: StateFlow<List<DrawerItem>?>,
-    modifier: StateFlow<Modifier>,
-    background: StateFlow<Color?>,
-) {
-    drawerItems.safeValue?.let { DefaultDrawer(it) }
-}
-
-@Composable
-fun DefaultDrawer(drawerItems: List<DrawerItem>) {
+fun DefaultDrawer(drawerItems: List<DrawerItem>, modifier: Modifier = Modifier) {
     Spacer(Modifier.padding(Dimens.m / 2))
 
     Column(
-        Modifier
-            .wrapContentWidth()
-            .padding(Dimens.m)
+        modifier.then(
+            Modifier
+                .wrapContentWidth()
+                .padding(Dimens.m)
+        )
     ) {
         drawerItems.forEach { item ->
             Row(
