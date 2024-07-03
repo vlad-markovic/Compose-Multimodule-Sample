@@ -3,6 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.screen
 
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.vladmarkovic.sample.shared_domain.screen.MainScreen
@@ -47,3 +48,7 @@ fun stringArg(argName: String) =
 
 val Screen.namedArgs: List<NamedNavArgument>
     get() = argNames?.map { stringArg(it) } ?: emptyList()
+
+val Screen.deepLinks: List<NavDeepLink>
+    get() = emptyList()
+
