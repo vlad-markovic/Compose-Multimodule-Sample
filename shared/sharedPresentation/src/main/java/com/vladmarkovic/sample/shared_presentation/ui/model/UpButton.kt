@@ -9,11 +9,12 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.shared_presentation.R
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
+import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.display
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.OpenDrawer
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 sealed class UpButton(
     open val icon: ImageVector,
@@ -30,7 +31,7 @@ sealed class UpButton(
     data class BackButton(override val action: () -> Unit) :
         UpButton(Icons.AutoMirrored.Filled.ArrowBack, R.string.button_back_label, action) {
         companion object {
-            operator fun <VM> invoke(vm: VM): BackButton where VM : BriefActionable, VM : ViewModel =
+            operator fun <VM> invoke(vm: VM): BackButton where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
                 BackButton { vm.navigate(Back) }
         }
     }
@@ -38,7 +39,7 @@ sealed class UpButton(
     data class DrawerButton(override val action: () -> Unit) :
         UpButton(Icons.Filled.Menu, R.string.button_open_drawer_label, action) {
         companion object {
-            operator fun <VM> invoke(vm: VM): DrawerButton where VM : BriefActionable, VM : ViewModel =
+            operator fun <VM> invoke(vm: VM): DrawerButton where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
                 DrawerButton { vm.display(OpenDrawer) }
         }
     }

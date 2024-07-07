@@ -23,7 +23,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionable
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldDataManagerFactoryProvider
@@ -35,10 +34,15 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigato
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.lifecycle.withCreationCallback
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onSubscription
 import kotlin.coroutines.EmptyCoroutineContext
 
 //@MainThread
@@ -51,14 +55,14 @@ import kotlin.coroutines.EmptyCoroutineContext
 inline fun <reified VM> actionViewModel(
     key: String?,
     noinline actionHandler: (BriefAction) -> Unit,
-): VM where VM : BriefActionable, VM : ViewModel =
+): VM where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
     hiltViewModel<VM>(key = key).apply { SetupWith(actionHandler) }
 
 
 @Composable
 inline fun <reified VM> actionViewModel(
     noinline actionHandler: (BriefAction) -> Unit,
-): VM where VM : BriefActionable, VM : ViewModel =
+): VM where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
     hiltViewModel<VM>().apply { SetupWith(actionHandler) }
 
 @Composable
@@ -193,8 +197,18 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> sha
 // region setup action handling
 /** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
 @Composable
-fun BriefActionable.SetupWith(actionHandler: (BriefAction) -> Unit) {
-    ActionsHandler(action, actionHandler)
+@OptIn(ExperimentalCoroutinesApi::class)
+fun MutableSharedFlow<BriefAction>.SetupWith(actionHandler: (BriefAction) -> Unit) {
+    ActionsHandler(this.withMissedReplayed(), actionHandler)
+}
+
+@ExperimentalCoroutinesApi
+fun <T> MutableSharedFlow<T>.withMissedReplayed(millis: Long = 100): SharedFlow<T> = this.onSubscription {
+    // For ensuring to be able to emit even from init (before collection is set up)
+    replayCache.forEach { emit(it) }
+    // allow only emitted up to specified time before subscription to be cached.
+    delay(millis)
+    resetReplayCache()
 }
 
 @Composable
