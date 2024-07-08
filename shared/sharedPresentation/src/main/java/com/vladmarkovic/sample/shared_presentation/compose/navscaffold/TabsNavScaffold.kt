@@ -44,7 +44,8 @@ import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
 inline fun <reified T: Tab> DefaultTabsNavScaffold(
     allTabs: List<T>,
     initialTab: T = allTabs.first(),
-    tabNav: TabNavViewModel = tabNavViewModel(initialTab),
+    navController: NavHostController = rememberNavController(),
+    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navController),
     noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = remember {
         { throw IllegalStateException("Unhandled action: $it") }
     },
@@ -62,6 +63,7 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
     TabsNavScaffold(
         allTabs = allTabs,
         initialTab = initialTab,
+        navController = navController,
         tabNav = tabNav,
         topBar = remember {{
             DefaultTopBar(
@@ -82,8 +84,8 @@ inline fun <reified T: Tab> TabsNavScaffold(
     allTabs: List<T>,
     initialTab: T = allTabs.first(),
     modifier: Modifier = Modifier,
-    tabNav: TabNavViewModel = tabNavViewModel(initialTab),
     navController: NavHostController = rememberNavController(),
+    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navController),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     noinline topBar: @Composable () -> Unit = {},
     noinline bottomBar: @Composable () -> Unit = {},

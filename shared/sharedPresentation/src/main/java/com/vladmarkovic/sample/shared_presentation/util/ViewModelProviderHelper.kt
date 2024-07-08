@@ -135,8 +135,12 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> ass
 
 // region shared ViewModel
 @Composable
-fun tabNavViewModel(initialTab: Tab, key: String? = null): TabNavViewModel =
-    assistedViewModel<TabNavViewModel, Tab, TabNavViewModelFactory>(assistedInput = initialTab, key = key)
+fun tabNavViewModel(initialTab: Tab, navController: NavController, key: String? = null): TabNavViewModel =
+    assistedViewModel<TabNavViewModel, Tab, TabNavViewModelFactory>(
+        assistedInput = initialTab,
+        navBackStackEntry = navController.currentBackStackEntry,
+        key = key
+    )
 
 @Composable
 fun scaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
