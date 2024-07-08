@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.shared_domain.screen.MainScreen
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
 import javax.inject.Inject
 import javax.inject.Singleton
 

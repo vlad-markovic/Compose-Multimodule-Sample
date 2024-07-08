@@ -14,7 +14,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewMo
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
-import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str
 
 @Composable

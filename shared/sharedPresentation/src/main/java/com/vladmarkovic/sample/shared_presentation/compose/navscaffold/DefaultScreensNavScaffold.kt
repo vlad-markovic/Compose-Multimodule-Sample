@@ -8,26 +8,17 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
-import com.vladmarkovic.sample.shared_presentation.util.scaffoldDataManager
+import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.di.rememberScaffoldDataManager
 
 @Composable
 fun DefaultScreensNavScaffold(
     allScreens: List<Screen>,
     initialScreen: Screen = allScreens.first(),
-    actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = remember {
-        { throw IllegalStateException("Unhandled action: $it") }
-    },
+    bubbleUp: @DisallowComposableCalls (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
-    val scaffoldData: ScaffoldDataManager = scaffoldDataManager(initialScreen)
-    val scaffoldChangesHandler: (BriefAction) -> Unit = remember {
-        { action ->
-            when (action) {
-                is ScaffoldData -> scaffoldData.update(action)
-                else -> actionHandler(action)
-            }
-        }
-    }
+    val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialScreen)
+    val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
     val drawerItems = scaffoldData.drawerItems.safeValue
 

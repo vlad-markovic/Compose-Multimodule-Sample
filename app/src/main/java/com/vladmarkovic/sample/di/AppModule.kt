@@ -11,7 +11,7 @@ import com.vladmarkovic.sample.shared_domain.AppSystem
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Logger
-import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import dagger.Module
 import dagger.Provides

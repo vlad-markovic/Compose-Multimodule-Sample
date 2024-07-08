@@ -45,8 +45,8 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
-import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 
 @Composable
 fun CountryComparisonScreen(bubbleUp: (BriefAction) -> Unit) {

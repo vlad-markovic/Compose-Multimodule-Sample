@@ -1,8 +1,9 @@
-package com.vladmarkovic.sample.shared_presentation.navigation
+package com.vladmarkovic.sample.shared_presentation.compose.di
 
+import com.vladmarkovic.sample.shared_domain.di.EntryPoint
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.vladmarkovic.sample.shared_domain.di.EntryPoint
 
 @Suppress("unused")
 @dagger.hilt.EntryPoint

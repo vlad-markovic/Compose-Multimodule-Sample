@@ -24,7 +24,6 @@ import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
-import com.vladmarkovic.sample.shared_presentation.util.handleAction
 
 @Composable
 fun NavScaffold(
@@ -45,7 +44,7 @@ fun NavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    bubbleUp: (BriefAction) -> Unit = remember {{ throw IllegalStateException("Unhandled action: $it") }},
+    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
     navHost: @Composable (modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()

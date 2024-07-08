@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.DefaultTabsNavScaffold
-import com.vladmarkovic.sample.shared_presentation.util.setComposeContentView
+import com.vladmarkovic.sample.shared_presentation.compose.setComposeContentView
 import dagger.hilt.android.AndroidEntryPoint
 
 /** Main holder activity, holding composers for Composable-s. */
@@ -19,4 +19,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-

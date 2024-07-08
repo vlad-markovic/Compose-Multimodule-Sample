@@ -30,9 +30,9 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
-import com.vladmarkovic.sample.shared_presentation.util.actionViewModel
-import com.vladmarkovic.sample.shared_presentation.util.padding
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.padding
+import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 
 
 @Composable

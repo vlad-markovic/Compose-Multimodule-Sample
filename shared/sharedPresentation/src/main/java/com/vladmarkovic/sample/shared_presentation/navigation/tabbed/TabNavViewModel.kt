@@ -35,4 +35,3 @@ fun <T> T.navigate(tab: Tab) where T: ViewModel, T: MutableStateFlow<Tab> {
 }
 
 val StateFlow<Tab>.tabs: StateFlow<Tab> get() = this
-

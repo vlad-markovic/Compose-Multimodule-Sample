@@ -1,4 +1,4 @@
-package com.vladmarkovic.sample.shared_presentation.di
+package com.vladmarkovic.sample.shared_presentation.compose.di
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel

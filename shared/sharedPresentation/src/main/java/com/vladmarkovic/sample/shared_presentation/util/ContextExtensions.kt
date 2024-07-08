@@ -11,13 +11,13 @@ import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 val Context.asActivity: Activity get() = asActivity<Activity>()
 
 inline fun <reified T: Activity> Context.asActivity(): T = this.let {
-        var context = it
-        while (context is ContextWrapper) {
-            if (context is T) return@let context
-            context = context.baseContext
-        }
-        throw IllegalStateException("Expected an activity context but instead found: $context")
+    var context = it
+    while (context is ContextWrapper) {
+        if (context is T) return@let context
+        context = context.baseContext
     }
+    throw IllegalStateException("Expected an activity context but instead found: $context")
+}
 
 val Context.asTopNavHandler: TopNavigationActionHandler get() = applicationContext as TopNavigationActionHandler
 

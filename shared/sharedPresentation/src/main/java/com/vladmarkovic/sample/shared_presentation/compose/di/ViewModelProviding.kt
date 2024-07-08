@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.util
+package com.vladmarkovic.sample.shared_presentation.compose.di
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
@@ -31,17 +31,16 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldD
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
+import com.vladmarkovic.sample.shared_presentation.util.asActivity
+import com.vladmarkovic.sample.shared_presentation.util.withMissedReplayed
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onSubscription
 import kotlin.coroutines.EmptyCoroutineContext
 
 
@@ -138,7 +137,7 @@ fun tabNavViewModel(initialTab: Tab, navController: NavController, key: String? 
     )
 
 @Composable
-fun scaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
+fun rememberScaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
     val factory = activityFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
     return remember(key) { factory.create(initialScreen) }
 }
@@ -193,14 +192,6 @@ fun MutableSharedFlow<BriefAction>.SetupWith(actionHandler: (BriefAction) -> Uni
     ActionsHandler(this.withMissedReplayed(), actionHandler)
 }
 
-@ExperimentalCoroutinesApi
-fun <T> MutableSharedFlow<T>.withMissedReplayed(millis: Long = 100): SharedFlow<T> = this.onSubscription {
-    // For ensuring to be able to emit even from init (before collection is set up)
-    replayCache.forEach { emit(it) }
-    // allow only emitted up to specified time before subscription to be cached.
-    delay(millis)
-    resetReplayCache()
-}
 
 @Composable
 fun <T: BriefAction> ActionsHandler(actions: Flow<T>, handler: (T) -> Unit) {

@@ -6,13 +6,12 @@ import androidx.compose.ui.test.performClick
 import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.post_presentation.*
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_android_test.TestCompose
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
-import com.vladmarkovic.sample.shared_presentation.util.collectAsStateLifecycleAware
+import com.vladmarkovic.sample.shared_presentation.compose.collectAsStateLifecycleAware
 import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
 import com.vladmarkovic.sample.shared_test.setupTestLogger

@@ -42,7 +42,7 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 
 
 @Composable

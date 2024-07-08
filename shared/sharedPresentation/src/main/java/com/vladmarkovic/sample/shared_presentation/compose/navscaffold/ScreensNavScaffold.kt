@@ -10,20 +10,17 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.compose.NavHost
-import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
-import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolverEntryPoint
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
 
 
 @Composable
@@ -46,11 +43,9 @@ fun ScreensNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    actionHandler: (BriefAction) -> Unit = remember {{ throw IllegalStateException("Unhandled action: $it") }},
+    actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
-    val screenContentResolver: ScreenContentResolver = remember {
-        EntryPointAccessor.fromApplication(ScreenContentResolverEntryPoint::class.java).screenContentResolver()
-    }
+    val screenContentResolver: ScreenContentResolver = rememberScreenContentResolver()
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,

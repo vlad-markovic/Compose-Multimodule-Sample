@@ -11,14 +11,15 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
-import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
@@ -27,17 +28,18 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
-import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolverEntryPoint
+import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
-import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
-import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
-import com.vladmarkovic.sample.shared_presentation.util.safeValue
-import com.vladmarkovic.sample.shared_presentation.util.scaffoldDataManager
-import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
+import com.vladmarkovic.sample.shared_presentation.util.collectIn
+import com.vladmarkovic.sample.shared_presentation.util.navigate
+import com.vladmarkovic.sample.shared_presentation.compose.di.rememberScaffoldDataManager
+import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.drop
 
 @Composable
 inline fun <reified T: Tab> DefaultTabsNavScaffold(
@@ -45,19 +47,13 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
     initialTab: T = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = remember {
-        { throw IllegalStateException("Unhandled action: $it") }
-    },
+    noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
-    val scaffoldData: ScaffoldDataManager = scaffoldDataManager(initialTab.initialScreen)
-    val scaffoldChangesHandler: (BriefAction) -> Unit = remember {{ action ->
-        when (action) {
-            is ScaffoldData -> scaffoldData.update(action)
-            else -> actionHandler(action)
-        }
-    }}
+    val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
+    val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, actionHandler)
 
     val drawerItems = scaffoldData.drawerItems.safeValue
+    val showDrawer: Boolean = remember(drawerItems) { drawerItems != null }
 
     TabsNavScaffold(
         allTabs = allTabs,
@@ -71,7 +67,7 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
             )
         }},
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
-        drawerContent = remember(drawerItems) {
+        drawerContent = remember(showDrawer) {
             drawerItems?.let {{ DefaultDrawer(drawerItems = drawerItems) }}
         },
         actionHandler = scaffoldChangesHandler
@@ -100,19 +96,10 @@ inline fun <reified T: Tab> TabsNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = remember {
-        { throw IllegalStateException("Unhandled action: $it") }
-    },
+    noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
-    val screenContentResolver: ScreenContentResolver = remember {
-        EntryPointAccessor.fromApplication(ScreenContentResolverEntryPoint::class.java).screenContentResolver()
-    }
-    val tabNavHandler: (BriefAction) -> Unit = remember {{ action ->
-        when (action) {
-            is ToTab -> tabNav.navigate(action.tab)
-            else -> actionHandler(action)
-        }
-    }}
+    val screenContentResolver: ScreenContentResolver = rememberScreenContentResolver()
+    val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, actionHandler)
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,
@@ -149,4 +136,13 @@ inline fun <reified T: Tab> TabsNavScaffold(
         }
     }
     SetupTabsNavigation(tabs = tabNav.tabs, navController = navArgs.navController)
+}
+
+@Composable
+fun SetupTabsNavigation(tabs: Flow<Tab>, navController: NavController) {
+    LaunchedEffect(Unit) {
+        tabs.drop(1).collectIn(this) { tab ->
+            navController.navigate(tab)
+        }
+    }
 }
