@@ -51,8 +51,7 @@ fun DefaultTabsNavScaffold(
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
     val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
-    val drawerItems = scaffoldData.drawerItems.safeValue
-    val showDrawer: Boolean = remember(drawerItems) { drawerItems != null }
+    val drawerData = scaffoldData.drawerData.safeValue
 
     TabsNavScaffold(
         allTabs = allTabs,
@@ -66,7 +65,7 @@ fun DefaultTabsNavScaffold(
             )
         }},
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
-        drawerContent = remember(showDrawer) { drawerItems?.let {{ DefaultDrawer(drawerItems) }} },
+        drawerContent = remember(drawerData) { drawerData?.drawerItems?.let {{ DefaultDrawer(it) }} },
         bubbleUp = scaffoldChangesHandler
     )
 }

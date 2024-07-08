@@ -5,7 +5,6 @@ import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.compose.di.activityFactoryProvider
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.util.updateNullable
 import dagger.assisted.Assisted
@@ -18,15 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-//@HiltViewModel // TODO ScaffoldViewModel is it needed?
-//class ScaffoldViewModel @AssistedInject constructor(
-//    @Assisted dataManager: ScaffoldDataManager
-//) : ViewModel(), ScaffoldDataUpdater by dataManager, ScaffoldDataMonitor by dataManager
-//
-//@AssistedFactory
-//interface ScaffoldViewModelFactory : AssistedViewModelFactory<ScaffoldViewModel, ScaffoldDataManager> {
-//    override fun create(assistedInput: ScaffoldDataManager): ScaffoldViewModel
-//}
 
 class ScaffoldDataManager @AssistedInject constructor(
     @Assisted initialScreen: Screen?
@@ -38,12 +28,12 @@ class ScaffoldDataManager @AssistedInject constructor(
     private val _topBarData: MutableStateFlow<TopBarData?> = MutableStateFlow(null)
     val topBarData: StateFlow<TopBarData?> = _topBarData.asStateFlow()
 
-    private val _drawerItems: MutableStateFlow<List<DrawerItem>?> = MutableStateFlow(null)
-    val drawerItems: StateFlow<List<DrawerItem>?> = _drawerItems.asStateFlow()
+    private val _drawerData: MutableStateFlow<DrawerData?> = MutableStateFlow(null)
+    val drawerData: StateFlow<DrawerData?> = _drawerData.asStateFlow()
 
     fun update(data: ScaffoldData) {
         _topBarData.updateNullable(data.topBar)
-        _drawerItems.updateNullable(data.drawerItems)
+        _drawerData.updateNullable(data.drawerItems)
     }
 }
 

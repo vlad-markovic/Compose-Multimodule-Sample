@@ -7,14 +7,16 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 
-data class ScaffoldData(
+class ScaffoldData(
     val topBar: TopBarData,
-    val drawerItems: List<DrawerItem>?,
+    val drawerItems: DrawerData,
 ): BriefAction.DisplayAction {
     constructor(
         topBarTitle: StrOrRes?,
         upButton: UpButton? = null,
         menuItems: List<MenuItem>? = null,
         drawerItems: List<DrawerItem>? = null
-    ) : this(TopBarData(topBarTitle, upButton, menuItems), drawerItems)
+    ) : this(TopBarData(topBarTitle, upButton, menuItems), DrawerData(drawerItems))
 }
+
+class DrawerData(val drawerItems: List<DrawerItem>?)

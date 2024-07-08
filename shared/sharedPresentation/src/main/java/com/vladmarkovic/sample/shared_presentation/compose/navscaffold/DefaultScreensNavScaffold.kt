@@ -18,7 +18,7 @@ fun DefaultScreensNavScaffold(
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialScreen)
     val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
-    val drawerItems = scaffoldData.drawerItems.safeValue
+    val drawerData = scaffoldData.drawerData.safeValue
 
     ScreensNavScaffold(
         allScreens = allScreens,
@@ -29,9 +29,7 @@ fun DefaultScreensNavScaffold(
                 backgroundColor = AppColor.Grey900
             )
         }},
-        drawerContent = remember(drawerItems) {
-            drawerItems?.let {{ DefaultDrawer(drawerItems = drawerItems) }}
-        },
+        drawerContent = remember(drawerData) { drawerData?.drawerItems?.let {{ DefaultDrawer(it) }} },
         bubbleUp = scaffoldChangesHandler
     )
 }
