@@ -20,18 +20,17 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldDataManagerFactoryProvider
-import com.vladmarkovic.sample.shared_domain.tab.Tab
+import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigator
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavigatorFactoryProvider
-import com.vladmarkovic.sample.shared_domain.screen.Screen
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -136,15 +135,8 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> ass
 
 // region shared ViewModel
 @Composable
-fun tabNavViewModel(tabNav: TabNavigator, key: String? = null): TabNavViewModel =
-    assistedViewModel<TabNavViewModel, TabNavigator, TabNavViewModelFactory>(assistedInput = tabNav, key = key)
-
-@Composable
-fun tabNavigator(initialTab: Tab, key: String? = null): TabNavigator {
-    val factory = activityFactoryProvider<TabNavigatorFactoryProvider>().provideTabNavigatorFactory()
-    return remember(key) { factory.create(initialTab) }
-}
-
+fun tabNavViewModel(initialTab: Tab, key: String? = null): TabNavViewModel =
+    assistedViewModel<TabNavViewModel, Tab, TabNavViewModelFactory>(assistedInput = initialTab, key = key)
 
 @Composable
 fun scaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {

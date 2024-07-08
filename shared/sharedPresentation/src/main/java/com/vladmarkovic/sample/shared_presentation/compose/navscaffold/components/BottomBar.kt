@@ -18,19 +18,19 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun DefaultBottomBar(
-    tabs: List<Tab>,
+    allTabs: List<Tab>,
     currentTabFlow: StateFlow<Tab>,
     onTabSelected: (Tab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // Don't show tabs if there is none or only one.
-    if (tabs.size < 2) return
+    if (allTabs.size < 2) return
 
     val currentTab by currentTabFlow.collectAsState()
 
     BottomAppBar(modifier) {
         BottomNavigation {
-            tabs.forEach { tab ->
+            allTabs.forEach { tab ->
                 BottomNavigationItem(
                     icon = { Icon(tab.icon, contentDescription = null) },
                     label = { Text(stringResource(tab.textRes)) },

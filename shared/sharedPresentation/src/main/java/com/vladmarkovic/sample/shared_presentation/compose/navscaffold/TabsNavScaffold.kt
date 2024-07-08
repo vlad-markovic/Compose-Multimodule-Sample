@@ -25,26 +25,26 @@ import androidx.navigation.navigation
 import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolverEntryPoint
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
 import com.vladmarkovic.sample.shared_presentation.util.safeValue
 import com.vladmarkovic.sample.shared_presentation.util.scaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.util.tabNavigator
 
 @Composable
 inline fun <reified T: Tab> DefaultTabsNavScaffold(
     allTabs: List<T>,
     initialTab: T = allTabs.first(),
-    tabNav: TabNavViewModel = tabNavViewModel(tabNavigator(initialTab)),
+    tabNav: TabNavViewModel = tabNavViewModel(initialTab),
     noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = remember {
         { throw IllegalStateException("Unhandled action: $it") }
     },
@@ -69,7 +69,7 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
                 backgroundColor = AppColor.Grey900
             )
         }},
-        bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.currentTab, tabNav::navigate) }},
+        bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav, tabNav::navigate) }},
         drawerContent = remember(drawerItems) {
             drawerItems?.let {{ DefaultDrawer(drawerItems = drawerItems) }}
         },
@@ -82,7 +82,7 @@ inline fun <reified T: Tab> TabsNavScaffold(
     allTabs: List<T>,
     initialTab: T = allTabs.first(),
     modifier: Modifier = Modifier,
-    tabNav: TabNavViewModel = tabNavViewModel(tabNavigator(initialTab)),
+    tabNav: TabNavViewModel = tabNavViewModel(initialTab),
     navController: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     noinline topBar: @Composable () -> Unit = {},
@@ -149,5 +149,5 @@ inline fun <reified T: Tab> TabsNavScaffold(
             }
         }
     }
-    SetupTabsNavigation(tabs = tabNav.currentTab, navController = navController)
+    SetupTabsNavigation(tabs = tabNav, navController = navController)
 }
