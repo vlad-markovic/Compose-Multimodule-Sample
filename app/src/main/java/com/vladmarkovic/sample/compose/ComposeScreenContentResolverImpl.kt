@@ -1,6 +1,4 @@
-/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
-
-package com.vladmarkovic.sample.nav
+package com.vladmarkovic.sample.compose
 
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonScreen

@@ -5,7 +5,7 @@ package com.vladmarkovic.sample.di
 import android.content.Context
 import com.vladmarkovic.sample.connectivity.AppNetworkConnectivity
 import com.vladmarkovic.sample.log.TimberLogger
-import com.vladmarkovic.sample.nav.ComposeScreenContentResolverImpl
+import com.vladmarkovic.sample.compose.ComposeScreenContentResolverImpl
 import com.vladmarkovic.sample.nav.TopNavHandler
 import com.vladmarkovic.sample.shared_domain.AppSystem
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
