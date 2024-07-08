@@ -10,7 +10,6 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,31 +22,31 @@ import androidx.navigation.navigation
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
+import com.vladmarkovic.sample.shared_presentation.compose.di.rememberScaffoldDataManager
+import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.util.collectIn
 import com.vladmarkovic.sample.shared_presentation.util.navigate
-import com.vladmarkovic.sample.shared_presentation.compose.di.rememberScaffoldDataManager
-import com.vladmarkovic.sample.shared_presentation.compose.safeValue
-import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 
 @Composable
-inline fun <reified T: Tab> DefaultTabsNavScaffold(
-    allTabs: List<T>,
-    initialTab: T = allTabs.first(),
+fun DefaultTabsNavScaffold(
+    allTabs: List<Tab>,
+    initialTab: Tab = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
     val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, actionHandler)
@@ -75,19 +74,19 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
 }
 
 @Composable
-inline fun <reified T: Tab> TabsNavScaffold(
-    allTabs: List<T>,
-    initialTab: T = allTabs.first(),
+fun TabsNavScaffold(
+    allTabs: List<Tab>,
     modifier: Modifier = Modifier,
+    initialTab: Tab = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    noinline topBar: @Composable () -> Unit = {},
-    noinline bottomBar: @Composable () -> Unit = {},
-    noinline snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
-    noinline floatingActionButton: @Composable () -> Unit = {},
+    topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
+    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
+    floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
-    noinline drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
+    drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
     drawerGesturesEnabled: Boolean = true,
     drawerShape: Shape = MaterialTheme.shapes.large,
     drawerElevation: Dp = DrawerDefaults.Elevation,
@@ -96,7 +95,7 @@ inline fun <reified T: Tab> TabsNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
     val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
     val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, actionHandler)

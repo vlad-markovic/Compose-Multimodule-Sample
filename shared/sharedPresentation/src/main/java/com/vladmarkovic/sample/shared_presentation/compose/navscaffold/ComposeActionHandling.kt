@@ -11,6 +11,7 @@ import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.compose.di.ScreenContentResolverEntryPoint
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
@@ -22,7 +23,7 @@ import com.vladmarkovic.sample.shared_presentation.util.handleTopScreenNavigatio
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun rememberScreenContentResolver(key: String? = null) = remember(key) {
+fun rememberScreenContentResolver(key: String? = null): ComposeScreenContentResolver = remember(key) {
     EntryPointAccessor.fromApplication(ScreenContentResolverEntryPoint::class.java).screenContentResolver()
 }
 
