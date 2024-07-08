@@ -3,17 +3,17 @@
 package com.vladmarkovic.sample.shared_presentation.util
 
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.vladmarkovic.sample.shared_domain.log.Lumber
+import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeArgs
@@ -22,11 +22,9 @@ import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
-import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
-import com.vladmarkovic.sample.shared_presentation.navigation.route
-import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
+import com.vladmarkovic.sample.shared_presentation.navigation.route
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -119,10 +117,9 @@ private fun ComposeArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
 
 @Composable
 fun SetupTabsNavigation(tabs: Flow<Tab>, navController: NavController) {
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
-        tabs.drop(1).collectWith(context.asActivity<ComponentActivity>()) {
-            navController.navigate(it)
+        tabs.drop(1).collectIn(this) { tab ->
+            navController.navigate(tab)
         }
     }
 }

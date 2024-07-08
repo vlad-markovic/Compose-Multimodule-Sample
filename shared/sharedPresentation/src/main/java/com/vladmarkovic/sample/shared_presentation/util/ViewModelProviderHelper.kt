@@ -44,11 +44,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onSubscription
 import kotlin.coroutines.EmptyCoroutineContext
 
-//@MainThread
-//fun <S: Screen, T: Tab<S>> TabNavigableComposeHolder<S, T>.tabNavViewModels(): Lazy<TabNavViewModel<S, T>> =
-//    with(this as FragmentActivity) {
-//        viewModels { tabNavViewModelProviderFactory(tabNavViewModelFactory, mainTab) }
-//    }
 
 @Composable
 inline fun <reified VM> actionViewModel(

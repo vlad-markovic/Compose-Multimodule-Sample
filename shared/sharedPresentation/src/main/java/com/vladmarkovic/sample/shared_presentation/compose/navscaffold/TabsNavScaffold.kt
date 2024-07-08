@@ -33,6 +33,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResol
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolverEntryPoint
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
+import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
 import com.vladmarkovic.sample.shared_presentation.util.SetupTabsNavigation
@@ -71,7 +72,7 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
                 backgroundColor = AppColor.Grey900
             )
         }},
-        bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav, tabNav::navigate) }},
+        bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
         drawerContent = remember(drawerItems) {
             drawerItems?.let {{ DefaultDrawer(drawerItems = drawerItems) }}
         },
@@ -151,5 +152,5 @@ inline fun <reified T: Tab> TabsNavScaffold(
             }
         }
     }
-    SetupTabsNavigation(tabs = tabNav, navController = navController)
+    SetupTabsNavigation(tabs = tabNav.tabs, navController = navController)
 }

@@ -11,6 +11,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /** ViewModel for managing navigation between tabs. */
 @HiltViewModel(assistedFactory = TabNavViewModelFactory::class)
@@ -32,3 +33,6 @@ fun <T> T.navigate(tab: Tab) where T: ViewModel, T: MutableStateFlow<Tab> {
         value = tab
     }
 }
+
+val StateFlow<Tab>.tabs: StateFlow<Tab> get() = this
+
