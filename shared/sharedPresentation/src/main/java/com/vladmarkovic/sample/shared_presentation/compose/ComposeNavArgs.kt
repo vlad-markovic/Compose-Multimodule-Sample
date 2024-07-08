@@ -29,9 +29,7 @@ internal fun ComposeNavArgs.onBack(scope: CoroutineScope) {
 fun rememberComposeNavArgs(
     navController: NavHostController = rememberNavController(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    key1: Any? = null,
-    key2: Any? = null,
-    key3: Any? = null,
-): ComposeNavArgs = remember(key1, key2, key3) {
+    key: Any? = null,
+): ComposeNavArgs = remember(key) {
     ComposeNavArgs(navController, scaffoldState)
 }

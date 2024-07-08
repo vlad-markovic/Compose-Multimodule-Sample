@@ -48,6 +48,7 @@ import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
 @Composable
 fun CountryComparisonScreen(
@@ -58,11 +59,12 @@ fun CountryComparisonScreen(
         bubbleUp(
             ScaffoldData(
                 topBarTitle = StrOrRes.res(R.string.country_comparison_screen_title),
-                upButton = UpButton.BackButton(viewModel),
+                upButton = UpButton.DrawerButton(viewModel),
                 menuItems = listOf(
                     CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
                     CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
-                )
+                ),
+                drawerItems = defaultDrawerItems(viewModel)
             )
         )
     }
