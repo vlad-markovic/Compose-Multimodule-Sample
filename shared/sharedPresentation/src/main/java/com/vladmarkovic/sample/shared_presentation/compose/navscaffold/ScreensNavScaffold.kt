@@ -20,7 +20,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 
 
 @Composable
@@ -45,7 +45,7 @@ fun ScreensNavScaffold(
     contentColor: Color = contentColorFor(backgroundColor),
     actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
-    val screenContentResolver: ScreenContentResolver = rememberScreenContentResolver()
+    val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,

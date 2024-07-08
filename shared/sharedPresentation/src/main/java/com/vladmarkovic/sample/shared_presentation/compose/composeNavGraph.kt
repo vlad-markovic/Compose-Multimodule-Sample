@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.shared_presentation.screen.route
 
 /** Composes screens and a "navigation branch" with "composable" function for each screen. */
 fun NavGraphBuilder.composeNavGraph(
-    screenContentResolver: ScreenContentResolver,
+    screenContentResolver: ComposeScreenContentResolver,
     allScreens: List<Screen>,
     bubbleUp: (BriefAction) -> Unit
 ) {

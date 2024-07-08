@@ -28,7 +28,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.ScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
@@ -98,7 +98,7 @@ inline fun <reified T: Tab> TabsNavScaffold(
     contentColor: Color = contentColorFor(backgroundColor),
     noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
-    val screenContentResolver: ScreenContentResolver = rememberScreenContentResolver()
+    val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
     val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, actionHandler)
     NavScaffold(
         modifier = modifier,
