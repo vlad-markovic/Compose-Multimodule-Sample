@@ -1,6 +1,9 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_presentation.compose.di.activityFactoryProvider
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
@@ -53,4 +56,10 @@ interface ScaffoldDataManagerFactory : BaseAssistedFactory<ScaffoldDataManager, 
 @InstallIn(ActivityComponent::class)
 interface ScaffoldDataManagerFactoryProvider {
     fun provideScaffoldDataManagerFactory(): ScaffoldDataManagerFactory
+}
+
+@Composable
+fun rememberScaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
+    val factory = activityFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
+    return remember(key) { factory.create(initialScreen) }
 }

@@ -25,7 +25,6 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
-import com.vladmarkovic.sample.shared_presentation.compose.di.rememberScaffoldDataManager
 import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer

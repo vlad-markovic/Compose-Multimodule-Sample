@@ -22,12 +22,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldDataManager
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldDataManagerFactoryProvider
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
@@ -124,6 +121,29 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> ass
     },
     key: String? = null,
 ): VM = viewModel(viewModelStoreOwner, key, factory, extras)
+
+
+@Composable
+inline fun <reified VM, I, VMF: AssistedViewModelFactory<VM, I>> assistedActionViewModel(
+    assistedInput: I,
+    noinline actionHandler: (BriefAction) -> Unit,
+    navBackStackEntry: NavBackStackEntry? = rememberNavController().currentBackStackEntry,
+    viewModelStoreOwner: ViewModelStoreOwner = navBackStackEntry ?: checkNotNull(LocalViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    },
+    factory: ViewModelProvider.Factory? = navBackStackEntry?.let { HiltViewModelFactory(LocalContext.current, it) },
+    extras: CreationExtras = if (viewModelStoreOwner is HasDefaultViewModelProviderFactory) {
+        viewModelStoreOwner.defaultViewModelCreationExtras
+    } else {
+        CreationExtras.Empty
+    }.withCreationCallback<VMF> { assistedFactory ->
+        assistedFactory.create(assistedInput)
+    },
+    key: String? = null,
+): VM where VM: ViewModel, VM : MutableSharedFlow<BriefAction> =
+    viewModel<VM>(viewModelStoreOwner, key, factory, extras).apply { SetupWith(actionHandler) }
+
+
 // endregion assisted ViewModel
 
 
@@ -135,12 +155,6 @@ fun tabNavViewModel(initialTab: Tab, navController: NavController, key: String? 
         navBackStackEntry = navController.currentBackStackEntry,
         key = key
     )
-
-@Composable
-fun rememberScaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
-    val factory = activityFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
-    return remember(key) { factory.create(initialScreen) }
-}
 
 @Composable
 inline fun <reified VM : ViewModel> sharedHiltViewModel(
