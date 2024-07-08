@@ -4,6 +4,7 @@ package com.vladmarkovic.sample.post_presentation.post.compose
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -65,6 +66,7 @@ internal fun PostScreen(
 
     Column(
         modifier = Modifier
+            .fillMaxSize()
             .padding(Dimens.m)
             .verticalScroll(scrollState)
     ) {

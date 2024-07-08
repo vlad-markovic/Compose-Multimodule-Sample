@@ -7,5 +7,6 @@ androidLibrary {
 }
 
 dependencies {
-    implementation(Dependencies.Navigation.runtime)
+    implementation(Dependencies.navigation.runtime)
+    implementation(Dependencies.navigation.compose)
 }

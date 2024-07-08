@@ -92,7 +92,7 @@ private fun CountryComparisonScreen(
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     } else {
-        Column {
+        Column((Modifier.fillMaxSize())) {
             SortByDropdown(sortBy, onSortByChanged)
             CountryList(items, sortBy, onOpenCountryDetail)
         }

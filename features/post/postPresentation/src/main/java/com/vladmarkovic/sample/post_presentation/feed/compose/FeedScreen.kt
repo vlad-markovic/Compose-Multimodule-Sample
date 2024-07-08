@@ -5,6 +5,7 @@ package com.vladmarkovic.sample.post_presentation.feed.compose
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,7 +70,8 @@ private fun FeedScreen(
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(loading),
-        onRefresh = onRefresh
+        onRefresh = onRefresh,
+        modifier = Modifier.fillMaxSize()
     ) {
         if (error) Error(stringResource(error_on_posts_fetch), onRefresh)
         else PostList(posts, onPostClick)

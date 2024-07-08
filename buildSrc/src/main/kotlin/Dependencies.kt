@@ -91,6 +91,7 @@ object Dependencies {
 
     object Navigation {
         val runtime = dependency("androidx.navigation", "navigation-runtime-ktx", Versions.navigation)
+        val compose = dependency("androidx.navigation", "navigation-compose", Versions.navigation)
     }
 
     object Room {

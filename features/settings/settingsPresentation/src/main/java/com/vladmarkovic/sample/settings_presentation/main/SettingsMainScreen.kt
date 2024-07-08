@@ -3,6 +3,7 @@
 package com.vladmarkovic.sample.settings_presentation.main
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -31,8 +32,13 @@ fun SettingsMainScreen(
             )
         )
     }
-    Column (Modifier.padding(16.dp)) {
-        Button({ viewModel.navigate(ToSecondSettingsScreen) }) {
+    SettingsMainScreen { viewModel.navigate(ToSecondSettingsScreen) }
+}
+
+@Composable
+private fun SettingsMainScreen(navigateToSettingsTwo: () -> Unit) {
+    Column (Modifier.fillMaxSize().padding(16.dp)) {
+        Button(navigateToSettingsTwo) {
             Text("Go To Settings Two")
         }
     }
