@@ -6,24 +6,22 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
+import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolverEntryPoint
 
@@ -33,8 +31,7 @@ fun ScreensNavScaffold(
     allScreens: List<Screen>,
     modifier: Modifier = Modifier,
     initialScreen: Screen = allScreens.first(),
-    navController: NavHostController = rememberNavController(),
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     topBar: @Composable () -> Unit = {},
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
     floatingActionButton: @Composable () -> Unit = {},
@@ -56,8 +53,7 @@ fun ScreensNavScaffold(
     }
     NavScaffold(
         modifier = modifier,
-        navController = navController,
-        scaffoldState = scaffoldState,
+        navArgs = navArgs,
         topBar = topBar,
         bottomBar = {},
         snackbarHost = snackbarHost,
@@ -76,7 +72,7 @@ fun ScreensNavScaffold(
         bubbleUp = actionHandler,
     ) { mdfr, bubbleUp ->
         NavHost(
-            navController = navController,
+            navController = navArgs.navController,
             startDestination = initialScreen.name,
             modifier = mdfr,
         ) {

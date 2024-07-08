@@ -6,33 +6,27 @@ import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeArgs
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
+import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.handleAction
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NavScaffold(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
@@ -57,14 +51,10 @@ fun NavScaffold(
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(Color.Black)
 
-    val mainScope: CoroutineScope = rememberCoroutineScope()
-
-    val composeArgs = ComposeArgs(navController, mainScope, scaffoldState)
-
     AppTheme {
         Scaffold(
             modifier = modifier,
-            scaffoldState = scaffoldState,
+            scaffoldState = navArgs.scaffoldState,
             topBar = topBar,
             bottomBar = bottomBar,
             snackbarHost = snackbarHost,
@@ -83,16 +73,16 @@ fun NavScaffold(
         ) { paddingValues ->
             navHost(
                 Modifier.padding(paddingValues),
-                remember {{ composeArgs.handleAction(it, bubbleUp) }}
+                remember {{ navArgs.handleAction(it, bubbleUp) }}
             )
 
-            composeArgs.BackHandler(bubbleUp)
+            navArgs.BackHandler(bubbleUp)
         }
     }
 }
 
 @Composable
-private fun ComposeArgs.BackHandler(actionHandler: (BriefAction) -> Unit) {
+private fun ComposeNavArgs.BackHandler(actionHandler: (BriefAction) -> Unit) {
     androidx.activity.compose.BackHandler {
         handleAction(CommonNavigationAction.Back, actionHandler)
     }

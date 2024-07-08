@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.remember
@@ -18,17 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
+import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.ScreenContentResolverEntryPoint
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
@@ -45,8 +43,8 @@ import com.vladmarkovic.sample.shared_presentation.util.tabNavViewModel
 inline fun <reified T: Tab> DefaultTabsNavScaffold(
     allTabs: List<T>,
     initialTab: T = allTabs.first(),
-    navController: NavHostController = rememberNavController(),
-    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navController),
+    navArgs: ComposeNavArgs = rememberComposeNavArgs(),
+    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
     noinline actionHandler: @DisallowComposableCalls (BriefAction) -> Unit = remember {
         { throw IllegalStateException("Unhandled action: $it") }
     },
@@ -64,7 +62,7 @@ inline fun <reified T: Tab> DefaultTabsNavScaffold(
     TabsNavScaffold(
         allTabs = allTabs,
         initialTab = initialTab,
-        navController = navController,
+        navArgs = navArgs,
         tabNav = tabNav,
         topBar = remember {{
             DefaultTopBar(
@@ -85,9 +83,8 @@ inline fun <reified T: Tab> TabsNavScaffold(
     allTabs: List<T>,
     initialTab: T = allTabs.first(),
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navController),
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navArgs: ComposeNavArgs = rememberComposeNavArgs(),
+    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
     noinline topBar: @Composable () -> Unit = {},
     noinline bottomBar: @Composable () -> Unit = {},
     noinline snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
@@ -118,8 +115,7 @@ inline fun <reified T: Tab> TabsNavScaffold(
     }}
     NavScaffold(
         modifier = modifier,
-        navController = navController,
-        scaffoldState = scaffoldState,
+        navArgs = navArgs,
         topBar = topBar,
         bottomBar = bottomBar,
         snackbarHost = snackbarHost,
@@ -138,7 +134,7 @@ inline fun <reified T: Tab> TabsNavScaffold(
         bubbleUp = tabNavHandler,
     ) { mdfr, bubbleUp ->
         NavHost(
-            navController = navController,
+            navController = navArgs.navController,
             startDestination = initialTab.name,
             modifier = mdfr
         ) {
@@ -152,5 +148,5 @@ inline fun <reified T: Tab> TabsNavScaffold(
             }
         }
     }
-    SetupTabsNavigation(tabs = tabNav.tabs, navController = navController)
+    SetupTabsNavigation(tabs = tabNav.tabs, navController = navArgs.navController)
 }

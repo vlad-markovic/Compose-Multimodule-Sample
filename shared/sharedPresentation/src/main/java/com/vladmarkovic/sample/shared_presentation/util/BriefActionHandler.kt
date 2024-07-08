@@ -16,7 +16,7 @@ import com.vladmarkovic.sample.shared_domain.screen.Screen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeArgs
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.closeDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 
-internal fun ComposeArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
+internal fun ComposeNavArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
     Lumber.i("action: ${action.javaClass.simpleName}")
     return when (action) {
         is NavigationAction -> navigate(action, bubbleUp)
@@ -42,15 +42,14 @@ internal fun ComposeArgs.handleAction(action: BriefAction, bubbleUp: (BriefActio
 }
 
 /** Branch out handling of different types of [NavigationAction]s. */
-private fun ComposeArgs.navigate(action: NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
-    is ToTab -> navController.navigate(action.tab)
+private fun ComposeNavArgs.navigate(action: NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
     is ToScreen -> navController.navigate(action.route)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
     is CommonNavigationAction -> navigate(action)
     else -> bubbleUp(action)
 }
 
-private fun ComposeArgs.navigate(action: CommonNavigationAction) {
+private fun ComposeNavArgs.navigate(action: CommonNavigationAction) {
     when (action) {
         is CommonNavigationAction.Back -> onBack()
     }
@@ -102,7 +101,7 @@ fun NavController.navigate(tab: Tab) {
     }
 }
 
-private fun ComposeArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
+private fun ComposeNavArgs.handleCommonDisplayAction(action: CommonDisplayAction) =
     when(action) {
         is CommonDisplayAction.Toast -> {
             Toast.makeText(navController.context, action.value.get(navController.context), Toast.LENGTH_SHORT).show()
