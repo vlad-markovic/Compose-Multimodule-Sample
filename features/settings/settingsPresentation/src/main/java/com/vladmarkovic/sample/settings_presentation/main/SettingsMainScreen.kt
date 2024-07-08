@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
@@ -18,14 +19,18 @@ import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.util.str
 
 @Composable
-fun SettingsMainScreen(bubbleUp: (BriefAction) -> Unit) {
-    val viewModel = actionViewModel<BriefActionViewModel>(bubbleUp)
-    bubbleUp(
-        ScaffoldData(
-            topBarTitle = "Settings".str,
-            upButton = UpButton.BackButton(viewModel),
+fun SettingsMainScreen(
+    bubbleUp: (BriefAction) -> Unit,
+    viewModel: BriefActionViewModel = actionViewModel<BriefActionViewModel>(bubbleUp)
+) {
+    LaunchedEffect(Unit) {
+        bubbleUp(
+            ScaffoldData(
+                topBarTitle = "Settings".str,
+                upButton = UpButton.BackButton(viewModel),
+            )
         )
-    )
+    }
     Column (Modifier.padding(16.dp)) {
         Button({ viewModel.navigate(ToSecondSettingsScreen) }) {
             Text("Go To Settings Two")

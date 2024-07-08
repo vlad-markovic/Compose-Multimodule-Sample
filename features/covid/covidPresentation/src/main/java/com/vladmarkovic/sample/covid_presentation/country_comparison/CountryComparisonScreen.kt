@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,18 +50,22 @@ import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 
 @Composable
-fun CountryComparisonScreen(bubbleUp: (BriefAction) -> Unit) {
-    val viewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
-    bubbleUp(
-        ScaffoldData(
-            topBarTitle = StrOrRes.res(R.string.country_comparison_screen_title),
-            upButton = UpButton.BackButton(viewModel),
-            menuItems = listOf(
-                CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
-                CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
+fun CountryComparisonScreen(
+    bubbleUp: (BriefAction) -> Unit,
+    viewModel: CountryComparisonViewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
+) {
+    LaunchedEffect(Unit) {
+        bubbleUp(
+            ScaffoldData(
+                topBarTitle = StrOrRes.res(R.string.country_comparison_screen_title),
+                upButton = UpButton.BackButton(viewModel),
+                menuItems = listOf(
+                    CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
+                    CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
+                )
             )
         )
-    )
+    }
     CountryComparisonScreen(
         showLoading = viewModel.showLoading.safeValue,
         items = viewModel.items.safeValue,

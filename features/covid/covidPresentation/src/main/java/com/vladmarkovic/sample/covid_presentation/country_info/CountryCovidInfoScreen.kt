@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
@@ -24,14 +25,18 @@ import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 @Composable
-fun CountryCovidInfoScreen(bubbleUp: (BriefAction) -> Unit) {
-    val viewModel = actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
-    bubbleUp(
-        ScaffoldData(
-            topBarTitle = viewModel.info.country.str,
-            upButton = UpButton.BackButton(viewModel),
+fun CountryCovidInfoScreen(
+    bubbleUp: (BriefAction) -> Unit,
+    viewModel: CovidCountryInfoViewModel = actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
+) {
+    LaunchedEffect(Unit) {
+        bubbleUp(
+            ScaffoldData(
+                topBarTitle = viewModel.info.country.str,
+                upButton = UpButton.BackButton(viewModel),
+            )
         )
-    )
+    }
     CountryCovidInfoScreen(viewModel.info)
 }
 

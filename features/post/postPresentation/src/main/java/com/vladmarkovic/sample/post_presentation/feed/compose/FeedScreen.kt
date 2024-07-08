@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -36,15 +37,19 @@ import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 
 
 @Composable
-fun FeedScreen(bubbleUp: (BriefAction) -> Unit) {
-    val viewModel = actionViewModel<FeedViewModel>(bubbleUp)
-    bubbleUp(
-        ScaffoldData(
-            topBarTitle = StrOrRes.res(R.string.feed_screen_title),
-            upButton = UpButton.DrawerButton(viewModel),
-            drawerItems = defaultDrawerItems(viewModel)
+fun FeedScreen(
+    bubbleUp: (BriefAction) -> Unit,
+    viewModel: FeedViewModel = actionViewModel<FeedViewModel>(bubbleUp)
+) {
+    LaunchedEffect(Unit) {
+        bubbleUp(
+            ScaffoldData(
+                topBarTitle = StrOrRes.res(R.string.feed_screen_title),
+                upButton = UpButton.DrawerButton(viewModel),
+                drawerItems = defaultDrawerItems(viewModel)
+            )
         )
-    )
+    }
     FeedScreen(
         loading = viewModel.loading.safeValue,
         posts = viewModel.posts.safeValue,
