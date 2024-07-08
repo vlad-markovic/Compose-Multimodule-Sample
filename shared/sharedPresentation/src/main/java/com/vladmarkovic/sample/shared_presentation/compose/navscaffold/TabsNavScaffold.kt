@@ -3,6 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
@@ -46,10 +47,10 @@ fun DefaultTabsNavScaffold(
     initialTab: Tab = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
-    val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, actionHandler)
+    val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
     val drawerItems = scaffoldData.drawerItems.safeValue
     val showDrawer: Boolean = remember(drawerItems) { drawerItems != null }
@@ -66,10 +67,8 @@ fun DefaultTabsNavScaffold(
             )
         }},
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
-        drawerContent = remember(showDrawer) {
-            drawerItems?.let {{ DefaultDrawer(drawerItems = drawerItems) }}
-        },
-        actionHandler = scaffoldChangesHandler
+        drawerContent = remember(showDrawer) { drawerItems?.let {{ DefaultDrawer(drawerItems) }} },
+        bubbleUp = scaffoldChangesHandler
     )
 }
 
@@ -95,10 +94,10 @@ fun TabsNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
     val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
-    val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, actionHandler)
+    val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,
@@ -118,18 +117,18 @@ fun TabsNavScaffold(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         bubbleUp = tabNavHandler,
-    ) { mdfr, bubbleUp ->
+    ) { paddingValues, actionHandler ->
         NavHost(
             navController = navArgs.navController,
             startDestination = initialTab.name,
-            modifier = mdfr
+            modifier = Modifier.padding(paddingValues)
         ) {
             allTabs.forEach { tab ->
                 navigation(
                     startDestination = tab.initialScreen.name,
                     route = tab.name
                 ) {
-                    composeNavGraph(screenContentResolver, tab.screens, bubbleUp)
+                    composeNavGraph(screenContentResolver, tab.screens, actionHandler)
                 }
             }
         }

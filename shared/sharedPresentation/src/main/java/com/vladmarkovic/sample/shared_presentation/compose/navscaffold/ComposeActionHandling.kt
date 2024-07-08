@@ -14,12 +14,16 @@ import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.compose.di.ScreenContentResolverEntryPoint
+import com.vladmarkovic.sample.shared_presentation.compose.onBack
+import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
+import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import com.vladmarkovic.sample.shared_presentation.navigation.route
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import com.vladmarkovic.sample.shared_presentation.util.handleTopScreenNavigationAction
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -52,6 +56,20 @@ fun <T> rememberTabNavHandler(
             else -> bubbleUp(action)
         }
     }}
+
+@Composable
+fun rememberCommonActionsHandler(
+    navArgs: ComposeNavArgs,
+    scope: CoroutineScope,
+    bubbleUp: (BriefAction) -> Unit,
+    key: String? = null
+)  : (BriefAction) -> Unit = remember(key) {{ action ->
+    when(action) {
+        is CommonNavigationAction.Back -> navArgs.onBack(scope)
+        is CommonNavigationAction.OpenDrawer -> navArgs.openDrawer(scope)
+        else -> navArgs.handleAction(action, bubbleUp)
+    }
+}}
 
 @Composable
 fun rememberThrowingNoHandler(key: String? = null): (BriefAction) -> Unit =

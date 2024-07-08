@@ -1,7 +1,7 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
@@ -10,7 +10,6 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,9 +19,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
-import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 
 @Composable
@@ -45,19 +42,13 @@ fun NavScaffold(
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
     bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
-    navHost: @Composable (modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
+    navHost: @Composable (paddingValues: PaddingValues, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(Color.Black)
 
     val scope = rememberCoroutineScope()
-    val actionHandler: (BriefAction) -> Unit = remember {{ action ->
-        when(action) {
-            is CommonNavigationAction.Back -> navArgs.onBack(scope)
-            is CommonNavigationAction.OpenDrawer -> navArgs.openDrawer(scope)
-            else -> navArgs.handleAction(action, bubbleUp)
-        }
-    }}
+    val actionHandler: (BriefAction) -> Unit = rememberCommonActionsHandler(navArgs, scope, bubbleUp)
 
     AppTheme {
         Scaffold(
@@ -79,7 +70,7 @@ fun NavScaffold(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
         ) { paddingValues ->
-            navHost(Modifier.padding(paddingValues), actionHandler)
+            navHost(paddingValues, actionHandler)
 
             navArgs.BackHandler()
         }

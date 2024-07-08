@@ -33,6 +33,6 @@ fun DefaultScreensNavScaffold(
         drawerContent = remember(drawerItems) {
             drawerItems?.let {{ DefaultDrawer(drawerItems = drawerItems) }}
         },
-        actionHandler = scaffoldChangesHandler
+        bubbleUp = scaffoldChangesHandler
     )
 }

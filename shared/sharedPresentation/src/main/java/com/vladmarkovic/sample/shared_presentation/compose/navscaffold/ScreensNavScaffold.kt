@@ -3,6 +3,7 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
@@ -43,7 +44,7 @@ fun ScreensNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    actionHandler: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
 ) {
     val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
     NavScaffold(
@@ -64,14 +65,14 @@ fun ScreensNavScaffold(
         drawerScrimColor = drawerScrimColor,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
-        bubbleUp = actionHandler,
-    ) { mdfr, bubbleUp ->
+        bubbleUp = bubbleUp,
+    ) { paddingValues, actionHandler ->
         NavHost(
             navController = navArgs.navController,
             startDestination = initialScreen.name,
-            modifier = mdfr,
+            modifier = Modifier.padding(paddingValues),
         ) {
-            composeNavGraph(screenContentResolver, allScreens, bubbleUp)
+            composeNavGraph(screenContentResolver, allScreens, actionHandler)
         }
     }
 }
