@@ -3,7 +3,6 @@
 package com.vladmarkovic.sample.shared_presentation.util
 
 import android.widget.Toast
-import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavBackStackEntry
@@ -17,19 +16,12 @@ import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.closeDrawer
-import com.vladmarkovic.sample.shared_presentation.compose.onBack
-import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import com.vladmarkovic.sample.shared_presentation.navigation.route
-import com.vladmarkovic.sample.shared_presentation.screen.ToTab
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.launch
 
 
 internal fun ComposeNavArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
@@ -45,19 +37,12 @@ internal fun ComposeNavArgs.handleAction(action: BriefAction, bubbleUp: (BriefAc
 private fun ComposeNavArgs.navigate(action: NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
     is ToScreen -> navController.navigate(action.route)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
-    is CommonNavigationAction -> navigate(action)
     else -> bubbleUp(action)
 }
 
-private fun ComposeNavArgs.navigate(action: CommonNavigationAction) {
-    when (action) {
-        is CommonNavigationAction.Back -> onBack()
-    }
-}
-
-fun NavController.onBack(scaffoldState: ScaffoldState, scope: CoroutineScope) {
+fun NavController.onBack(isDrawerOpen: () -> Boolean, closeDrawer: () -> Unit) {
     when {
-        scaffoldState.drawerState.isOpen -> scope.launch { scaffoldState.drawerState.close() }
+        isDrawerOpen() -> closeDrawer()
         isStackFirstScreen -> context.asActivity.finish() // TODO circular if onBackPress is called; how to do for Fragments?
         else -> popBackStack()
     }
@@ -105,12 +90,6 @@ private fun ComposeNavArgs.handleCommonDisplayAction(action: CommonDisplayAction
     when(action) {
         is CommonDisplayAction.Toast -> {
             Toast.makeText(navController.context, action.value.get(navController.context), Toast.LENGTH_SHORT).show()
-        }
-        is CommonDisplayAction.OpenDrawer -> {
-            openDrawer()
-        }
-        is CommonDisplayAction.CloseDrawer -> {
-            closeDrawer()
         }
     }
 

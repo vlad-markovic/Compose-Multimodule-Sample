@@ -11,11 +11,11 @@ import com.vladmarkovic.sample.shared_presentation.R
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.display
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
+import com.vladmarkovic.sample.shared_presentation.navigation.CloseDrawer
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 
 sealed class MainDrawerItem(
@@ -38,19 +38,19 @@ sealed class MainDrawerItem(
 
 fun defaultDrawerItems(viewModel: BriefActionViewModel) = listOf(
     MainDrawerItem.ItemPostsTab {
-        viewModel.display(CommonDisplayAction.CloseDrawer)
+        viewModel.navigate(CloseDrawer)
         viewModel.navigate(ToTab(MainBottomTab.POSTS_TAB))
     },
     MainDrawerItem.ItemCovidTab {
-        viewModel.display(CommonDisplayAction.CloseDrawer)
+        viewModel.navigate(CloseDrawer)
         viewModel.navigate(ToTab(MainBottomTab.COVID_TAB))
     },
     MainDrawerItem.ItemToast {
-        viewModel.display(CommonDisplayAction.CloseDrawer)
+        viewModel.navigate(CloseDrawer)
         viewModel.display(Toast("A Toast"))
     },
     MainDrawerItem.ItemSettings {
-        viewModel.display(CommonDisplayAction.CloseDrawer)
+        viewModel.navigate(CloseDrawer)
         viewModel.navigate(ToSettings)
     }
 )

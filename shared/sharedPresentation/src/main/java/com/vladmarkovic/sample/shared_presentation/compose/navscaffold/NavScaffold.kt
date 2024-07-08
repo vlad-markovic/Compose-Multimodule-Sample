@@ -11,6 +11,7 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.Dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
+import com.vladmarkovic.sample.shared_presentation.compose.onBack
+import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
@@ -42,14 +45,20 @@ fun NavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    bubbleUp: (BriefAction) -> Unit = {},
-    navHost: @Composable (
-        modifier: Modifier,
-        bubbleUp: (BriefAction) -> Unit
-    ) -> Unit
+    bubbleUp: (BriefAction) -> Unit = remember {{ throw IllegalStateException("Unhandled action: $it") }},
+    navHost: @Composable (modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(Color.Black)
+
+    val scope = rememberCoroutineScope()
+    val actionHandler: (BriefAction) -> Unit = remember {{ action ->
+        when(action) {
+            is CommonNavigationAction.Back -> navArgs.onBack(scope)
+            is CommonNavigationAction.OpenDrawer -> navArgs.openDrawer(scope)
+            else -> navArgs.handleAction(action, bubbleUp)
+        }
+    }}
 
     AppTheme {
         Scaffold(
@@ -71,19 +80,15 @@ fun NavScaffold(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
         ) { paddingValues ->
-            navHost(
-                Modifier.padding(paddingValues),
-                remember {{ navArgs.handleAction(it, bubbleUp) }}
-            )
+            navHost(Modifier.padding(paddingValues), actionHandler)
 
-            navArgs.BackHandler(bubbleUp)
+            navArgs.BackHandler()
         }
     }
 }
 
 @Composable
-private fun ComposeNavArgs.BackHandler(actionHandler: (BriefAction) -> Unit) {
-    androidx.activity.compose.BackHandler {
-        handleAction(CommonNavigationAction.Back, actionHandler)
-    }
+private fun ComposeNavArgs.BackHandler() {
+    val scope = rememberCoroutineScope()
+    androidx.activity.compose.BackHandler { onBack(scope) }
 }

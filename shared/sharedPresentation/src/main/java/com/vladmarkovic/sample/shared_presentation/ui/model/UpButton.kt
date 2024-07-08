@@ -10,10 +10,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.shared_presentation.R
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.briefaction.display
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
-import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.OpenDrawer
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
+import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.OpenDrawer
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 sealed class UpButton(
@@ -40,7 +39,7 @@ sealed class UpButton(
         UpButton(Icons.Filled.Menu, R.string.button_open_drawer_label, action) {
         companion object {
             operator fun <VM> invoke(vm: VM): DrawerButton where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
-                DrawerButton { vm.display(OpenDrawer) }
+                DrawerButton { vm.navigate(OpenDrawer) }
         }
     }
 }
