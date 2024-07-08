@@ -7,6 +7,7 @@ object Dependencies {
     val ktor = Ktor
     val room = Room
     val compose = Compose
+    val navigation = Navigation
 
     object Kotlin {
         val gradlePlugin: String = kotlinDependency("kotlin-gradle-plugin")
@@ -67,7 +68,8 @@ object Dependencies {
     object Compose {
         val bom = dependency("androidx.compose", "compose-bom", Versions.composeBom)
         //    val composeCompiler = dependency("androidx.compose.compiler", "compiler", Versions.compose)
-        val activity = dependency("androidx.activity", "activity-compose")
+        //    val activity = dependency("androidx.activity", "activity-compose")
+        val runtime = dependency("androidx.compose.runtime", "runtime")
         val lifecycle = dependency("androidx.lifecycle", "lifecycle-runtime-compose")
         val material = dependency("androidx.compose.material", "material")
         val ui = UI
@@ -85,6 +87,10 @@ object Dependencies {
             private fun googleAccompanist(module: String, version: String = Versions.googleAccompanist) =
                 dependency("com.google.accompanist", module, version)
         }
+    }
+
+    object Navigation {
+        val runtime = dependency("androidx.navigation", "navigation-runtime-ktx", Versions.navigation)
     }
 
     object Room {

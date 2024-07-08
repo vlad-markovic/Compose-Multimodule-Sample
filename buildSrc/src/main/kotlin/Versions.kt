@@ -35,6 +35,7 @@ internal object  Versions {
 
     const val composeBom = "2024.06.00"
     const val googleAccompanist = "0.34.0"
+    const val navigation = "2.7.7"
     const val room = "2.6.1"
 
     const val timber = "5.0.1"

@@ -73,7 +73,8 @@ dependencies {
     // Android / Google
     implementation(Dependencies.appCompat)
     implementation(Dependencies.googleMaterial)
-    implementation(Dependencies.compose.activity)
+    implementation(Dependencies.compose.bom)
+    implementation(Dependencies.compose.runtime)
 
     // Logging
     implementation(Dependencies.timber)
