@@ -4,4 +4,6 @@ sealed interface Screen {
     val name: String
 }
 
-sealed interface NavGraphScreen : Screen
+sealed interface NavGraphScreen : Screen {
+    val ordinal: Int
+}

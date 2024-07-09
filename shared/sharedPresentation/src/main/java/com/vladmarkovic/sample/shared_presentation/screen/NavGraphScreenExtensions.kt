@@ -2,6 +2,7 @@
 
 package com.vladmarkovic.sample.shared_presentation.screen
 
+import android.os.Bundle
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -18,7 +19,11 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.compose.opposite
 
 
-val NavGraphScreen.argNames: List<String>? get() = when(this) {
+val NavGraphScreen.argNames: List<String>? get() =
+    if (ordinal == 0) null
+    else listOf(ScreenArgKeys.ORDINAL.name) + (screenArgNames ?: emptyList())
+
+val NavGraphScreen.screenArgNames: List<String>? get() = when(this) {
     MainScreen.PostsScreen.POST_SCREEN -> listOf(ScreenArgKeys.POST.name)
     MainScreen.CovidScreen.COVID_COUNTRY_INFO -> listOf(ScreenArgKeys.COUNTRY_INFO.name)
     else -> null
@@ -61,13 +66,15 @@ val NavGraphScreen.deepLinks: List<NavDeepLink>
     get() = emptyList()
 
 
-private val screenTransitionAnimationSpec = tween<IntOffset>(200, easing = LinearEasing)
-
+// region transitions
 val NavGraphScreen.enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)
     get() = {
         slideIntoContainer(
             animationSpec = screenTransitionAnimationSpec,
-            towards = enterTransitionDirection()
+            towards = enterTransitionDirection(
+                exitScreenOrdinal = targetState.arguments.argOrdinal,
+                enterScreenOrdinal = initialState.arguments.argOrdinal,
+            )
         )
     }
 
@@ -75,15 +82,36 @@ val NavGraphScreen.exitTransition: (AnimatedContentTransitionScope<NavBackStackE
     get() = {
         slideOutOfContainer(
             animationSpec = screenTransitionAnimationSpec,
-            towards = exitTransitionDirection()
+            towards = exitTransitionDirection(
+                exitScreenOrdinal = targetState.arguments.argOrdinal,
+                enterScreenOrdinal = initialState.arguments.argOrdinal,
+            )
         )
     }
 
-fun NavGraphScreen.enterTransitionDirection(): AnimatedContentTransitionScope.SlideDirection = when(this) {
-    MainScreen.PostsScreen.FEED_SCREEN -> AnimatedContentTransitionScope.SlideDirection.End
-    MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> AnimatedContentTransitionScope.SlideDirection.Start
-    else -> AnimatedContentTransitionScope.SlideDirection.Up
-}
+private val screenTransitionAnimationSpec = tween<IntOffset>(200, easing = LinearEasing)
 
-fun NavGraphScreen.exitTransitionDirection(): AnimatedContentTransitionScope.SlideDirection =
-    enterTransitionDirection().opposite
+private val Bundle?.argOrdinal get() = this?.getString(ScreenArgKeys.ORDINAL.name)?.toIntOrNull() ?: 0
+
+private fun NavGraphScreen.enterTransitionDirection(
+    exitScreenOrdinal: Int, enterScreenOrdinal: Int
+): AnimatedContentTransitionScope.SlideDirection =
+    when(this) {
+        MainScreen.PostsScreen.FEED_SCREEN -> AnimatedContentTransitionScope.SlideDirection.End
+        MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> AnimatedContentTransitionScope.SlideDirection.Start
+        else -> when {
+            exitScreenOrdinal > enterScreenOrdinal -> AnimatedContentTransitionScope.SlideDirection.Start
+            else -> AnimatedContentTransitionScope.SlideDirection.End
+        }
+    }
+
+private fun NavGraphScreen.exitTransitionDirection(
+    exitScreenOrdinal: Int, enterScreenOrdinal: Int
+): AnimatedContentTransitionScope.SlideDirection =
+    enterTransitionDirection(exitScreenOrdinal, enterScreenOrdinal).let {
+        when(this) {
+            MainScreen.PostsScreen.FEED_SCREEN, MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> it.opposite
+            else -> it
+        }
+    }
+// endregion transitions
