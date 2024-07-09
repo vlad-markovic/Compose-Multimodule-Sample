@@ -17,7 +17,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.di.ScreenContentResol
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
-import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
+import com.vladmarkovic.sample.shared_presentation.navigation.ToNavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import com.vladmarkovic.sample.shared_presentation.navigation.route
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
@@ -86,7 +86,7 @@ internal fun ComposeNavArgs.handleAction(action: BriefAction, bubbleUp: (BriefAc
 
 /** Branch out handling of different types of [NavigationAction]s. */
 private fun ComposeNavArgs.navigate(action: BriefAction.NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
-    is ToScreen -> navController.navigate(action.route)
+    is ToNavGraphScreen -> navController.navigate(action.route)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
     else -> bubbleUp(action)
 }

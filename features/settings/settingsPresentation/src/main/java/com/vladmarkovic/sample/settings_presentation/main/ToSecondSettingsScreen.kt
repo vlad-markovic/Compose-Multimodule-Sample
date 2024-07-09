@@ -2,7 +2,7 @@
 
 package com.vladmarkovic.sample.settings_presentation.main
 
-import com.vladmarkovic.sample.shared_presentation.navigation.ToScreen
+import com.vladmarkovic.sample.shared_presentation.navigation.ToNavGraphScreen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 
-data object ToSecondSettingsScreen : ToScreen(SettingsScreen.SECOND)
+data object ToSecondSettingsScreen : ToNavGraphScreen(SettingsScreen.SECOND)

@@ -14,33 +14,33 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.vladmarkovic.sample.shared_domain.screen.MainScreen
-import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.compose.opposite
 
 
-val Screen.argNames: List<String>? get() = when(this) {
+val NavGraphScreen.argNames: List<String>? get() = when(this) {
     MainScreen.PostsScreen.POST_SCREEN -> listOf(ScreenArgKeys.POST.name)
     MainScreen.CovidScreen.COVID_COUNTRY_INFO -> listOf(ScreenArgKeys.COUNTRY_INFO.name)
     else -> null
 }
 
 /** i.e. POSTS?POST={post-json} */
-val Screen.route: String get() = name + routeArgs
+val NavGraphScreen.route: String get() = name + routeArgs
 
 /** i.e. ?POST=%s */
-val Screen.routeArgsFormat: String
+val NavGraphScreen.routeArgsFormat: String
     get() = argNames
         ?.joinToString("&") { "${it}=%s" }
         ?.let { "?$it" } ?: ""
 
 /** i.e. ?POST={POST} */
-val Screen.routeArgs: String
+val NavGraphScreen.routeArgs: String
     get() = argNames?.let { arguments ->
         String.format(routeArgsFormat, *arguments.map { "{${it}}" }.toTypedArray())
     } ?: ""
 
 /** i.e. ?POST=[post-json] */
-fun Screen.routeArgs(args: List<String>?): String {
+fun NavGraphScreen.routeArgs(args: List<String>?): String {
     if (args.isNullOrEmpty()) return ""
     if (args.size != (this.argNames?.size ?: 0)) throw IllegalArgumentException()
     return String.format(routeArgsFormat, *args.toTypedArray())
@@ -54,16 +54,16 @@ fun stringArg(argName: String) =
         defaultValue = ""
     }
 
-val Screen.namedArgs: List<NamedNavArgument>
+val NavGraphScreen.namedArgs: List<NamedNavArgument>
     get() = argNames?.map { stringArg(it) } ?: emptyList()
 
-val Screen.deepLinks: List<NavDeepLink>
+val NavGraphScreen.deepLinks: List<NavDeepLink>
     get() = emptyList()
 
 
 private val screenTransitionAnimationSpec = tween<IntOffset>(200, easing = LinearEasing)
 
-val Screen.enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)
+val NavGraphScreen.enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)
     get() = {
         slideIntoContainer(
             animationSpec = screenTransitionAnimationSpec,
@@ -71,7 +71,7 @@ val Screen.enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.(
         )
     }
 
-val Screen.exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)
+val NavGraphScreen.exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)
     get() = {
         slideOutOfContainer(
             animationSpec = screenTransitionAnimationSpec,
@@ -79,11 +79,11 @@ val Screen.exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.()
         )
     }
 
-fun Screen.enterTransitionDirection(): AnimatedContentTransitionScope.SlideDirection = when(this) {
+fun NavGraphScreen.enterTransitionDirection(): AnimatedContentTransitionScope.SlideDirection = when(this) {
     MainScreen.PostsScreen.FEED_SCREEN -> AnimatedContentTransitionScope.SlideDirection.End
     MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> AnimatedContentTransitionScope.SlideDirection.Start
     else -> AnimatedContentTransitionScope.SlideDirection.Up
 }
 
-fun Screen.exitTransitionDirection(): AnimatedContentTransitionScope.SlideDirection =
+fun NavGraphScreen.exitTransitionDirection(): AnimatedContentTransitionScope.SlideDirection =
     enterTransitionDirection().opposite

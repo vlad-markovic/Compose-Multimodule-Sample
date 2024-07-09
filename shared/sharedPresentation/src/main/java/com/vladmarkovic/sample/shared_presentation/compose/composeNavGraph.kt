@@ -2,7 +2,7 @@ package com.vladmarkovic.sample.shared_presentation.compose
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.screen.deepLinks
 import com.vladmarkovic.sample.shared_presentation.screen.enterTransition
@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.shared_presentation.screen.route
 /** Composes screens and a "navigation branch" with "composable" function for each screen. */
 fun NavGraphBuilder.composeNavGraph(
     screenContentResolver: ComposeScreenContentResolver,
-    allScreens: List<Screen>,
+    allScreens: List<NavGraphScreen>,
     bubbleUp: (BriefAction) -> Unit
 ) {
     allScreens.forEach { screen ->

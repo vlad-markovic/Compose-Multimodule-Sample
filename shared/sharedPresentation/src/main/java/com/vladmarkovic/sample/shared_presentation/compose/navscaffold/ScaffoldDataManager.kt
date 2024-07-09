@@ -2,7 +2,7 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.compose.di.activityFactoryProvider
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
@@ -19,11 +19,11 @@ import kotlinx.coroutines.flow.asStateFlow
 
 
 class ScaffoldDataManager @AssistedInject constructor(
-    @Assisted initialScreen: Screen?
+    @Assisted initialScreen: NavGraphScreen?
 ) {
 
-    private val _screen: MutableStateFlow<Screen?> = MutableStateFlow(initialScreen)
-    val currentScreen: StateFlow<Screen?> = _screen.asStateFlow()
+    private val _screen: MutableStateFlow<NavGraphScreen?> = MutableStateFlow(initialScreen)
+    val currentScreen: StateFlow<NavGraphScreen?> = _screen.asStateFlow()
 
     private val _topBarData: MutableStateFlow<TopBarData?> = MutableStateFlow(null)
     val topBarData: StateFlow<TopBarData?> = _topBarData.asStateFlow()
@@ -38,8 +38,8 @@ class ScaffoldDataManager @AssistedInject constructor(
 }
 
 @AssistedFactory
-interface ScaffoldDataManagerFactory : BaseAssistedFactory<ScaffoldDataManager, Screen?> {
-    override fun create(assistedInput: Screen?): ScaffoldDataManager
+interface ScaffoldDataManagerFactory : BaseAssistedFactory<ScaffoldDataManager, NavGraphScreen?> {
+    override fun create(assistedInput: NavGraphScreen?): ScaffoldDataManager
 }
 
 @EntryPoint
@@ -49,7 +49,7 @@ interface ScaffoldDataManagerFactoryProvider {
 }
 
 @Composable
-fun rememberScaffoldDataManager(initialScreen: Screen?, key: String? = null): ScaffoldDataManager {
+fun rememberScaffoldDataManager(initialScreen: NavGraphScreen?, key: String? = null): ScaffoldDataManager {
     val factory = activityFactoryProvider<ScaffoldDataManagerFactoryProvider>().provideScaffoldDataManagerFactory()
     return remember(key) { factory.create(initialScreen) }
 }

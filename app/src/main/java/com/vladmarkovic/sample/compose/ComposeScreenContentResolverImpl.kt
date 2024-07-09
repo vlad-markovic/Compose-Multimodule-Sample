@@ -8,7 +8,7 @@ import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.settings_presentation.main.SettingsMainScreen
 import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScreen
 import com.vladmarkovic.sample.shared_domain.screen.MainScreen
-import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class ComposeScreenContentResolverImpl @Inject constructor(): ComposeScreenContentResolver {
     @Composable
-    override fun Screen.Content(bubbleUp: (BriefAction) -> Unit) = when (this) {
+    override fun NavGraphScreen.Content(bubbleUp: (BriefAction) -> Unit) = when (this) {
         MainScreen.PostsScreen.FEED_SCREEN -> FeedScreen(bubbleUp)
         MainScreen.PostsScreen.POST_SCREEN -> PostScreen(bubbleUp)
         MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> CountryComparisonScreen(bubbleUp)

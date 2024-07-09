@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.compose.NavHost
-import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
@@ -26,9 +26,9 @@ import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentR
 
 @Composable
 fun ScreensNavScaffold(
-    allScreens: List<Screen>,
+    allScreens: List<NavGraphScreen>,
     modifier: Modifier = Modifier,
-    initialScreen: Screen = allScreens.first(),
+    initialScreen: NavGraphScreen = allScreens.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     topBar: @Composable () -> Unit = {},
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },

@@ -8,7 +8,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.vladmarkovic.sample.shared_domain.log.Lumber
-import com.vladmarkovic.sample.shared_domain.screen.Screen
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 
 
@@ -20,13 +20,13 @@ fun NavController.onBack(isDrawerOpen: () -> Boolean, closeDrawer: () -> Unit) {
     }
 }
 
-fun NavController.isInitialStackFirstScreen(initialScreen: Screen): Boolean =
+fun NavController.isInitialStackFirstScreen(initialScreen: NavGraphScreen): Boolean =
     currentBackStackEntry?.isInitialStackFirstScreen(initialScreen) == true
 
 val NavController.isStackFirstScreen: Boolean
     get() = currentBackStackEntry?.isStackFirstScreen == true
 
-fun NavBackStackEntry.isInitialStackFirstScreen(initialScreen: Screen): Boolean =
+fun NavBackStackEntry.isInitialStackFirstScreen(initialScreen: NavGraphScreen): Boolean =
     isStackFirstScreen && destination.parent?.startDestinationRoute == initialScreen.name
 
 val NavBackStackEntry.isStackFirstScreen: Boolean

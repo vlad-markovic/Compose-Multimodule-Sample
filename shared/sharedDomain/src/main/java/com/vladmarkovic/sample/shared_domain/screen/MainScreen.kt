@@ -1,6 +1,6 @@
 package com.vladmarkovic.sample.shared_domain.screen
 
-sealed interface MainScreen : Screen {
+sealed interface MainScreen : NavGraphScreen {
 
     enum class PostsScreen : MainScreen {
         FEED_SCREEN,
