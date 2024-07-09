@@ -15,8 +15,9 @@ class ScaffoldData(
         topBarTitle: StrOrRes?,
         upButton: UpButton? = null,
         menuItems: List<MenuItem>? = null,
-        drawerItems: List<DrawerItem>? = null
-    ) : this(TopBarData(topBarTitle, upButton, menuItems), DrawerData(drawerItems))
+        drawerItems: List<DrawerItem>? = null,
+        topBarTransitionDirection: Int = 0,
+    ) : this(TopBarData(topBarTitle, upButton, menuItems, topBarTransitionDirection), DrawerData(drawerItems))
 }
 
 class DrawerData(val drawerItems: List<DrawerItem>?)

@@ -64,7 +64,8 @@ fun CountryComparisonScreen(
                     CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
                     CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
                 ),
-                drawerItems = defaultDrawerItems(viewModel)
+                drawerItems = defaultDrawerItems(viewModel),
+                topBarTransitionDirection = -1,
             )
         )
     }

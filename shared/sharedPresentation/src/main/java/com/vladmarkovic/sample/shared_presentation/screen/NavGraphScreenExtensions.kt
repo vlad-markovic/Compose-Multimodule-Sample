@@ -16,7 +16,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.vladmarkovic.sample.shared_domain.screen.MainScreen
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_presentation.compose.opposite
+import com.vladmarkovic.sample.shared_presentation.compose.animation.opposite
 
 
 val NavGraphScreen.argNames: List<String>? get() =

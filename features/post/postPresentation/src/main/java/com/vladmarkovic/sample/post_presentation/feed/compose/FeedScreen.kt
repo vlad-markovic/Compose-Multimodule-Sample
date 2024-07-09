@@ -47,7 +47,8 @@ fun FeedScreen(
             ScaffoldData(
                 topBarTitle = StrOrRes.res(R.string.feed_screen_title),
                 upButton = UpButton.DrawerButton(viewModel),
-                drawerItems = defaultDrawerItems(viewModel)
+                drawerItems = defaultDrawerItems(viewModel),
+                topBarTransitionDirection = 1,
             )
         )
     }

@@ -3,7 +3,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose
 
 import android.app.Activity
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -32,16 +31,6 @@ fun Modifier.padding(
 ): Modifier = this.then(
     Modifier.padding(start = start, end = end, top = top, bottom = bottom)
 )
-
-val AnimatedContentTransitionScope.SlideDirection.opposite: AnimatedContentTransitionScope.SlideDirection get() = when (this) {
-    AnimatedContentTransitionScope.SlideDirection.Down -> AnimatedContentTransitionScope.SlideDirection.Up
-    AnimatedContentTransitionScope.SlideDirection.Up -> AnimatedContentTransitionScope.SlideDirection.Down
-    AnimatedContentTransitionScope.SlideDirection.Right -> AnimatedContentTransitionScope.SlideDirection.Left
-    AnimatedContentTransitionScope.SlideDirection.Left -> AnimatedContentTransitionScope.SlideDirection.Right
-    AnimatedContentTransitionScope.SlideDirection.Start -> AnimatedContentTransitionScope.SlideDirection.End
-    AnimatedContentTransitionScope.SlideDirection.End -> AnimatedContentTransitionScope.SlideDirection.Start
-    else -> throw IllegalArgumentException("Illegal AnimatedContentTransitionScope.SlideDirection $this to get opposite.")
-}
 
 @Composable
 fun LogComposition(what: String) {
