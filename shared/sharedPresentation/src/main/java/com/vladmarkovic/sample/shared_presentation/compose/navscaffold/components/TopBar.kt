@@ -4,7 +4,6 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold.componen
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
@@ -39,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.vladmarkovic.sample.shared_presentation.R.string
+import com.vladmarkovic.sample.shared_presentation.compose.animation.DefaultScreenTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.SlideContent
 import com.vladmarkovic.sample.shared_presentation.compose.animation.SlideTransition
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
@@ -56,7 +56,7 @@ fun DefaultTopBar(
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
-    slideTransition: SlideTransition = remember { SlideTransition(tween(200)) }
+    slideTransition: SlideTransition = DefaultScreenTransition.transition
 ) {
     if (data != null) {
         SlideContent(

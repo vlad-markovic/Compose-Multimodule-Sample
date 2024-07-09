@@ -5,8 +5,3 @@ configurePresentationModule(includeSharedPresentation = false)
 androidLibrary {
     namespace = "com.vladmarkovic.sample.shared_presentation"
 }
-
-dependencies {
-    implementation(Dependencies.navigation.runtime)
-    implementation(Dependencies.navigation.compose)
-}

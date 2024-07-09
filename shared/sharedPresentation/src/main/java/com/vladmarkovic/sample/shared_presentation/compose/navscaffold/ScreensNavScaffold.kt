@@ -19,9 +19,10 @@ import androidx.navigation.compose.NavHost
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
+import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 
 
 @Composable
@@ -45,6 +46,7 @@ fun ScreensNavScaffold(
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
     bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    routeDataResolver: (NavGraphScreen) -> ScreenRouteData,
 ) {
     val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
     NavScaffold(
@@ -69,10 +71,10 @@ fun ScreensNavScaffold(
     ) { paddingValues, actionHandler ->
         NavHost(
             navController = navArgs.navController,
-            startDestination = initialScreen.name,
+            startDestination = routeDataResolver(initialScreen).route,
             modifier = Modifier.padding(paddingValues),
         ) {
-            composeNavGraph(screenContentResolver, allScreens, actionHandler)
+            composeNavGraph(screenContentResolver, allScreens, actionHandler, routeDataResolver)
         }
     }
 }

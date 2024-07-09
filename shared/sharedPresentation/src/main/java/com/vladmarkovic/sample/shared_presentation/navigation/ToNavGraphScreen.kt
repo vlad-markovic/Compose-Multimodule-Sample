@@ -2,21 +2,11 @@
 
 package com.vladmarkovic.sample.shared_presentation.navigation
 
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
-import com.vladmarkovic.sample.shared_presentation.screen.routeArgs
+import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 
 /** For typing and scoping screen navigation actions for navigating to [NavGraphScreen]. */
-abstract class ToNavGraphScreen(val screen: NavGraphScreen) : NavigationAction {
-
-    private var _args: List<String>? = listOf(screen.ordinal.toString())
-    val args: List<String>? get() = _args
-    constructor(screen: NavGraphScreen, arg: String) : this(screen) {
-        _args = _args?.let { it + arg } ?: listOf(arg)
-    }
-    constructor(screen: NavGraphScreen, args: List<String>) : this(screen) {
-        _args = _args?.let { it + args } ?: args
-    }
+abstract class ToNavGraphScreen(val screen: NavGraphScreen, val args: List<String>? = null) : NavigationAction {
+    constructor(screen: NavGraphScreen, arg: String) : this(screen, listOf(arg))
+    abstract val route: String
 }
-
-val ToNavGraphScreen.route: String get() = screen.name + screen.routeArgs(args)

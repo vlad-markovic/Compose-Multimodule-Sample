@@ -1,5 +1,5 @@
 package com.vladmarkovic.sample.shared_presentation.screen
 
-enum class ScreenArgKeys {
-    POST, COUNTRY_INFO, ORDINAL
+enum class ScreenArgNames {
+    POST, COUNTRY_INFO
 }

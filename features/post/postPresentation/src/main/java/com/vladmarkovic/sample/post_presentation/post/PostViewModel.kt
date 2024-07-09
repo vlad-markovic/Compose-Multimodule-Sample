@@ -16,7 +16,8 @@ import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
-import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
+import com.vladmarkovic.sample.shared_presentation.screen.DefaultScreenArgNames
+import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +36,7 @@ class PostViewModel @Inject constructor(
     connection: NetworkConnectivity
 ) : BriefActionViewModel() {
 
-    val post: Post = Json.decodeFromString<PostArg>(state.get<String>(ScreenArgKeys.POST.name)!!)
+    val post: Post = Json.decodeFromString<PostArg>(state.get<String>(ScreenArgNames.POST.name)!!)
 
     private val _authorResult: MutableStateFlow<Result<Author>?> = MutableStateFlow(null)
 
@@ -81,6 +82,6 @@ class PostViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
 
-        state[ScreenArgKeys.POST.name] = null
+        state[ScreenArgNames.POST.name] = null
     }
 }

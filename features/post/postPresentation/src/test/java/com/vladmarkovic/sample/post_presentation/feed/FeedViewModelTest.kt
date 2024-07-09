@@ -3,16 +3,21 @@
 package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.lifecycle.SavedStateHandle
+import com.vladmarkovic.sample.post_domain.PostRepository
+import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.FakePostRepository
 import com.vladmarkovic.sample.post_presentation.FakePostRepository.Companion.FAKE_FETCH_DELAY
 import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
 import com.vladmarkovic.sample.post_presentation.fakePost
 import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
-import com.vladmarkovic.sample.post_domain.PostRepository
-import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.shared_domain.model.DataSource
-import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
-import com.vladmarkovic.sample.shared_test.*
+import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
+import com.vladmarkovic.sample.shared_test.CustomizableAllTestSetupExtension
+import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
+import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
+import com.vladmarkovic.sample.shared_test.assertValueEquals
+import com.vladmarkovic.sample.shared_test.setupCoroutines
+import com.vladmarkovic.sample.shared_test.setupLogger
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -58,7 +63,7 @@ class FeedViewModelTest {
         mockSavedStateHandle = mockk()
         testNetworkConnectivity = TestNetworkConnectivity()
 
-        every { mockSavedStateHandle.set<Post>(ScreenArgKeys.POST.name, fakePost) }.answers { }
+        every { mockSavedStateHandle.set<Post>(ScreenArgNames.POST.name, fakePost) }.answers { }
 
         viewModel = FeedViewModel(
             fakePostRepository,

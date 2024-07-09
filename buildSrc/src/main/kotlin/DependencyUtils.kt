@@ -61,6 +61,8 @@ fun DependencyHandler.implementationCompose() {
     implementation(Dependencies.compose.material)
     implementation(Dependencies.compose.accompanist.swipeRefresh)
     implementation(Dependencies.compose.accompanist.systemUiController)
+    implementation(Dependencies.navigation.runtime)
+    implementation(Dependencies.navigation.compose)
 }
 
 fun DependencyHandler.testImplementationAll() {

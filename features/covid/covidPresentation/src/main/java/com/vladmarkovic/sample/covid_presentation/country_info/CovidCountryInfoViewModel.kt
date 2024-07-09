@@ -5,7 +5,7 @@ package com.vladmarkovic.sample.covid_presentation.country_info
 import androidx.lifecycle.SavedStateHandle
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgKeys
+import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -16,12 +16,12 @@ class CovidCountryInfoViewModel @Inject constructor(
 ) : BriefActionViewModel() {
 
     val info: CountryCovidInfo = Json.decodeFromString(
-        state.get<String>(ScreenArgKeys.COUNTRY_INFO.name)!!
+        state.get<String>(ScreenArgNames.COUNTRY_INFO.name)!!
     )
 
     override fun onCleared() {
         super.onCleared()
 
-        state[ScreenArgKeys.COUNTRY_INFO.name] = null
+        state[ScreenArgNames.COUNTRY_INFO.name] = null
     }
 }
