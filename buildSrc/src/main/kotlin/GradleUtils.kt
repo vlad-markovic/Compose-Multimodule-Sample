@@ -101,6 +101,12 @@ fun GradleProject.configureAndroidModule() {
             implementation(Dependencies.hilt.dagger.android)
             kapt(Dependencies.hilt.dagger.androidCompiler)
         }
+
+        lint {
+            ignoreWarnings = false
+            warningsAsErrors = true
+            abortOnError = true
+        }
     }
 }
 

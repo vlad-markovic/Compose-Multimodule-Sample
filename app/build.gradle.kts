@@ -52,6 +52,12 @@ android {
     packaging {
         resources.excludes.addAll(excludePackagingOptions)
     }
+
+    lint {
+        ignoreWarnings = false
+        warningsAsErrors = true
+        abortOnError = true
+    }
 }
 
 dependencies {
