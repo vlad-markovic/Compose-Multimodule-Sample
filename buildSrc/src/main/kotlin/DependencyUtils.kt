@@ -54,7 +54,7 @@ fun DependencyHandler.implementationRoom() {
 }
 
 fun DependencyHandler.implementationCompose() {
-    implementation(Dependencies.compose.bom)
+    implementation(platform(Dependencies.compose.bom))
     implementation(Dependencies.compose.lifecycle)
     implementation(Dependencies.compose.ui)
     implementation(Dependencies.compose.ui.toolingPreview)
