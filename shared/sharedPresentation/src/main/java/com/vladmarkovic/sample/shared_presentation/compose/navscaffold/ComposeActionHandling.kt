@@ -6,13 +6,12 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
-import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
-import com.vladmarkovic.sample.shared_presentation.compose.di.ScreenContentResolverEntryPoint
+import com.vladmarkovic.sample.shared_presentation.compose.di.inject
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
@@ -21,14 +20,14 @@ import com.vladmarkovic.sample.shared_presentation.navigation.ToNavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
+import com.vladmarkovic.sample.shared_presentation.screen.routeWithArgs
 import com.vladmarkovic.sample.shared_presentation.util.handleTopScreenNavigationAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun rememberScreenContentResolver(key: String? = null): ComposeScreenContentResolver = remember(key) {
-    EntryPointAccessor.fromApplication(ScreenContentResolverEntryPoint::class.java).screenContentResolver()
-}
+fun injectScreenContentResolver(): ComposeScreenContentResolver =
+    inject<ComposeScreenContentResolver, ComposeScreenContentResolver.Provider>()
 
 @Composable
 fun rememberScaffoldChangesHandler(
@@ -83,9 +82,9 @@ internal fun ComposeNavArgs.handleAction(action: BriefAction, bubbleUp: (BriefAc
     }
 }
 
-/** Branch out handling of different types of [NavigationAction]s. */
+/** Branch out handling of different types of [BriefAction.NavigationAction]s. */
 private fun ComposeNavArgs.navigate(action: BriefAction.NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
-    is ToNavGraphScreen -> navController.navigate(action.route)
+    is ToNavGraphScreen -> navController.navigate(action.routeWithArgs)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
     else -> bubbleUp(action)
 }

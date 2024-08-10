@@ -2,6 +2,12 @@
 
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerDefaults
@@ -17,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
@@ -25,6 +32,10 @@ import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
+import com.vladmarkovic.sample.shared_presentation.compose.animation.slideEnterTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.slideExitTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.slidePopEnterTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.slidePopExitTransition
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
@@ -70,6 +81,10 @@ fun DefaultTabsNavScaffold(
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
         drawerContent = remember(drawerData) { drawerData?.drawerItems?.let {{ DefaultDrawer(it) }} },
         bubbleUp = scaffoldChangesHandler,
+        enterTransition = { slideEnterTransition() },
+        exitTransition = { slideExitTransition() },
+        popEnterTransition = { slidePopEnterTransition() },
+        popExitTransition = { slidePopExitTransition() },
         routeDataResolver = routeDataResolver
     )
 }
@@ -97,9 +112,17 @@ fun TabsNavScaffold(
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
     bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+        { fadeIn(animationSpec = tween(700)) },
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+        { fadeOut(animationSpec = tween(700)) },
+    popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+        enterTransition,
+    popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+        exitTransition,
     routeDataResolver: (NavGraphScreen) -> ScreenRouteData
 ) {
-    val screenContentResolver: ComposeScreenContentResolver = rememberScreenContentResolver()
+    val screenContentResolver: ComposeScreenContentResolver = injectScreenContentResolver()
     val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(
         modifier = modifier,
@@ -125,10 +148,14 @@ fun TabsNavScaffold(
             navController = navArgs.navController,
             startDestination = initialTab.name,
             modifier = Modifier.padding(paddingValues),
+            enterTransition = enterTransition,
+            exitTransition = exitTransition,
+            popEnterTransition = popEnterTransition,
+            popExitTransition = popExitTransition,
         ) {
             allTabs.forEach { tab ->
                 navigation(
-                    startDestination = routeDataResolver(tab.initialScreen).route,
+                    startDestination = routeDataResolver(tab.initialScreen).routeWithPlaceholders,
                     route = tab.name
                 ) {
                     composeNavGraph(screenContentResolver, tab.screens, actionHandler, routeDataResolver)

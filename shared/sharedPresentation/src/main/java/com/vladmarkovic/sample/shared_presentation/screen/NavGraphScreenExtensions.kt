@@ -16,7 +16,7 @@ fun stringArg(argName: String, default: String) =
         defaultValue = default
     }
 
-/** i.e. SCREEN=%s&ORDINAL=%s */
+/** i.e. SCREEN=%s&STACK_ORDINAL=%s */
 internal fun argsFormat(argNames: List<String>?): String = argNames
     ?.joinToString("&") { "${it}=%s" }
     ?: ""
@@ -24,4 +24,5 @@ internal fun argsFormat(argNames: List<String>?): String = argNames
 internal fun joinArgs(argNamesWithArg: Map<String, String>): String =
     argNamesWithArg.map { "${it.key}=${it.value}" }.joinToString("&")
 
-internal val Bundle?.argOrdinal get() = this?.getString(DefaultScreenArgNames.ORDINAL.name)?.toIntOrNull() ?: 0
+internal val Bundle?.screenStackOrdinal get() =
+    this?.getString(DefaultScreenArgNames.STACK_ORDINAL.name)?.toIntOrNull() ?: 0

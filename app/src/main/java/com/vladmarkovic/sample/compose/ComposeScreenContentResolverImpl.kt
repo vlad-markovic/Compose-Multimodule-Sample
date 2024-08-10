@@ -12,10 +12,10 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@ViewModelScoped
 class ComposeScreenContentResolverImpl @Inject constructor(): ComposeScreenContentResolver {
     @Composable
     override fun NavGraphScreen.Content(bubbleUp: (BriefAction) -> Unit) = when (this) {

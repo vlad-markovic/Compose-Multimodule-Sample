@@ -15,7 +15,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setComposeContentView {
-            DefaultScreensNavScaffold(SettingsScreen.entries) { it.routeData }
+            DefaultScreensNavScaffold(SettingsScreen.entries) { it.routeData() }
         }
     }
 }

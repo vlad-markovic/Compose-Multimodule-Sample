@@ -5,13 +5,11 @@ package com.vladmarkovic.sample.di
 import android.content.Context
 import com.vladmarkovic.sample.connectivity.AppNetworkConnectivity
 import com.vladmarkovic.sample.log.TimberLogger
-import com.vladmarkovic.sample.compose.ComposeScreenContentResolverImpl
 import com.vladmarkovic.sample.nav.TopNavHandler
 import com.vladmarkovic.sample.shared_domain.AppSystem
 import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.shared_domain.log.Logger
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import dagger.Module
 import dagger.Provides
@@ -40,10 +38,6 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLogger(logger: TimberLogger): Logger = logger
-
-    @Singleton
-    @Provides
-    fun provideScreenContentResolver(resolver: ComposeScreenContentResolverImpl): ComposeScreenContentResolver = resolver
 
     @Singleton
     @Provides
