@@ -42,7 +42,7 @@ private val NavGraphScreen.defaultArgNames: Set<String> get() = setOf(DefaultScr
 /** Map of arg names and default values. For default args, the actual value is the same as the default value. */
 private fun NavGraphScreen.defaultArgs(
     stackOrdinal: Int? = null
-): Map<String, String> = stackOrdinal?.let { stackOrdinal ->
+): Map<String, String> = stackOrdinal?.let {
     mapOf(DefaultScreenArgNames.STACK_ORDINAL.name to stackOrdinal.toString())
 } ?: emptyMap()
 

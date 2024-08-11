@@ -8,5 +8,4 @@ class TopBarData(
     val title: StrOrRes? = null,
     val upButton: UpButton? = null,
     val menuItems: List<MenuItem>? = null,
-    val transitionDirection: Int = 0,
 )

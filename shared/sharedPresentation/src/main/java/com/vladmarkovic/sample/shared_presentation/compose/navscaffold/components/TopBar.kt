@@ -2,7 +2,6 @@
 
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,9 +37,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.vladmarkovic.sample.shared_presentation.R.string
-import com.vladmarkovic.sample.shared_presentation.compose.animation.DefaultScreenTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.SlideContent
-import com.vladmarkovic.sample.shared_presentation.compose.animation.SlideTransition
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
@@ -52,37 +48,29 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 @Composable
 fun DefaultTopBar(
     data: TopBarData?,
-    backgroundColor: Color,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = AppColor.Grey900,
     textAlign: TextAlign = TextAlign.Start,
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
-    slideTransition: SlideTransition = DefaultScreenTransition.transition
 ) {
     if (data != null) {
-        SlideContent(
-            target = data.transitionDirection,
-            increaseDirection = AnimatedContentTransitionScope.SlideDirection.End,
-            slideInTransition = slideTransition,
-            slideOutTransition = slideTransition,
-        ) {
-            TopAppBar(
-                modifier = modifier,
-                backgroundColor = backgroundColor,
-                navigationIcon = { data.upButton?.let { UpButton(it) } },
-                actions = { data.menuItems?.let { DefaultMenu(it) } },
-                elevation = elevation,
-                title = {
-                    Text(
-                        modifier = modifier.then(Modifier.fillMaxWidth()),
-                        text = data.title?.get(LocalContext.current).orEmpty(),
-                        textAlign = textAlign,
-                        style = AppTheme.typography.h5,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-            )
-        }
+        TopAppBar(
+            modifier = modifier.then(Modifier.fillMaxWidth()),
+            backgroundColor = backgroundColor,
+            navigationIcon = { data.upButton?.let { UpButton(it) } },
+            actions = { data.menuItems?.let { DefaultMenu(it) } },
+            elevation = elevation,
+            title = {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = data.title?.get(LocalContext.current).orEmpty(),
+                    textAlign = textAlign,
+                    style = AppTheme.typography.h5,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+        )
     }
 }
 
@@ -102,7 +90,7 @@ fun UpButton(upButton: UpButton?) {
 @Preview
 @Composable
 private fun PreviewTopBar() {
-    DefaultTopBar(TopBarData(StrOrRes.str("Top Title")), AppColor.Grey900)
+    DefaultTopBar(TopBarData(StrOrRes.str("Top Title")))
 }
 
 @Composable

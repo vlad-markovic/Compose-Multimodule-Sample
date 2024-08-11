@@ -1,23 +1,24 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
+import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 
 class ScaffoldData(
-    val topBar: TopBarData,
-    val drawerItems: DrawerData,
+    val topBar: TopBarData?,
+    val drawerItems: DrawerData?,
 ): BriefAction.DisplayAction {
     constructor(
-        topBarTitle: StrOrRes?,
+        topBarTitle: StrOrRes? = null,
         upButton: UpButton? = null,
         menuItems: List<MenuItem>? = null,
         drawerItems: List<DrawerItem>? = null,
-        topBarTransitionDirection: Int = 0,
-    ) : this(TopBarData(topBarTitle, upButton, menuItems, topBarTransitionDirection), DrawerData(drawerItems))
+    ) : this(TopBarData(topBarTitle, upButton, menuItems), DrawerData(drawerItems))
+
+    constructor(drawerItems: List<DrawerItem>) : this(null, DrawerData(drawerItems))
 }
 
 class DrawerData(val drawerItems: List<DrawerItem>?)

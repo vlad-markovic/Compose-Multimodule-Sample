@@ -26,7 +26,6 @@ fun SettingsTwoScreen(
             ScaffoldData(
                 topBarTitle = "Settings Two".str,
                 upButton = UpButton.BackButton(viewModel),
-                topBarTransitionDirection = -1,
             )
         )
     }

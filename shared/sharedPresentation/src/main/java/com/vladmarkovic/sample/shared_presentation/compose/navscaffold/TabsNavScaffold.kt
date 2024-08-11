@@ -78,12 +78,10 @@ fun DefaultTabsNavScaffold(
         initialTab = initialTab,
         navArgs = navArgs,
         tabNav = tabNav,
-        topBar = remember {{
-            DefaultTopBar(
-                data = scaffoldData.topBarData.safeValue,
-                backgroundColor = AppColor.Grey900
-            )
-        }},
+        topBar = {
+            val topBarData = scaffoldData.topBarData.safeValue
+            if (topBarData != null) DefaultTopBar(topBarData) else Unit
+        },
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
         drawerContent = remember(drawerData) { drawerData?.drawerItems?.let {{ DefaultDrawer(it) }} },
         bubbleUp = scaffoldChangesHandler,

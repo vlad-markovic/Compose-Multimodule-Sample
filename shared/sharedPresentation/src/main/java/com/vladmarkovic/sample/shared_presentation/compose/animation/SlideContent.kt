@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavBackStackEntry
+import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_presentation.screen.screenStackOrdinal
 
 object DefaultScreenTransition {
@@ -70,7 +71,7 @@ fun <T : Comparable<T>> SlideContent(
     val transitionSpec: AnimatedContentTransitionScope<T>.() -> ContentTransform = {
         slideTransform(slideInTransition, slideOutTransition, extraEnterTransition, extraExitTransition, increaseDirection)
     }
-    SlideContent(target, transitionSpec, modifier, contentAlignment, label, contentKey, content)
+    AnimatedContent(target, modifier, { transitionSpec(this) }, contentAlignment, label, contentKey, content)
 }
 
 /**
@@ -94,31 +95,11 @@ fun <T> SlideContent(
     val transitionSpec: AnimatedContentTransitionScope<T>.() -> ContentTransform = {
         slideTransform(direction, slideInTransition, slideOutTransition, extraEnterTransition, extraExitTransition)
     }
-    SlideContent(target, transitionSpec, modifier, contentAlignment, label, contentKey, content)
+    AnimatedContent(target, modifier, transitionSpec, contentAlignment, label, contentKey, content)
 }
 
-@Composable
-private fun <T> SlideContent(
-    target: T,
-    transitionSpec: AnimatedContentTransitionScope<T>.() -> ContentTransform,
-    modifier: Modifier = Modifier,
-    contentAlignment: Alignment,
-    label: String = "SlideContent",
-    contentKey: (targetState: T) -> Any? = { it },
-    content: @Composable AnimatedVisibilityScope.(T) -> Unit
-) {
-    AnimatedContent(
-        targetState = target,
-        transitionSpec = { transitionSpec(this) },
-        modifier = modifier,
-        contentAlignment = contentAlignment,
-        label = label,
-        contentKey = contentKey,
-        content = content,
-    )
-}
 
-private fun <T: Comparable<T>> AnimatedContentTransitionScope<T>.slideTransform(
+fun <T: Comparable<T>> AnimatedContentTransitionScope<T>.slideTransform(
     slideInTransition: SlideTransition?,
     slideOutTransition: SlideTransition?,
     extraEnterTransition: EnterTransition?,
@@ -213,5 +194,6 @@ private val AnimatedContentTransitionScope<NavBackStackEntry>.isFirstScreen
 // endregion slide transition
 
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.log(from: String) {
-//    Lumber.e("$from, inSameStack: $inSameStack ${initialState.destination.route} ${targetState.destination.route}")
+    Lumber.e("$from, inSameStack: $inSameStack ${initialState.destination.route} ${targetState.destination.route}")
+    Lumber.e("$from, ${initialState.arguments.screenStackOrdinal} ${targetState.arguments.screenStackOrdinal}")
 }

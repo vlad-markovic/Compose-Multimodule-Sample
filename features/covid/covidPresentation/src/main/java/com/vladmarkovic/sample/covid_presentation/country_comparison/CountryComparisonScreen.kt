@@ -47,6 +47,8 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldD
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
@@ -56,28 +58,31 @@ fun CountryComparisonScreen(
     viewModel: CountryComparisonViewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {
-        bubbleUp(
-            ScaffoldData(
-                topBarTitle = StrOrRes.res(R.string.country_comparison_screen_title),
-                upButton = UpButton.DrawerButton(viewModel),
-                menuItems = listOf(
+        bubbleUp(ScaffoldData(defaultDrawerItems(viewModel)))
+    }
+
+    Column(Modifier.fillMaxSize()) {
+        DefaultTopBar(
+            TopBarData(
+                StrOrRes.res(R.string.country_comparison_screen_title),
+                UpButton.DrawerButton(viewModel),
+                listOf(
                     CountryComparisonMenu.GroupByContinent(viewModel::groupByContinent, viewModel.groupByContinent),
                     CountryComparisonMenu.Sort(viewModel::sortAscending, viewModel.sortAscending)
-                ),
-                drawerItems = defaultDrawerItems(viewModel),
-                topBarTransitionDirection = -1,
+                )
             )
         )
+
+        CountryComparisonScreen(
+            showLoading = viewModel.showLoading.safeValue,
+            items = viewModel.items.safeValue,
+            sortBy = viewModel.sortBy.safeValue,
+            onSortByChanged = viewModel::sortBy,
+            onOpenCountryDetail = { countryCovidInfo ->
+                viewModel.navigate(ToCountryInfoScreen(countryCovidInfo))
+            }
+        )
     }
-    CountryComparisonScreen(
-        showLoading = viewModel.showLoading.safeValue,
-        items = viewModel.items.safeValue,
-        sortBy = viewModel.sortBy.safeValue,
-        onSortByChanged = viewModel::sortBy,
-        onOpenCountryDetail = { countryCovidInfo ->
-            viewModel.navigate(ToCountryInfoScreen(countryCovidInfo))
-        }
-    )
 }
 
 @Composable

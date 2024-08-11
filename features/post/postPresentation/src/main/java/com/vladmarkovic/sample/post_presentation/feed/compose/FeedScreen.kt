@@ -33,6 +33,8 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.compose.padding
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 
@@ -43,22 +45,22 @@ fun FeedScreen(
     viewModel: FeedViewModel = actionViewModel<FeedViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {
-        bubbleUp(
-            ScaffoldData(
-                topBarTitle = StrOrRes.res(R.string.feed_screen_title),
-                upButton = UpButton.DrawerButton(viewModel),
-                drawerItems = defaultDrawerItems(viewModel),
-                topBarTransitionDirection = 1,
-            )
+        bubbleUp(ScaffoldData(drawerItems = defaultDrawerItems(viewModel)))
+    }
+
+    Column(Modifier.fillMaxSize()) {
+        DefaultTopBar(
+            TopBarData(StrOrRes.res(R.string.feed_screen_title), UpButton.DrawerButton(viewModel))
+        )
+
+        FeedScreen(
+            loading = viewModel.loading.safeValue,
+            posts = viewModel.posts.safeValue,
+            error = viewModel.error.safeValue,
+            onRefresh = { viewModel.refreshPosts(DataSource.REMOTE) },
+            onPostClick = { viewModel.navigate(ToPostScreen(it)) }
         )
     }
-    FeedScreen(
-        loading = viewModel.loading.safeValue,
-        posts = viewModel.posts.safeValue,
-        error = viewModel.error.safeValue,
-        onRefresh = { viewModel.refreshPosts(DataSource.REMOTE) },
-        onPostClick = { viewModel.navigate(ToPostScreen(it)) }
-    )
 }
 
 @Composable

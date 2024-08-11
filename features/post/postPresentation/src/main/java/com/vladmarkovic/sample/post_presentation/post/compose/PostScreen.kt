@@ -11,7 +11,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,12 +23,13 @@ import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.Error
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.compose.padding
 import com.vladmarkovic.sample.shared_presentation.compose.safeValue
 import java.io.IOException
@@ -39,21 +39,18 @@ fun PostScreen(
     bubbleUp: (BriefAction) -> Unit,
     viewModel: PostViewModel = actionViewModel<PostViewModel>(bubbleUp)
 ) {
-    LaunchedEffect(Unit) {
-        bubbleUp(
-            ScaffoldData(
-                topBarTitle = StrOrRes.res(R.string.post_screen_title),
-                upButton = UpButton.BackButton(viewModel),
-                topBarTransitionDirection = -1,
-            )
+    Column(Modifier.fillMaxSize()) {
+        DefaultTopBar(
+            TopBarData(StrOrRes.res(R.string.post_screen_title), UpButton.BackButton(viewModel))
+        )
+
+        PostScreen(
+            viewModel.post,
+            viewModel.authorResult.safeValue,
+            viewModel::getDetails,
+            viewModel::deletePost
         )
     }
-    PostScreen(
-        viewModel.post,
-        viewModel.authorResult.safeValue,
-        viewModel::getDetails,
-        viewModel::deletePost
-    )
 }
 
 @Composable

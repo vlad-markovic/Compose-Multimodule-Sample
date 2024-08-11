@@ -10,16 +10,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
+import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
+import com.vladmarkovic.sample.shared_presentation.compose.padding
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
-import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
-import com.vladmarkovic.sample.shared_presentation.compose.padding
 import com.vladmarkovic.sample.shared_presentation.util.str
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
@@ -29,15 +29,11 @@ fun CountryCovidInfoScreen(
     bubbleUp: (BriefAction) -> Unit,
     viewModel: CovidCountryInfoViewModel = actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
 ) {
-    LaunchedEffect(Unit) {
-        bubbleUp(
-            ScaffoldData(
-                topBarTitle = viewModel.info.country.str,
-                upButton = UpButton.BackButton(viewModel),
-            )
-        )
+    Column(Modifier.fillMaxSize()) {
+        DefaultTopBar(TopBarData(viewModel.info.country.str, UpButton.BackButton(viewModel)))
+
+        CountryCovidInfoScreen(viewModel.info)
     }
-    CountryCovidInfoScreen(viewModel.info)
 }
 
 @Composable
