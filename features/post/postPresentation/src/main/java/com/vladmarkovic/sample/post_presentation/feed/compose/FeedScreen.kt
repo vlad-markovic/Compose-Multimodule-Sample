@@ -82,7 +82,8 @@ private fun FeedScreen(
 @Composable
 private fun PostList(posts: List<Post>, onPostClick: (Post) -> Unit) {
     LazyColumn(
-        contentPadding = PaddingValues(vertical = Dimens.m)
+        contentPadding = PaddingValues(vertical = Dimens.m),
+        modifier = Modifier.fillMaxSize()
     ) {
         items(posts.size) { index ->
             val post = posts[index]

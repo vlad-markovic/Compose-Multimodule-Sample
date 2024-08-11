@@ -1,7 +1,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose.animation
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
@@ -18,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavBackStackEntry
-import com.vladmarkovic.sample.shared_presentation.screen.DefaultScreenArgNames
+import com.vladmarkovic.sample.shared_presentation.screen.screenStackOrdinal
 
 object DefaultScreenTransition {
     val enterDirection = SlideDirection.Start
@@ -168,29 +167,51 @@ private fun offset(length: Int, offsetMultiplier: Float, offsetExtra: Int) =
     (length * offsetMultiplier).toInt() + offsetExtra
 
 // region slide transition
-fun slideEnterTransition(): (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) = {
-    slideDirection(targetState.arguments, initialState.arguments)?.let { slideDirection ->
-        slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = slideDirection)
-    } ?: EnterTransition.None
-}
+fun AnimatedContentTransitionScope<NavBackStackEntry>.slideEnterTransition(
+    direction: SlideDirection = slideDirection
+): EnterTransition =
+    slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
+        .also { log("enter $direction") }
 
-fun slideExitTransition(): (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) = {
-    slideDirection(targetState.arguments, initialState.arguments)?.let { slideDirection ->
-        slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = slideDirection)
-    } ?: ExitTransition.None
-}
+fun AnimatedContentTransitionScope<NavBackStackEntry>.slideExitTransition(
+    direction: SlideDirection = slideDirection
+): ExitTransition =
+    slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
+        .also { log("exit $direction") }
 
-private fun slideDirection(target: Bundle?, initial: Bundle?): SlideDirection? =
-    slideDirection(target?.getString(DefaultScreenArgNames.TRANSITION_DIRECTION.name))
-        ?: slideDirection(initial?.getString(DefaultScreenArgNames.TRANSITION_DIRECTION.name))?.opposite
+fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopEnterTransition(
+    direction: SlideDirection = slidePopDirection
+): EnterTransition =
+    slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
+        .also { log("popEnter $direction") }
 
-private fun slideDirection(direction: String?): SlideDirection? = when(direction) {
-    SlideDirection.Left.toString() -> SlideDirection.Left
-    SlideDirection.Right.toString() -> SlideDirection.Right
-    SlideDirection.Up.toString() -> SlideDirection.Up
-    SlideDirection.Down.toString() -> SlideDirection.Down
-    SlideDirection.Start.toString() -> SlideDirection.Start
-    SlideDirection.End.toString() -> SlideDirection.End
-    else -> null
-}
+fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopExitTransition(
+    direction: SlideDirection = slidePopDirection
+): ExitTransition =
+    slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
+        .also { log("popExit $direction") }
+
+private val AnimatedContentTransitionScope<NavBackStackEntry>.slideDirection
+    get() = if (inSameStack) SlideDirection.Down else interStackSlideDirection
+
+private val AnimatedContentTransitionScope<NavBackStackEntry>.interStackSlideDirection
+    get() =
+        if (initialState.arguments.screenStackOrdinal < targetState.arguments.screenStackOrdinal) {
+            SlideDirection.Start
+        } else {
+            SlideDirection.End
+        }
+
+private val AnimatedContentTransitionScope<NavBackStackEntry>.slidePopDirection
+    get() = if (inSameStack) SlideDirection.Up else SlideDirection.End
+
+private val AnimatedContentTransitionScope<NavBackStackEntry>.inSameStack
+    get() = initialState.destination.parent?.route == targetState.destination.parent?.route
+
+private val AnimatedContentTransitionScope<NavBackStackEntry>.isFirstScreen
+    get() = targetState.destination.route == targetState.destination.parent?.route
 // endregion slide transition
+
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.log(from: String) {
+//    Lumber.e("$from, inSameStack: $inSameStack ${initialState.destination.route} ${targetState.destination.route}")
+}

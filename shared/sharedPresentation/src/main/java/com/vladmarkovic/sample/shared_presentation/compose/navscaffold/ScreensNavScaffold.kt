@@ -17,6 +17,7 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -26,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
@@ -63,7 +63,6 @@ fun ScreensNavScaffold(
         exitTransition,
     routeDataResolver: (NavGraphScreen) -> ScreenRouteData,
 ) {
-    val screenContentResolver: ComposeScreenContentResolver = injectScreenContentResolver()
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,
@@ -84,6 +83,11 @@ fun ScreensNavScaffold(
         contentColor = contentColor,
         bubbleUp = bubbleUp,
     ) { paddingValues, actionHandler ->
+        val data = remember(allScreens) {
+            allScreens.associateWith { screen ->
+                routeDataResolver(screen)
+            }
+        }
         NavHost(
             navController = navArgs.navController,
             startDestination = routeDataResolver(initialScreen).routeWithPlaceholders,
@@ -93,7 +97,7 @@ fun ScreensNavScaffold(
             popEnterTransition = popEnterTransition,
             popExitTransition = popExitTransition,
         ) {
-            composeNavGraph(screenContentResolver, allScreens, actionHandler, routeDataResolver)
+            composeNavGraph(allScreens, actionHandler, data)
         }
     }
 }

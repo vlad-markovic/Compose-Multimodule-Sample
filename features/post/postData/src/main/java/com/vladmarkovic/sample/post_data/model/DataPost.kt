@@ -2,7 +2,6 @@
 
 package com.vladmarkovic.sample.post_data.model
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.vladmarkovic.sample.post_data.PostDatabase
@@ -15,10 +14,8 @@ import kotlinx.serialization.Serializable
 data class DataPost(
     @PrimaryKey
     override val id: Int,
-    @NonNull
     override val userId: Int,
-    @NonNull
     override val title: String,
-    @NonNull @SerialName("body")
+    @SerialName("body")
     override val content: String
 ) : Post

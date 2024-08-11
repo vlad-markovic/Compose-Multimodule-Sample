@@ -31,7 +31,6 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.animation.slideEnterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.slideExitTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.slidePopEnterTransition
@@ -66,6 +65,13 @@ fun DefaultTabsNavScaffold(
     val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
     val drawerData = scaffoldData.drawerData.safeValue
+    val data = remember(allTabs) {
+        allTabs.associateWith { tab ->
+            tab.screens.associateWith { screen ->
+                routeDataResolver(screen)
+            }
+        }
+    }
 
     TabsNavScaffold(
         allTabs = allTabs,
@@ -85,7 +91,7 @@ fun DefaultTabsNavScaffold(
         exitTransition = { slideExitTransition() },
         popEnterTransition = { slidePopEnterTransition() },
         popExitTransition = { slidePopExitTransition() },
-        routeDataResolver = routeDataResolver
+        routeDataMap = data
     )
 }
 
@@ -120,9 +126,8 @@ fun TabsNavScaffold(
         enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         exitTransition,
-    routeDataResolver: (NavGraphScreen) -> ScreenRouteData
+    routeDataMap: Map<Tab, Map<NavGraphScreen, ScreenRouteData>>,
 ) {
-    val screenContentResolver: ComposeScreenContentResolver = injectScreenContentResolver()
     val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(
         modifier = modifier,
@@ -154,11 +159,12 @@ fun TabsNavScaffold(
             popExitTransition = popExitTransition,
         ) {
             allTabs.forEach { tab ->
+                val data = routeDataMap[tab]!!
                 navigation(
-                    startDestination = routeDataResolver(tab.initialScreen).routeWithPlaceholders,
+                    startDestination = data[tab.initialScreen]!!.routeWithPlaceholders,
                     route = tab.name
                 ) {
-                    composeNavGraph(screenContentResolver, tab.screens, actionHandler, routeDataResolver)
+                    composeNavGraph(tab.screens, actionHandler, data)
                 }
             }
         }

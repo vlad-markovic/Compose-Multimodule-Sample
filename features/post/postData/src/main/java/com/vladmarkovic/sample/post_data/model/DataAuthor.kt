@@ -2,7 +2,6 @@
 
 package com.vladmarkovic.sample.post_data.model
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.vladmarkovic.sample.post_data.PostDatabase
@@ -14,10 +13,7 @@ import kotlinx.serialization.Serializable
 data class DataAuthor(
     @PrimaryKey
     override val id: Int,
-    @NonNull
     override val name: String,
-    @NonNull
     override val username: String,
-    @NonNull
     override val email: String
 ) : Author

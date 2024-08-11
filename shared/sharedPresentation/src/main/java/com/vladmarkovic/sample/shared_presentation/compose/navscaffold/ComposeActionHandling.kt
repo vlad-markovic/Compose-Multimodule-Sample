@@ -5,13 +5,13 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
-import com.vladmarkovic.sample.shared_presentation.compose.di.inject
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.openDrawer
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
@@ -22,12 +22,20 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.screen.ToTab
 import com.vladmarkovic.sample.shared_presentation.screen.routeWithArgs
 import com.vladmarkovic.sample.shared_presentation.util.handleTopScreenNavigationAction
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
+
+
+@HiltViewModel
+internal class ComposeScreenContentResolverProvider @Inject constructor(
+    val resolver: ComposeScreenContentResolver
+) : ViewModel()
 
 @Composable
 fun injectScreenContentResolver(): ComposeScreenContentResolver =
-    inject<ComposeScreenContentResolver, ComposeScreenContentResolver.Provider>()
+    hiltViewModel<ComposeScreenContentResolverProvider>().resolver
 
 @Composable
 fun rememberScaffoldChangesHandler(

@@ -44,6 +44,7 @@ fun PostScreen(
             ScaffoldData(
                 topBarTitle = StrOrRes.res(R.string.post_screen_title),
                 upButton = UpButton.BackButton(viewModel),
+                topBarTransitionDirection = -1,
             )
         )
     }
