@@ -1,6 +1,7 @@
 package com.vladmarkovic.sample.shared_presentation.compose.animation
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
@@ -17,8 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavBackStackEntry
-import com.vladmarkovic.sample.shared_domain.log.Lumber
-import com.vladmarkovic.sample.shared_presentation.screen.screenStackOrdinal
+import com.vladmarkovic.sample.shared_presentation.tab.TabArgsNames
 
 object DefaultScreenTransition {
     val enterDirection = SlideDirection.Start
@@ -152,36 +152,29 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.slideEnterTransition(
     direction: SlideDirection = slideDirection
 ): EnterTransition =
     slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-        .also { log("enter $direction") }
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.slideExitTransition(
     direction: SlideDirection = slideDirection
 ): ExitTransition =
     slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-        .also { log("exit $direction") }
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopEnterTransition(
     direction: SlideDirection = slidePopDirection
 ): EnterTransition =
     slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-        .also { log("popEnter $direction") }
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopExitTransition(
     direction: SlideDirection = slidePopDirection
 ): ExitTransition =
     slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-        .also { log("popExit $direction") }
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.slideDirection
     get() = if (inSameStack) SlideDirection.Down else interStackSlideDirection
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.interStackSlideDirection
     get() =
-        if (initialState.arguments.screenStackOrdinal < targetState.arguments.screenStackOrdinal) {
-            SlideDirection.Start
-        } else {
-            SlideDirection.End
-        }
+        if (initialState.stackOrdinal < targetState.stackOrdinal) SlideDirection.Start
+        else SlideDirection.End
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.slidePopDirection
     get() = if (inSameStack) SlideDirection.Up else SlideDirection.End
@@ -191,9 +184,10 @@ private val AnimatedContentTransitionScope<NavBackStackEntry>.inSameStack
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.isFirstScreen
     get() = targetState.destination.route == targetState.destination.parent?.route
-// endregion slide transition
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.log(from: String) {
-    Lumber.e("$from, inSameStack: $inSameStack ${initialState.destination.route} ${targetState.destination.route}")
-    Lumber.e("$from, ${initialState.arguments.screenStackOrdinal} ${targetState.arguments.screenStackOrdinal}")
-}
+private val NavBackStackEntry.stackOrdinal: Int
+    get() = Uri.parse(destination.parent?.route)
+        .getQueryParameter(TabArgsNames.STACK_ORDINAL.name)
+        ?.toIntOrNull()
+        ?: 0
+// endregion slide transition

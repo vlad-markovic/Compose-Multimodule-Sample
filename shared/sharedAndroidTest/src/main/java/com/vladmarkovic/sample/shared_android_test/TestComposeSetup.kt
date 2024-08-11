@@ -13,6 +13,7 @@ import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.di.SetupWith
+import com.vladmarkovic.sample.shared_presentation.tab.route
 
 @Composable
 fun TestCompose(
@@ -23,12 +24,12 @@ fun TestCompose(
     val navController: NavHostController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = tab.name,
+        startDestination = tab.route,
         modifier = Modifier
     ) {
         navigation(
             startDestination = tab.initialScreen.name,
-            route = tab.name
+            route = tab.route
         ) {
             composable(
                 route = tab.initialScreen.name,

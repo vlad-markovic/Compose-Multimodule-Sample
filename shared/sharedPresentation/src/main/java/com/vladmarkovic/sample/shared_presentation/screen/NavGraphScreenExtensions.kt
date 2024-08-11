@@ -2,7 +2,6 @@
 
 package com.vladmarkovic.sample.shared_presentation.screen
 
-import android.os.Bundle
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -16,13 +15,5 @@ fun stringArg(argName: String, default: String) =
         defaultValue = default
     }
 
-/** i.e. SCREEN=%s&STACK_ORDINAL=%s */
-internal fun argsFormat(argNames: List<String>?): String = argNames
-    ?.joinToString("&") { "${it}=%s" }
-    ?: ""
-
 internal fun joinArgs(argNamesWithArg: Map<String, String>): String =
     argNamesWithArg.map { "${it.key}=${it.value}" }.joinToString("&")
-
-internal val Bundle?.screenStackOrdinal get() =
-    this?.getString(DefaultScreenArgNames.STACK_ORDINAL.name)?.toIntOrNull() ?: 0

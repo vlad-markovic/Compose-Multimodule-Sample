@@ -7,9 +7,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.vladmarkovic.sample.shared_domain.log.Lumber
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
+import com.vladmarkovic.sample.shared_presentation.tab.route
 
 
 fun NavController.onBack(isDrawerOpen: () -> Boolean, closeDrawer: () -> Unit) {
@@ -34,18 +34,11 @@ val NavBackStackEntry.isStackFirstScreen: Boolean
 
 private val NavDestination.topParent: NavGraph? get() = parent?.topParent()?.takeIf { it != this }
 
-private fun NavGraph.topParent(): NavGraph {
-    parentCounter++
-    Lumber.e("Parent$parentCounter: route: $$route, parent: ${parent?.route}, start: $startDestinationRoute")
-    return parent?.topParent() ?: this
-}
-
-private var parentCounter = 0
-
+private fun NavGraph.topParent(): NavGraph = parent?.topParent() ?: this
 
 /** Enables separate back stack navigation per tab. */
 fun NavController.navigate(tab: Tab) {
-    navigate(tab.name) {
+    navigate(tab.route) {
         // Separate stacks per tab.
         popUpTo(graph.findStartDestination().id) {
             // Save state to be able to restore when re-selecting..

@@ -46,7 +46,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewM
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
-import com.vladmarkovic.sample.shared_presentation.ui.theme.AppColor
+import com.vladmarkovic.sample.shared_presentation.tab.route
 import com.vladmarkovic.sample.shared_presentation.util.collectIn
 import com.vladmarkovic.sample.shared_presentation.util.navigate
 import kotlinx.coroutines.flow.Flow
@@ -149,7 +149,7 @@ fun TabsNavScaffold(
     ) { paddingValues, actionHandler ->
         NavHost(
             navController = navArgs.navController,
-            startDestination = initialTab.name,
+            startDestination = initialTab.route,
             modifier = Modifier.padding(paddingValues),
             enterTransition = enterTransition,
             exitTransition = exitTransition,
@@ -160,7 +160,7 @@ fun TabsNavScaffold(
                 val data = routeDataMap[tab]!!
                 navigation(
                     startDestination = data[tab.initialScreen]!!.routeWithPlaceholders,
-                    route = tab.name
+                    route = tab.route
                 ) {
                     composeNavGraph(tab.screens, actionHandler, data)
                 }

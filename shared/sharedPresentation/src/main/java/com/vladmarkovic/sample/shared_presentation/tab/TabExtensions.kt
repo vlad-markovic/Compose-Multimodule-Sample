@@ -17,3 +17,9 @@ val Tab.textRes: Int get() = when (this) {
     MainBottomTab.POSTS_TAB -> R.string.bottom_tab_posts
     MainBottomTab.COVID_TAB -> R.string.bottom_tab_covid
 }
+
+val Tab.route: String get() = "$name?${TabArgsNames.STACK_ORDINAL.name}=$ordinal"
+
+enum class TabArgsNames {
+    STACK_ORDINAL
+}

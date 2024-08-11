@@ -6,6 +6,7 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 
 sealed interface Tab {
     val name: String
+    val ordinal: Int
     val screens: List<NavGraphScreen>
     val initialScreen: NavGraphScreen get() = screens.first()
 }
