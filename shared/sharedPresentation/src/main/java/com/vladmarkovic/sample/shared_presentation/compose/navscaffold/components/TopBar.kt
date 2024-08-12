@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.vladmarkovic.sample.shared_presentation.R.string
-import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
@@ -156,7 +156,7 @@ fun DefaultMenu(menuItems: List<MenuItem>) {
                         }
                     }
                     is MenuItem.Toggle -> {
-                        val checked = menuItem.checked.safeValue
+                        val checked = menuItem.checked.lifecycleAwareValue
 
                         DropdownMenuItem(onClick = {
                             expanded.value = false

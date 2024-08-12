@@ -31,7 +31,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.compose.padding
-import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 import java.io.IOException
 
 @Composable
@@ -46,7 +46,7 @@ fun PostScreen(
 
         PostScreen(
             viewModel.post,
-            viewModel.authorResult.safeValue,
+            viewModel.authorResult.lifecycleAwareValue,
             viewModel::getDetails,
             viewModel::deletePost
         )

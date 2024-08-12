@@ -49,7 +49,7 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
 @Composable
@@ -74,9 +74,9 @@ fun CountryComparisonScreen(
         )
 
         CountryComparisonScreen(
-            showLoading = viewModel.showLoading.safeValue,
-            items = viewModel.items.safeValue,
-            sortBy = viewModel.sortBy.safeValue,
+            showLoading = viewModel.showLoading.lifecycleAwareValue,
+            items = viewModel.items.lifecycleAwareValue,
+            sortBy = viewModel.sortBy.lifecycleAwareValue,
             onSortByChanged = viewModel::sortBy,
             onOpenCountryDetail = { countryCovidInfo ->
                 viewModel.navigate(ToCountryInfoScreen(countryCovidInfo))

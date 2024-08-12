@@ -36,7 +36,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.compose.padding
-import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 
 
 @Composable
@@ -54,9 +54,9 @@ fun FeedScreen(
         )
 
         FeedScreen(
-            loading = viewModel.loading.safeValue,
-            posts = viewModel.posts.safeValue,
-            error = viewModel.error.safeValue,
+            loading = viewModel.loading.lifecycleAwareValue,
+            posts = viewModel.posts.lifecycleAwareValue,
+            error = viewModel.error.lifecycleAwareValue,
             onRefresh = { viewModel.refreshPosts(DataSource.REMOTE) },
             onPostClick = { viewModel.navigate(ToPostScreen(it)) }
         )

@@ -41,7 +41,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.safeValue
+import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
@@ -64,7 +64,6 @@ fun DefaultTabsNavScaffold(
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
     val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
-    val drawerData = scaffoldData.drawerData.safeValue
     val data = remember(allTabs) {
         allTabs.associateWith { tab ->
             tab.screens.associateWith { screen ->
@@ -79,11 +78,14 @@ fun DefaultTabsNavScaffold(
         navArgs = navArgs,
         tabNav = tabNav,
         topBar = {
-            val topBarData = scaffoldData.topBarData.safeValue
+            val topBarData = scaffoldData.topBarData.lifecycleAwareValue
             if (topBarData != null) DefaultTopBar(topBarData) else Unit
         },
+        drawerContent = {
+            val drawerData = scaffoldData.drawerData.lifecycleAwareValue
+            drawerData?.drawerItems?.let { DefaultDrawer(it) }
+        },
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
-        drawerContent = remember(drawerData) { drawerData?.drawerItems?.let {{ DefaultDrawer(it) }} },
         bubbleUp = scaffoldChangesHandler,
         enterTransition = { enterTransition() },
         exitTransition = { exitTransition() },
