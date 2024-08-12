@@ -1,6 +1,4 @@
-/** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
-
-package com.vladmarkovic.sample.shared_presentation.compose
+package com.vladmarkovic.sample.common.compose.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState

@@ -25,7 +25,6 @@ import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
-import com.vladmarkovic.sample.shared_presentation.compose.Error
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
@@ -35,8 +34,9 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.compose.padding
-import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
+import com.vladmarkovic.sample.common.compose.util.padding
+import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.shared_presentation.compose.components.Error
 
 
 @Composable

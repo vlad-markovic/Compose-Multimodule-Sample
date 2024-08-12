@@ -62,6 +62,7 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
         if (includeSharedPresentation) {
             implementationProject(Project.Shared.presentation)
         }
+        implementationProject(Project.Common.Compose)
         implementationProject(Project.Shared.domain)
         testImplementationProject(Project.SharedTest)
         androidTestImplementationProject(Project.SharedTest)

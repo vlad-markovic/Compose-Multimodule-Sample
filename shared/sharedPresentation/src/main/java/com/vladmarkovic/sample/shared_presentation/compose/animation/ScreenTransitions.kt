@@ -1,5 +1,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose.animation
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.EnterTransition
@@ -13,6 +14,8 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavBackStackEntry
+import com.vladmarkovic.sample.common.compose.animation.inSameStack
+import com.vladmarkovic.sample.shared_presentation.tab.TabArgsNames
 
 
 object DefaultScreenTransition {
@@ -70,4 +73,10 @@ private val AnimatedContentTransitionScope<NavBackStackEntry>.interStackSlideDir
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.slidePopDirection
     get() = if (inSameStack) SlideDirection.Up else SlideDirection.End
+
+val NavBackStackEntry.stackOrdinal: Int
+    get() = Uri.parse(destination.parent?.route)
+        .getQueryParameter(TabArgsNames.STACK_ORDINAL.name)
+        ?.toIntOrNull()
+        ?: 0
 // endregion slide transition

@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.compose
+package com.vladmarkovic.sample.common.compose.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -8,43 +8,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.vladmarkovic.sample.shared_presentation.R.string.button_retry_label
-import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
-
-@Composable
-fun Error(error: String, onRetry: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimens.m * 2)
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(end = Dimens.m)
-                .align(Alignment.CenterVertically),
-            text = error
-        )
-        Button(onRetry) {
-            Text(stringResource(button_retry_label))
-        }
-    }
-}
 
 @Composable
 fun AnimateSlide(

@@ -9,3 +9,4 @@ class TopBarData(
     val upButton: UpButton? = null,
     val menuItems: List<MenuItem>? = null,
 )
+

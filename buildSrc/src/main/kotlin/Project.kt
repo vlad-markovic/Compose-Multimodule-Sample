@@ -84,6 +84,8 @@ sealed interface Project: Named {
                 override val dirs: List<String> = super.dirs + "logging"
             }
         }
+
+        object Compose : Common("compose")
     }
 
     /** Included into all other projects (modules), per required layer. */

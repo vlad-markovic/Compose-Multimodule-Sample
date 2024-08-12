@@ -18,7 +18,6 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -31,19 +30,10 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.popEnterTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.popExitTransition
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
-import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 import com.vladmarkovic.sample.shared_presentation.tab.route
@@ -51,49 +41,6 @@ import com.vladmarkovic.sample.shared_presentation.util.collectIn
 import com.vladmarkovic.sample.shared_presentation.util.navigate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
-
-@Composable
-fun DefaultTabsNavScaffold(
-    allTabs: List<Tab>,
-    initialTab: Tab = allTabs.first(),
-    navArgs: ComposeNavArgs = rememberComposeNavArgs(),
-    tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
-    routeDataResolver: (NavGraphScreen) -> ScreenRouteData
-) {
-    val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
-    val scaffoldChangesHandler: (ViewAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
-
-    val data = remember(allTabs) {
-        allTabs.associateWith { tab ->
-            tab.screens.associateWith { screen ->
-                routeDataResolver(screen)
-            }
-        }
-    }
-
-    TabsNavScaffold(
-        allTabs = allTabs,
-        initialTab = initialTab,
-        navArgs = navArgs,
-        tabNav = tabNav,
-        topBar = {
-            val topBarData = scaffoldData.topBarData.lifecycleAwareValue
-            if (topBarData != null) DefaultTopBar(topBarData) else Unit
-        },
-        drawerContent = {
-            val drawerData = scaffoldData.drawerData.lifecycleAwareValue
-            drawerData?.drawerItems?.let { DefaultDrawer(it) }
-        },
-        bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
-        bubbleUp = scaffoldChangesHandler,
-        enterTransition = { enterTransition() },
-        exitTransition = { exitTransition() },
-        popEnterTransition = { popEnterTransition() },
-        popExitTransition = { popExitTransition() },
-        routeDataMap = data
-    )
-}
 
 @Composable
 fun TabsNavScaffold(
