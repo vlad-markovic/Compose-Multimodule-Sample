@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
@@ -40,9 +40,9 @@ fun injectScreenContentResolver(): ComposeScreenContentResolver =
 @Composable
 fun rememberScaffoldChangesHandler(
     scaffoldData: ScaffoldDataManager,
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     key: String? = null
-)  : (BriefAction) -> Unit =
+)  : (ViewAction) -> Unit =
     remember(key) {{ action ->
         when (action) {
             is ScaffoldData -> scaffoldData.update(action)
@@ -53,9 +53,9 @@ fun rememberScaffoldChangesHandler(
 @Composable
 fun <T> rememberTabNavHandler(
     tabNav: T,
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     key: String? = null
-)  : (BriefAction) -> Unit where T: ViewModel, T: MutableStateFlow<Tab> =
+)  : (ViewAction) -> Unit where T: ViewModel, T: MutableStateFlow<Tab> =
     remember(key) {{ action ->
         when (action) {
             is ToTab -> tabNav.navigate(action.tab)
@@ -67,9 +67,9 @@ fun <T> rememberTabNavHandler(
 fun rememberCommonActionsHandler(
     navArgs: ComposeNavArgs,
     scope: CoroutineScope,
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     key: String? = null
-)  : (BriefAction) -> Unit = remember(key) {{ action ->
+)  : (ViewAction) -> Unit = remember(key) {{ action ->
     when(action) {
         is CommonNavigationAction.Back -> navArgs.onBack(scope)
         is CommonNavigationAction.OpenDrawer -> navArgs.openDrawer(scope)
@@ -78,20 +78,20 @@ fun rememberCommonActionsHandler(
 }}
 
 @Composable
-fun rememberThrowingNoHandler(key: String? = null): (BriefAction) -> Unit =
+fun rememberThrowingNoHandler(key: String? = null): (ViewAction) -> Unit =
     remember(key) {{ throw IllegalStateException("Unhandled action: $it") }}
 
-internal fun ComposeNavArgs.handleAction(action: BriefAction, bubbleUp: (BriefAction) -> Unit) {
+internal fun ComposeNavArgs.handleAction(action: ViewAction, bubbleUp: (ViewAction) -> Unit) {
     Lumber.i("action: ${action.javaClass.simpleName}")
     return when (action) {
-        is BriefAction.NavigationAction -> navigate(action, bubbleUp)
+        is ViewAction.NavigationAction -> navigate(action, bubbleUp)
         is CommonDisplayAction -> handleCommonDisplayAction(action)
         else -> bubbleUp(action)
     }
 }
 
-/** Branch out handling of different types of [BriefAction.NavigationAction]s. */
-private fun ComposeNavArgs.navigate(action: BriefAction.NavigationAction, bubbleUp: (BriefAction) -> Unit) = when(action) {
+/** Branch out handling of different types of [ViewAction.NavigationAction]s. */
+private fun ComposeNavArgs.navigate(action: ViewAction.NavigationAction, bubbleUp: (ViewAction) -> Unit) = when(action) {
     is ToNavGraphScreen -> navController.navigate(action.routeWithArgs)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
     else -> bubbleUp(action)

@@ -13,8 +13,8 @@ import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +33,7 @@ class PostViewModel @Inject constructor(
     private val dispatchers: DispatcherProvider,
     private val state: SavedStateHandle,
     connection: NetworkConnectivity
-) : BriefActionViewModel() {
+) : ActionViewModel() {
 
     val post: Post = Json.decodeFromString<PostArg>(state.get<String>(ScreenArgNames.POST.name)!!)
 

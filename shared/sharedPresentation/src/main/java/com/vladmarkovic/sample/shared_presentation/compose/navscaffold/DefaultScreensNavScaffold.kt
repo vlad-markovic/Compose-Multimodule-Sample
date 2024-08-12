@@ -2,7 +2,7 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.popEnterTransition
@@ -16,11 +16,11 @@ import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 fun DefaultScreensNavScaffold(
     allScreens: List<NavGraphScreen>,
     initialScreen: NavGraphScreen = allScreens.first(),
-    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
     routeDataResolver: (NavGraphScreen) -> ScreenRouteData
 ) {
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialScreen)
-    val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
+    val scaffoldChangesHandler: (ViewAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
     ScreensNavScaffold(
         allScreens = allScreens,

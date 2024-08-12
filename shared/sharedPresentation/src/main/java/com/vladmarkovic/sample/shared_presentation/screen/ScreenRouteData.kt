@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.shared_presentation.screen
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
 
 data class ScreenRouteData(
     val routeWithPlaceholders: String,

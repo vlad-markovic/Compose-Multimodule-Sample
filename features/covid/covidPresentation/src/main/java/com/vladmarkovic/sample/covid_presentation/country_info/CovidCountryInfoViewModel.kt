@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.covid_presentation.country_info
 
 import androidx.lifecycle.SavedStateHandle
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.serialization.json.Json
@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CovidCountryInfoViewModel @Inject constructor(
     private val state: SavedStateHandle
-) : BriefActionViewModel() {
+) : ActionViewModel() {
 
     val info: CountryCovidInfo = Json.decodeFromString(
         state.get<String>(ScreenArgNames.COUNTRY_INFO.name)!!

@@ -21,7 +21,7 @@ import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.delete_post_button_label
 import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.Error
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
@@ -36,7 +36,7 @@ import java.io.IOException
 
 @Composable
 fun PostScreen(
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     viewModel: PostViewModel = actionViewModel<PostViewModel>(bubbleUp)
 ) {
     Column(Modifier.fillMaxSize()) {

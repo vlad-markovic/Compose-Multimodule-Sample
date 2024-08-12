@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
@@ -26,7 +26,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun CountryCovidInfoScreen(
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     viewModel: CovidCountryInfoViewModel = actionViewModel<CovidCountryInfoViewModel>(bubbleUp)
 ) {
     Column(Modifier.fillMaxSize()) {

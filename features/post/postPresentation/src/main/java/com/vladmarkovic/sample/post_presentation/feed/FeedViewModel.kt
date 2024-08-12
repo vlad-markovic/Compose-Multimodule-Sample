@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +26,7 @@ class FeedViewModel @Inject constructor(
     private val postRepository: PostRepository,
     private val dispatchers: DispatcherProvider,
     connection: NetworkConnectivity
-): BriefActionViewModel() {
+): ActionViewModel() {
 
     private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading.asStateFlow()

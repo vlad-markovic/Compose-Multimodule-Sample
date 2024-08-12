@@ -22,22 +22,22 @@ Most feature modules would be split into "layers": "_data_", "_domain_" and "_pr
 
 There are three branches:
 
-- `fragments` branch, with fragments holding compose views, with fragment per screen, and custom navigation via view models using BriefAction pattern.
+- `fragments` branch, with fragments holding compose views, with fragment per screen, and custom navigation via view models using ViewAction pattern.
   
 - `compose` branch, several commits on top of the `fragments` branch, refactoring to remove fragments, and use compose screens only, with compose navigation. There are benefits to this, such as being able to apply animations, but a lot of the Compose features don't seem fully mature yet.
 
 - `tabs` branch, several commits on top of the `compose` branch, adds full scaffold structure (bottom tabs - adding another tab, drawer and menu).
 
-## BriefAction
+## ViewAction
 
-- `BriefAction` is action "consumed" only once. Used for actions of non-persistent nature, such as:
+- `ViewAction` is action "consumed" only once. Used for actions of non-persistent nature, such as:
     - `NavigationAction` - navigating to another screen or tab.
     - `DisplayAction` - like showing of a non persistent message.
-- `BriefActioner` - holds `MutableLiveAction<BriefAction>` and a function for "sending" actions, and can be included in a `ViewModel` a pre-setup structure.
-- `BriefActionable` is an interface holding a `BriefActioner` - can be used to decorate a `ViewModel` (if preferring composition over inheritance).
-- `BriefActionViewModel` implements `BriefActionable` - a base `ViewModel` already including an implementation with `BriefActioner` instance.
-- ViewModels (holding an instance of `BriefActioner`, by being decorated with `BriefActionable` or inheriting from `BriefActionViewModel`), are enabled to "send" `BriefAction`s.
-- Setup of observing `BriefAction`s is done in `shared_presentation.util.BriefActionHandlingSetup.kt` (by use of `fun BriefActioner.setupWith(navController: NavHostController)`) for specific screens/tabs, and further in `CommonDisplayHandler`/`TopNavHandler` for common display actions and top (common) navigation actions.
+- `ViewActioner` - holds `MutableLiveAction<ViewAction>` and a function for "sending" actions, and can be included in a `ViewModel` a pre-setup structure.
+- `ViewActionable` is an interface holding a `ViewActioner` - can be used to decorate a `ViewModel` (if preferring composition over inheritance).
+- `ActionViewModel` implements `ViewActionable` - a base `ViewModel` already including an implementation with `ViewActioner` instance.
+- ViewModels (holding an instance of `ViewActioner`, by being decorated with `ViewActionable` or inheriting from `ActionViewModel`), are enabled to "send" `ViewAction`s.
+- Setup of observing `ViewAction`s is done in `shared_presentation.util.ViewActionHandlingSetup.kt` (by use of `fun ViewActioner.setupWith(navController: NavHostController)`) for specific screens/tabs, and further in `CommonDisplayHandler`/`TopNavHandler` for common display actions and top (common) navigation actions.
     - Thus some of the `Screen`s and common `Display` actions need to be defined inside `shared_presentation` module - in `navigation` and `display` packages respectively.
         - This is to be able to navigate "cross-module" for modules which don't "see" each other, and send common actions from all feature modules.
 
@@ -46,7 +46,7 @@ There are three branches:
 - Navigation structure is defined in `shared_presentation.navigation`.
 - `NavigationAction` is an `interface` for scoping navigation actions.
 - `ToScreen` is a `NavigationAction` representing navigation to a screen.
-- Compose navigation is setup in `shared_presentation.util.BriefActionHandler.kt` file with `fun BriefActioner.setupWith(navController: NavHostController)`, from which handling of `BriefAction`s starting, branching into handling of `NavigationAction`s.
+- Compose navigation is setup in `shared_presentation.util.ViewActionHandler.kt` file with `fun ViewActioner.setupWith(navController: NavHostController)`, from which handling of `ViewAction`s starting, branching into handling of `NavigationAction`s.
 - `NavigationAction`s are sent from `ViewModel`s, for which observing of the actions is auto set-up, as handling is in one place.
 - In the case of fragments use on `fragments` branch, navigating is done using `supportFragmentManager` or `childFragmentManager`, using `Navigation` interface. 
 - In the case of `compose branch` handling of `NavigationAction` to navigate from compose screen to compose screen is done simply by passing the String name of the screen to `NavHostController.navigate` function.
@@ -184,7 +184,7 @@ Continues on top of the `compose` branch, adding another tab and full scaffold s
     - `AppModule` (in `app` module) defines Application (singleton) scoped dependencies.
 - Activities are annotated with `@AndroidEntryPoint` annotation, which enables injection into activities; into which `ScreenHolderComposer`s are injected.
 - ViewModels are annotated with `@HiltViewModel` annotation (except for `@AssistInject` ViewModels as Hilt doesn't support assisted injection), and injected directly in Compose functions (withing a `ScreenComposer`) using custom function defined on top of `hiltViewModel` Hilt function, which scopes ViewModel dependencies to `@ViewModelScope`.
-    - For assisted injection of the `BriefActoin``ViewModel`s, use the `actionViewModels()` function util function, or `actionViewModel()` for Compose variant.
+    - For assisted injection of the `ViewActoin``ViewModel`s, use the `actionViewModels()` function util function, or `actionViewModel()` for Compose variant.
     - `ViewModelModule` (in `app` module) defines ViewModel scoped dependencies.
 - Helper functions for injecting ViewModels are defined in `shared_presentation.di.ViewModelProviderHelper.kt` file.
 

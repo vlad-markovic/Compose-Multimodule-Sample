@@ -77,11 +77,11 @@ fun AnimateFade(
 
 //@Composable
 //fun BackHandler(args: ScreenArgs)  {
-//    BackHandler(actionViewModel<BriefActionViewModel>(args.bubbleUp))
+//    BackHandler(actionViewModel<ActionViewModel>(args.bubbleUp))
 //}
 //
 //@Composable
-//fun <VM> BackHandler(viewModel: VM) where VM : MutableSharedFlow<BriefAction>, VM : ViewModel {
+//fun <VM> BackHandler(viewModel: VM) where VM : MutableSharedFlow<ViewAction>, VM : ViewModel {
 //    LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher?.let { backDispatcher ->
 //        val onBack by rememberUpdatedState { viewModel.navigate(CommonNavigationAction.Back) }
 //        val backCallback = remember {

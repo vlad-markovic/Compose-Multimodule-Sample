@@ -23,8 +23,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
@@ -44,15 +44,15 @@ import kotlin.coroutines.EmptyCoroutineContext
 @Composable
 inline fun <reified VM> actionViewModel(
     key: String?,
-    noinline actionHandler: (BriefAction) -> Unit,
-): VM where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
+    noinline actionHandler: (ViewAction) -> Unit,
+): VM where VM : ViewModel, VM : MutableSharedFlow<ViewAction> =
     hiltViewModel<VM>(key = key).apply { SetupWith(actionHandler) }
 
 
 @Composable
 inline fun <reified VM> actionViewModel(
-    noinline actionHandler: (BriefAction) -> Unit,
-): VM where VM : ViewModel, VM : MutableSharedFlow<BriefAction> =
+    noinline actionHandler: (ViewAction) -> Unit,
+): VM where VM : ViewModel, VM : MutableSharedFlow<ViewAction> =
     hiltViewModel<VM>().apply { SetupWith(actionHandler) }
 
 @Composable
@@ -126,7 +126,7 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> ass
 @Composable
 inline fun <reified VM, I, VMF: AssistedViewModelFactory<VM, I>> assistedActionViewModel(
     assistedInput: I,
-    noinline actionHandler: (BriefAction) -> Unit,
+    noinline actionHandler: (ViewAction) -> Unit,
     navBackStackEntry: NavBackStackEntry? = rememberNavController().currentBackStackEntry,
     viewModelStoreOwner: ViewModelStoreOwner = navBackStackEntry ?: checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
@@ -140,7 +140,7 @@ inline fun <reified VM, I, VMF: AssistedViewModelFactory<VM, I>> assistedActionV
         assistedFactory.create(assistedInput)
     },
     key: String? = null,
-): VM where VM: ViewModel, VM : MutableSharedFlow<BriefAction> =
+): VM where VM: ViewModel, VM : MutableSharedFlow<ViewAction> =
     viewModel<VM>(viewModelStoreOwner, key, factory, extras).apply { SetupWith(actionHandler) }
 
 
@@ -199,16 +199,16 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> sha
 
 
 // region setup action handling
-/** Setup observing of [BriefAction]s for a [BriefActionViewModel]. */
+/** Setup observing of [ViewAction]s for a [ActionViewModel]. */
 @Composable
 @OptIn(ExperimentalCoroutinesApi::class)
-fun MutableSharedFlow<BriefAction>.SetupWith(actionHandler: (BriefAction) -> Unit) {
+fun MutableSharedFlow<ViewAction>.SetupWith(actionHandler: (ViewAction) -> Unit) {
     ActionsHandler(this.withMissedReplayed(), actionHandler)
 }
 
 
 @Composable
-fun <T: BriefAction> ActionsHandler(actions: Flow<T>, handler: (T) -> Unit) {
+fun <T: ViewAction> ActionsHandler(actions: Flow<T>, handler: (T) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleAwareActions = remember(actions, lifecycleOwner) {
         actions.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)

@@ -23,8 +23,8 @@ import com.vladmarkovic.sample.post_presentation.R.string.error_on_posts_fetch
 import com.vladmarkovic.sample.post_presentation.feed.FeedViewModel
 import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.Error
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
@@ -41,7 +41,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.lifecycleAwareValue
 
 @Composable
 fun FeedScreen(
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     viewModel: FeedViewModel = actionViewModel<FeedViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {

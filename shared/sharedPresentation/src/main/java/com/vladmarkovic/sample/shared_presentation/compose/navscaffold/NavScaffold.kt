@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
@@ -41,14 +41,14 @@ fun NavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
-    navHost: @Composable (paddingValues: PaddingValues, bubbleUp: (BriefAction) -> Unit) -> Unit
+    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
+    navHost: @Composable (paddingValues: PaddingValues, bubbleUp: (ViewAction) -> Unit) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(Color.Black)
 
     val scope = rememberCoroutineScope()
-    val actionHandler: (BriefAction) -> Unit = rememberCommonActionsHandler(navArgs, scope, bubbleUp)
+    val actionHandler: (ViewAction) -> Unit = rememberCommonActionsHandler(navArgs, scope, bubbleUp)
 
     AppTheme {
         Scaffold(

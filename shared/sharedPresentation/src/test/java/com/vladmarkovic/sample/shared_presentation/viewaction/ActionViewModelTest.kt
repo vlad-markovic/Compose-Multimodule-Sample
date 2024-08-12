@@ -1,9 +1,8 @@
-package com.vladmarkovic.sample.shared_presentation.briefaction
+package com.vladmarkovic.sample.shared_presentation.viewaction
 
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_test.AllTestSetupExtension
-import com.vladmarkovic.sample.shared_test.assertValueEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,10 +11,10 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-/** Test actioning [BriefAction]s like [NavigationAction]s via [BriefActionViewModel] */
+/** Test actioning [ViewAction]s like [NavigationAction]s via [ActionViewModel] */
 @ExperimentalCoroutinesApi
 @ExtendWith(AllTestSetupExtension::class)
-class BriefActionViewModelTest {
+class ActionViewModelTest {
 
     companion object {
         @JvmStatic
@@ -31,19 +30,19 @@ class BriefActionViewModelTest {
         )
     }
 
-    private val viewModel = BriefActionViewModel()
+    private val viewModel = ActionViewModel()
 
     @MethodSource("actionArgs")
-    @DisplayName("Given actioning via BriefActionViewModel")
+    @DisplayName("Given actioning via ActionViewModel")
     @ParameterizedTest(name = "When ''{0}'' action is sent, Then ''{0}'' action is received")
-    fun testBriefActionViewModelActions(action: BriefAction) {
+    fun testActionViewModelActions(action: ViewAction) {
         viewModel.action(action)
 
         // FIXME test viewModel.actioner.action.assertValueEquals(action)
     }
 
     @MethodSource("navArgs")
-    @DisplayName("Given navigating via BriefActionViewModel")
+    @DisplayName("Given navigating via ActionViewModel")
     @ParameterizedTest(name = "When ''{0}'' navigation action is sent, Then it navigates to ''{0}''")
     fun testCommonNavigationActions(action: NavigationAction) {
         viewModel.navigate(action)

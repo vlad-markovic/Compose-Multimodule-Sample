@@ -41,8 +41,8 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
 import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
@@ -54,7 +54,7 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
 @Composable
 fun CountryComparisonScreen(
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     viewModel: CountryComparisonViewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {

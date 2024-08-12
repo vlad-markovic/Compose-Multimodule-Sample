@@ -8,7 +8,7 @@ import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
 import com.vladmarkovic.sample.covid_presentation.country_info.mapToItems
 import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class CountryComparisonViewModel @Inject constructor(private val covidInfoRepo: CovidInfoRepo) : BriefActionViewModel() {
+class CountryComparisonViewModel @Inject constructor(private val covidInfoRepo: CovidInfoRepo) : ActionViewModel() {
 
     private val _showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val showLoading: StateFlow<Boolean> = _showLoading.asStateFlow()

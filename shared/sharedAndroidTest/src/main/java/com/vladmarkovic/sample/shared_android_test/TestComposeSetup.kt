@@ -9,8 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.di.SetupWith
 import com.vladmarkovic.sample.shared_presentation.tab.route
@@ -18,8 +18,8 @@ import com.vladmarkovic.sample.shared_presentation.tab.route
 @Composable
 fun TestCompose(
     tab: Tab,
-    viewModel: BriefActionViewModel,
-    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (BriefAction) -> Unit) -> Unit
+    viewModel: ActionViewModel,
+    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (ViewAction) -> Unit) -> Unit
 ) {
     val navController: NavHostController = rememberNavController()
     NavHost(
@@ -35,7 +35,7 @@ fun TestCompose(
                 route = tab.initialScreen.name,
                 arguments = emptyList(),
             ) {
-                val actionHandler: (BriefAction) -> Unit = {
+                val actionHandler: (ViewAction) -> Unit = {
                     println("Bubbled up action: $it")
                 }
 

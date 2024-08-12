@@ -3,14 +3,14 @@ package com.vladmarkovic.sample.shared_presentation.compose
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.injectScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 
 /** Composes screens and a "navigation branch" with "composable" function for each screen. */
 fun NavGraphBuilder.composeNavGraph(
     allScreens: List<NavGraphScreen>,
-    bubbleUp: (BriefAction) -> Unit,
+    bubbleUp: (ViewAction) -> Unit,
     routeDataMap: Map<NavGraphScreen, ScreenRouteData>,
 ) {
     allScreens.forEach { screen ->

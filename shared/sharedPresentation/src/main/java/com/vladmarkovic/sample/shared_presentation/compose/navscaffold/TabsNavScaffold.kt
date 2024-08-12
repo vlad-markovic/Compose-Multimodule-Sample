@@ -29,7 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition
@@ -58,11 +58,11 @@ fun DefaultTabsNavScaffold(
     initialTab: Tab = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
     routeDataResolver: (NavGraphScreen) -> ScreenRouteData
 ) {
     val scaffoldData: ScaffoldDataManager = rememberScaffoldDataManager(initialTab.initialScreen)
-    val scaffoldChangesHandler: (BriefAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
+    val scaffoldChangesHandler: (ViewAction) -> Unit = rememberScaffoldChangesHandler(scaffoldData, bubbleUp)
 
     val data = remember(allTabs) {
         allTabs.associateWith { tab ->
@@ -117,7 +117,7 @@ fun TabsNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
     enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         { fadeIn(animationSpec = tween(700)) },
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
@@ -128,7 +128,7 @@ fun TabsNavScaffold(
         exitTransition,
     routeDataMap: Map<Tab, Map<NavGraphScreen, ScreenRouteData>>,
 ) {
-    val tabNavHandler: (BriefAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
+    val tabNavHandler: (ViewAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,

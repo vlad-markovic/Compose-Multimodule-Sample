@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs
@@ -52,7 +52,7 @@ fun ScreensNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    bubbleUp: (BriefAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
     enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         { fadeIn(animationSpec = tween(700)) },
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =

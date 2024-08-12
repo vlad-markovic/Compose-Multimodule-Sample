@@ -8,9 +8,9 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefActionViewModel
-import com.vladmarkovic.sample.shared_presentation.briefaction.display
-import com.vladmarkovic.sample.shared_presentation.briefaction.navigate
+import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
+import com.vladmarkovic.sample.shared_presentation.viewaction.display
+import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
@@ -36,7 +36,7 @@ sealed class MainDrawerItem(
         MainDrawerItem(Icons.Filled.Settings, R.string.drawer_item_settings)
 }
 
-fun defaultDrawerItems(viewModel: BriefActionViewModel) = listOf(
+fun defaultDrawerItems(viewModel: ActionViewModel) = listOf(
     MainDrawerItem.ItemPostsTab {
         viewModel.navigate(CloseDrawer)
         viewModel.navigate(ToTab(MainBottomTab.POSTS_TAB))

@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScree
 import com.vladmarkovic.sample.shared_domain.screen.MainScreen
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class ComposeScreenContentResolverImpl @Inject constructor(): ComposeScreenContentResolver {
     @Composable
-    override fun NavGraphScreen.Content(bubbleUp: (BriefAction) -> Unit) = when (this) {
+    override fun NavGraphScreen.Content(bubbleUp: (ViewAction) -> Unit) = when (this) {
         MainScreen.PostsScreen.FEED_SCREEN -> FeedScreen(bubbleUp)
         MainScreen.PostsScreen.POST_SCREEN -> PostScreen(bubbleUp)
         MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> CountryComparisonScreen(bubbleUp)

@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction.NavigationAction
+import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
