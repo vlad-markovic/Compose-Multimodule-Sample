@@ -63,10 +63,12 @@ fun GradleProject.androidLibrary(action: LibraryExtension.() -> Unit) {
  *   implementationProject(Project.Feature.Home.domain) // is from [Project.Layered]
  */
 fun GradleProject.implementationProject(project: Project, configuration: String? = null) {
-    dependencies {
-        project.modules.forEach { module ->
-            implementation(project(module, configuration))
-        }
+    dependencies { implementationProject(project, configuration) }
+}
+
+fun DependencyHandler.implementationProject(project: Project, configuration: String? = null) {
+    project.modules.forEach { module ->
+        implementation(project(module, configuration))
     }
 }
 

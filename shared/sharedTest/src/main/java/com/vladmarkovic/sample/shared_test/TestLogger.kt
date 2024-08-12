@@ -2,7 +2,7 @@
 
 package com.vladmarkovic.sample.shared_test
 
-import com.vladmarkovic.sample.shared_domain.log.Logger
+import com.vladmarkovic.sample.common.logging.Logger
 
 class TestLogger : Logger {
 

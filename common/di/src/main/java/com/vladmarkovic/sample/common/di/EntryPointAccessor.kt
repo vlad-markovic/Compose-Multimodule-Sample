@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_domain.di
+package com.vladmarkovic.sample.common.di
 
 /**
  * [AppEntryPointAccessor] implementation wrapper enabling getting entry points statically,

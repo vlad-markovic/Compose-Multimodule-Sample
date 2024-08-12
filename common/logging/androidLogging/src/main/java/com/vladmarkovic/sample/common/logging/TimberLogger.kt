@@ -1,15 +1,12 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.log
+package com.vladmarkovic.sample.common.logging
 
-import android.os.Build
-import com.vladmarkovic.sample.shared_domain.log.Logger
 import timber.log.Timber
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.min
 
 /** [Logger] implementation using [Timber]. */
 @Singleton
@@ -46,22 +43,18 @@ class TimberLogger @Inject constructor() : Logger {
                     className = matcher.replaceAll("")
                 }
                 className = className.substring(className.lastIndexOf('.') + 1)
-                // Tag length limit was removed in API 24.
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                    val tag = "$className.${element.methodName}.${element.lineNumber}"
-                    val isInClass = className.commonSuffixWith(element.fileName, true).isEmpty()
-                    val classAndFileNamesAreDifferent = isInClass &&
-                            element.fileName.substring(
-                                0,
-                                element.fileName.lastIndexOf('.')
-                            ) != className
-                    if (isInClass && classAndFileNamesAreDifferent) {
-                        "${element.fileName}[$tag]"
-                    } else {
-                        tag
-                    }
+
+                val tag = "$className.${element.methodName}.${element.lineNumber}"
+                val isInClass = className.commonSuffixWith(element.fileName, true).isEmpty()
+                val classAndFileNamesAreDifferent = isInClass &&
+                    element.fileName.substring(
+                        0,
+                        element.fileName.lastIndexOf('.')
+                    ) != className
+                if (isInClass && classAndFileNamesAreDifferent) {
+                    "${element.fileName}[$tag]"
                 } else {
-                    className.substring(0, min(className.length, MAX_TAG_LENGTH))
+                    tag
                 }
             } catch (e: Exception) {
                 when (e) {

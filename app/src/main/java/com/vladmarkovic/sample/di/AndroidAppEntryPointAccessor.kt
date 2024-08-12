@@ -3,8 +3,8 @@
 package com.vladmarkovic.sample.di
 
 import android.content.Context
-import com.vladmarkovic.sample.shared_domain.di.AppEntryPointAccessor
-import com.vladmarkovic.sample.shared_domain.di.EntryPoint
+import com.vladmarkovic.sample.common.di.AppEntryPointAccessor
+import com.vladmarkovic.sample.common.di.EntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

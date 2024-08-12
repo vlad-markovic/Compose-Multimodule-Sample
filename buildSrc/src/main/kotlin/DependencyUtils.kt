@@ -5,6 +5,9 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 /** [DependencyHandler] extensions for combined [implementation] and similar calls. */
 
 internal fun DependencyHandler.implementationPresentationBase() {
+    implementationProject(Project.Core.Kotlin)
+    implementationProject(Project.Common.Logging)
+
     // Kotlin
     implementation(Dependencies.kotlin.x.serializationCore)
     implementation(Dependencies.ktor.clientSerialization)
@@ -24,12 +27,15 @@ internal fun DependencyHandler.implementationPresentationBase() {
 
 /** Data layer specific dependencies, not inclusive of [implementationPlainKotlinBase] */
 fun DependencyHandler.implementationDataBase() {
+    implementationProject(Project.Core.Kotlin)
+    implementationProject(Project.Common.Logging)
     implementationKtor()
     implementationKotlinCoroutines()
     implementationRoom()
 }
 
 fun DependencyHandler.implementationPlainKotlinBase() {
+    implementationProject(Project.Core.Kotlin)
     implementation(Dependencies.hilt.dagger.core)
     implementation(Dependencies.kotlin.x.serializationCore)
     implementationKotlinCoroutines()

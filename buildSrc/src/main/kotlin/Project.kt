@@ -62,6 +62,24 @@ sealed interface Project: Named {
 
     // region specific project modules
 
+    sealed class Core(override val shortName: String) : Organised {
+        override val dirs: List<String> = listOf("core")
+
+        object Kotlin : Core("kotlin")
+    }
+
+    sealed class Common(override val shortName: String) : Organised {
+        override val dirs: List<String> = listOf("common")
+
+        object Di : Common("di")
+
+        object Logging : Common("logging"), NameOrganised
+
+        object AndroidLogging : Common("androidLogging") {
+            override val dirs: List<String> = super.dirs + "logging"
+        }
+    }
+
     /** Included into all other projects (modules), per required layer. */
     object Shared : TopNameOrganised("shared"), Layered
     /** Included into all other data and presentation projects (with testImplementation). */

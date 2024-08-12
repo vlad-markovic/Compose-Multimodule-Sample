@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_domain.di
+package com.vladmarkovic.sample.common.di
 
 /**
  * For scoping interfaces annotated with @[dagger.hilt.EntryPoint], for providing injection into objects.

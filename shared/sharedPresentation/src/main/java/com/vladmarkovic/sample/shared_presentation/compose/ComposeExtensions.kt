@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.Dp
-import com.vladmarkovic.sample.shared_domain.log.Lumber
+import com.vladmarkovic.sample.common.logging.Lumber
 
 
 inline fun Activity.setComposeContentView(crossinline content: @Composable () -> Unit) {

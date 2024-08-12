@@ -2,11 +2,11 @@
 
 package com.vladmarkovic.sample.shared_test
 
-import com.vladmarkovic.sample.shared_domain.di.AppEntryPointAccessor
-import com.vladmarkovic.sample.shared_domain.di.EntryPoint
-import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
-import com.vladmarkovic.sample.shared_domain.log.Logger
-import com.vladmarkovic.sample.shared_domain.log.LoggerEntryPoint
+import com.vladmarkovic.sample.common.di.AppEntryPointAccessor
+import com.vladmarkovic.sample.common.di.EntryPoint
+import com.vladmarkovic.sample.common.di.EntryPointAccessor
+import com.vladmarkovic.sample.common.logging.Logger
+import com.vladmarkovic.sample.common.logging.LoggerEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

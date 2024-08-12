@@ -1,8 +1,8 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_domain.log
+package com.vladmarkovic.sample.common.logging
 
-import com.vladmarkovic.sample.shared_domain.di.EntryPointAccessor
+import com.vladmarkovic.sample.common.di.EntryPointAccessor
 
 /** Logger wrapper object, enabling static logging, as [Lumber.v]. */
 object Lumber : Logger {
@@ -89,7 +89,7 @@ object Lumber : Logger {
     }
 
     override fun tag(tag: String): Logger {
-        this.tag = tag
+        Lumber.tag = tag
         return this
     }
 

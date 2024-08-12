@@ -9,7 +9,7 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.GroupHeader
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.*
-import com.vladmarkovic.sample.shared_domain.util.sortedBy
+import com.vladmarkovic.sample.core.kotlin.sortedBy
 
 fun List<CountryCovidInfo>.mapToItems(
     groupByContinent: Boolean,

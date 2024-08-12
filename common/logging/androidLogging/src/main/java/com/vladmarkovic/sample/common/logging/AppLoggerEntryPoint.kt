@@ -1,13 +1,11 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.di
+package com.vladmarkovic.sample.common.logging
 
-import com.vladmarkovic.sample.shared_domain.log.LoggerEntryPoint
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-@Suppress("unused")
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface AppLoggerEntryPoint : LoggerEntryPoint

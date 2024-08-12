@@ -13,6 +13,8 @@ fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
     configurePlainKotlinModule()
 
     dependencies {
+        implementationProject(Project.Common.Logging)
+
         if (includeSharedDomain) {
             implementationProject(Project.Shared.domain)
         }
@@ -22,7 +24,7 @@ fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
 }
 
 /** Common plugins and dependencies for any plain kotlin (domain) module. */
-private fun GradleProject.configurePlainKotlinModule() {
+fun GradleProject.configurePlainKotlinModule() {
     applyPlugin(Plugins.kotlin.serialization)
     applyPlugin(Plugins.javaLibrary)
     applyPlugin(Plugins.kotlin)
