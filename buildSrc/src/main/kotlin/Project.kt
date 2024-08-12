@@ -71,12 +71,18 @@ sealed interface Project: Named {
     sealed class Common(override val shortName: String) : Organised {
         override val dirs: List<String> = listOf("common")
 
-        object Di : Common("di")
+        sealed class Di(override val shortName: String) : Common(shortName) {
+            override val dirs: List<String> = super.dirs + "di"
 
-        object Logging : Common("logging"), NameOrganised
+            object Abstract : Di("di")
+            object ViewModel : Common("viewModel")
+            object Hilt : Common("hilt")
+        }
 
-        object AndroidLogging : Common("androidLogging") {
-            override val dirs: List<String> = super.dirs + "logging"
+        object Logging : Common("logging"), NameOrganised {
+            object Android : Common("androidLogging") {
+                override val dirs: List<String> = super.dirs + "logging"
+            }
         }
     }
 

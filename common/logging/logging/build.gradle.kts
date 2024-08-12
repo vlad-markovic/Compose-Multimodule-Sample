@@ -3,5 +3,5 @@
 configurePlainKotlinModule()
 
 dependencies {
-    implementationProject(Project.Common.Di)
+    implementationProject(Project.Common.Di.Abstract)
 }

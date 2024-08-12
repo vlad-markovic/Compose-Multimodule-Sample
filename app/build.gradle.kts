@@ -67,9 +67,9 @@ dependencies {
     implementationProject(Project.Feature.Settings)
     implementationProject(Project.Feature.Post)
     implementationProject(Project.Feature.Covid)
-    implementationProject(Project.Common.Di)
+    implementationProject(Project.Common.Di.Abstract)
     implementationProject(Project.Common.Logging)
-    implementationProject(Project.Common.AndroidLogging)
+    implementationProject(Project.Common.Logging.Android)
 
     // Kotlin
     implementation(Dependencies.kotlin.reflect)

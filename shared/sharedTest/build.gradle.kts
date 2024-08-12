@@ -8,7 +8,7 @@ androidLibrary {
 }
 
 dependencies {
-    implementationProject(Project.Common.Di)
+    implementationProject(Project.Common.Di.Abstract)
     implementationProject(Project.Common.Logging)
     implementationProject(Project.Shared.domain)
     implementation(Dependencies.junitJupiterApi)
