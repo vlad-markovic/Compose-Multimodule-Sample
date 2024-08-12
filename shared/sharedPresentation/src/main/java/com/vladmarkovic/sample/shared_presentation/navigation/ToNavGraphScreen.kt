@@ -2,8 +2,8 @@
 
 package com.vladmarkovic.sample.shared_presentation.navigation
 
+import com.vladmarkovic.sample.common.view.action.NavigationAction
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
 
 /** For typing and scoping screen navigation actions for navigating to [NavGraphScreen]. */
 abstract class ToNavGraphScreen(

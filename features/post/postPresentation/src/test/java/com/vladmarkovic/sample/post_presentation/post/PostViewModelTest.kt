@@ -8,7 +8,7 @@ import com.vladmarkovic.sample.post_presentation.FakeAuthorRepository.Companion.
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
+import com.vladmarkovic.sample.common.view.action.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import com.vladmarkovic.sample.shared_test.*

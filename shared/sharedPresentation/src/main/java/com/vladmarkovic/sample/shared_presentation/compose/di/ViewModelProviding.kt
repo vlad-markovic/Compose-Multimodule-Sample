@@ -22,19 +22,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.vladmarkovic.sample.common.view.action.ViewActionMonitorable
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
-import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
 import com.vladmarkovic.sample.shared_presentation.di.AssistedViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewModelFactory
 import com.vladmarkovic.sample.shared_presentation.util.asActivity
-import com.vladmarkovic.sample.shared_presentation.util.withMissedReplayed
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -45,14 +44,14 @@ import kotlin.coroutines.EmptyCoroutineContext
 inline fun <reified VM> actionViewModel(
     key: String?,
     noinline actionHandler: (ViewAction) -> Unit,
-): VM where VM : ViewModel, VM : MutableSharedFlow<ViewAction> =
+): VM where VM : ViewModel, VM : ViewActionMonitorable<ViewAction> =
     hiltViewModel<VM>(key = key).apply { SetupWith(actionHandler) }
 
 
 @Composable
 inline fun <reified VM> actionViewModel(
     noinline actionHandler: (ViewAction) -> Unit,
-): VM where VM : ViewModel, VM : MutableSharedFlow<ViewAction> =
+): VM where VM : ViewModel, VM : ViewActionMonitorable<ViewAction> =
     hiltViewModel<VM>().apply { SetupWith(actionHandler) }
 
 @Composable
@@ -140,7 +139,7 @@ inline fun <reified VM, I, VMF: AssistedViewModelFactory<VM, I>> assistedActionV
         assistedFactory.create(assistedInput)
     },
     key: String? = null,
-): VM where VM: ViewModel, VM : MutableSharedFlow<ViewAction> =
+): VM where VM: ViewModel, VM : ViewActionMonitorable<ViewAction> =
     viewModel<VM>(viewModelStoreOwner, key, factory, extras).apply { SetupWith(actionHandler) }
 
 
@@ -202,8 +201,8 @@ inline fun <reified VM : ViewModel, I, VMF: AssistedViewModelFactory<VM, I>> sha
 /** Setup observing of [ViewAction]s for a [ActionViewModel]. */
 @Composable
 @OptIn(ExperimentalCoroutinesApi::class)
-fun MutableSharedFlow<ViewAction>.SetupWith(actionHandler: (ViewAction) -> Unit) {
-    ActionsHandler(this.withMissedReplayed(), actionHandler)
+fun ViewActionMonitorable<ViewAction>.SetupWith(actionHandler: (ViewAction) -> Unit) {
+    ActionsHandler(this.actions, actionHandler)
 }
 
 

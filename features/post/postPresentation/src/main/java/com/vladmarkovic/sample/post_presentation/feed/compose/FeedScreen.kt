@@ -23,8 +23,7 @@ import com.vladmarkovic.sample.post_presentation.R.string.error_on_posts_fetch
 import com.vladmarkovic.sample.post_presentation.feed.FeedViewModel
 import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
-import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
+import com.vladmarkovic.sample.common.view.action.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
@@ -36,6 +35,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.common.compose.util.padding
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.components.Error
 
 

@@ -9,8 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
-import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.di.SetupWith
 import com.vladmarkovic.sample.shared_presentation.tab.route

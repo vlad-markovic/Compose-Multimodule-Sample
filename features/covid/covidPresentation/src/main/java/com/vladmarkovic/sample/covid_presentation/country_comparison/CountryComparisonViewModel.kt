@@ -8,7 +8,7 @@ import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
 import com.vladmarkovic.sample.covid_presentation.country_info.mapToItems
 import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

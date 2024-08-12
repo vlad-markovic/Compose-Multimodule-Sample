@@ -8,9 +8,9 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
-import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
-import com.vladmarkovic.sample.shared_presentation.viewaction.display
-import com.vladmarkovic.sample.shared_presentation.viewaction.navigate
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.display
+import com.vladmarkovic.sample.common.view.action.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab

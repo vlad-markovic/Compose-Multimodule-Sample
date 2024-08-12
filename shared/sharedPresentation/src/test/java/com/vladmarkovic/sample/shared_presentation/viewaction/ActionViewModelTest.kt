@@ -1,6 +1,10 @@
 package com.vladmarkovic.sample.shared_presentation.viewaction
 
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.NavigationAction
+import com.vladmarkovic.sample.common.view.action.ViewAction
+import com.vladmarkovic.sample.common.view.action.action
+import com.vladmarkovic.sample.common.view.action.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
 import com.vladmarkovic.sample.shared_test.AllTestSetupExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi

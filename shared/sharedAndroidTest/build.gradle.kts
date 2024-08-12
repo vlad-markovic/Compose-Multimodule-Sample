@@ -10,6 +10,7 @@ androidLibrary {
 }
 
 dependencies {
+    implementationProject(Project.Common.View.Action)
     implementationProject(Project.Shared.domain)
     implementationProject(Project.Shared.presentation)
 

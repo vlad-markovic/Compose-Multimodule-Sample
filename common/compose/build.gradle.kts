@@ -6,3 +6,7 @@ configureComposeInModule()
 androidLibrary {
     namespace = "com.vladmarkovic.sample.common.compose"
 }
+
+dependencies {
+    implementationKotlinCoroutines()
+}

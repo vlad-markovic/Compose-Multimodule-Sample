@@ -26,9 +26,9 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
@@ -37,7 +37,7 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewM
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 import com.vladmarkovic.sample.shared_presentation.tab.route
-import com.vladmarkovic.sample.shared_presentation.util.collectIn
+import com.vladmarkovic.sample.core.coroutines.collectIn
 import com.vladmarkovic.sample.shared_presentation.util.navigate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop

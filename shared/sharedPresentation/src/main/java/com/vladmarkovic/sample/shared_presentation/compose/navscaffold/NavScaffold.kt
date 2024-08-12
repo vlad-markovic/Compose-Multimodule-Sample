@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs

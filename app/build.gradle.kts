@@ -70,6 +70,7 @@ dependencies {
     implementationProject(Project.Common.Di.Abstract)
     implementationProject(Project.Common.Logging)
     implementationProject(Project.Common.Logging.Android)
+    implementationProject(Project.Common.View.Action)
 
     // Kotlin
     implementation(Dependencies.kotlin.reflect)

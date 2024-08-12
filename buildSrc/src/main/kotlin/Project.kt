@@ -66,6 +66,8 @@ sealed interface Project: Named {
         override val dirs: List<String> = listOf("core")
 
         object Kotlin : Core("kotlin")
+
+        object Coroutines : Core("coroutines")
     }
 
     sealed class Common(override val shortName: String) : Organised {
@@ -86,6 +88,12 @@ sealed interface Project: Named {
         }
 
         object Compose : Common("compose")
+
+        sealed class View(override val shortName: String) : Common(shortName) {
+            override val dirs: List<String> = super.dirs + "view"
+
+            object Action : View("action")
+        }
     }
 
     /** Included into all other projects (modules), per required layer. */

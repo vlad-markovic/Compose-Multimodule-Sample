@@ -10,7 +10,7 @@ import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
-import com.vladmarkovic.sample.shared_presentation.viewaction.ActionViewModel
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

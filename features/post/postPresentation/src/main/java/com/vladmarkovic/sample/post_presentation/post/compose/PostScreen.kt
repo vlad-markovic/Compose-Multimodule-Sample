@@ -21,7 +21,6 @@ import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.delete_post_button_label
 import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
@@ -32,6 +31,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.compose.components.Error
 import com.vladmarkovic.sample.common.compose.util.padding
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import java.io.IOException
 
 @Composable

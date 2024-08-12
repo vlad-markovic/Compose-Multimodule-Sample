@@ -5,7 +5,6 @@ package com.vladmarkovic.sample.nav
 import android.app.Activity
 import android.content.Intent
 import com.vladmarkovic.sample.settings_presentation.SettingsActivity
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup

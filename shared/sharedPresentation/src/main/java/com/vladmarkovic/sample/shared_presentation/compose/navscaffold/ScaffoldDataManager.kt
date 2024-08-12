@@ -6,7 +6,7 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.compose.di.activityFactoryProvider
 import com.vladmarkovic.sample.shared_presentation.di.BaseAssistedFactory
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.util.updateNullable
+import com.vladmarkovic.sample.core.coroutines.updateNullable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

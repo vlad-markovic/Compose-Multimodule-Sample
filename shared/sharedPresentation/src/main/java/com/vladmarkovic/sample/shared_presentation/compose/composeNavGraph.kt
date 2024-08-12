@@ -2,8 +2,8 @@ package com.vladmarkovic.sample.shared_presentation.compose
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.injectScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 

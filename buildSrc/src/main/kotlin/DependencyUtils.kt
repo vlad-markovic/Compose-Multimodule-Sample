@@ -51,6 +51,7 @@ private fun DependencyHandler.implementationKtor() {
 
 fun DependencyHandler.implementationKotlinCoroutines() {
     implementation(Dependencies.kotlin.x.coroutinesCore)
+    implementationProject(Project.Core.Coroutines)
 }
 
 fun DependencyHandler.implementationRoom() {

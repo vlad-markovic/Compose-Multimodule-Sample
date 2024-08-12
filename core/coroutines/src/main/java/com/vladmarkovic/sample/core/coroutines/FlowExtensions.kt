@@ -1,11 +1,7 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.util
+package com.vladmarkovic.sample.core.coroutines
 
-import androidx.compose.runtime.State
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.coroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -17,24 +13,10 @@ import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.launch
 import java.util.Optional
 
-fun <T> Flow<T>.collectWith(lifecycleOwner: LifecycleOwner, onEach: (T) -> Unit) =
-    collectWith(lifecycleOwner.lifecycle, onEach)
-
-fun <T> Flow<T>.collectWith(lifecycle: Lifecycle, onEach: (T) -> Unit) =
-    collectIn(lifecycle.coroutineScope, onEach)
-
 fun <T> Flow<T>.collectIn(coroutineScope: CoroutineScope, onEach: (T) -> Unit) =
     coroutineScope.launch {
         collect { onEach(it) }
     }
-
-fun <T> MutableStateFlow<T>.update(state: State<T>) {
-    update(state.value)
-}
-
-fun <T> MutableStateFlow<T?>.updateNullable(state: State<T?>) {
-    updateNullable(state.value)
-}
 
 fun <T> MutableStateFlow<T>.update(value: T?) {
     if (value != null && this.value != value) this.value = value

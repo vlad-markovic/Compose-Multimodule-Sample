@@ -8,8 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.common.logging.Lumber
+import com.vladmarkovic.sample.common.view.action.NavigationAction
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_domain.tab.Tab
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.onBack
@@ -84,14 +85,14 @@ fun rememberThrowingNoHandler(key: String? = null): (ViewAction) -> Unit =
 internal fun ComposeNavArgs.handleAction(action: ViewAction, bubbleUp: (ViewAction) -> Unit) {
     Lumber.i("action: ${action.javaClass.simpleName}")
     return when (action) {
-        is ViewAction.NavigationAction -> navigate(action, bubbleUp)
+        is NavigationAction -> navigate(action, bubbleUp)
         is CommonDisplayAction -> handleCommonDisplayAction(action)
         else -> bubbleUp(action)
     }
 }
 
 /** Branch out handling of different types of [ViewAction.NavigationAction]s. */
-private fun ComposeNavArgs.navigate(action: ViewAction.NavigationAction, bubbleUp: (ViewAction) -> Unit) = when(action) {
+private fun ComposeNavArgs.navigate(action: NavigationAction, bubbleUp: (ViewAction) -> Unit) = when(action) {
     is ToNavGraphScreen -> navController.navigate(action.routeWithArgs)
     is ToScreenGroup -> navController.context.handleTopScreenNavigationAction(action)
     else -> bubbleUp(action)

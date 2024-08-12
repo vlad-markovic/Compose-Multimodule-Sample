@@ -2,7 +2,7 @@
 
 package com.vladmarkovic.sample.shared_presentation.navigation
 
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.NavigationAction
+import com.vladmarkovic.sample.common.view.action.NavigationAction
 
 /**
  * Navigate to a new screen holder, like new activity which holds another group of screens.

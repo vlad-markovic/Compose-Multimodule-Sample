@@ -7,6 +7,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransit
 import com.vladmarkovic.sample.shared_presentation.compose.animation.popEnterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.popExitTransition
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
@@ -19,7 +20,6 @@ import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.TabNavViewM
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.navigate
 import com.vladmarkovic.sample.shared_presentation.navigation.tabbed.tabs
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction
 
 @Composable
 fun DefaultTabsNavScaffold(

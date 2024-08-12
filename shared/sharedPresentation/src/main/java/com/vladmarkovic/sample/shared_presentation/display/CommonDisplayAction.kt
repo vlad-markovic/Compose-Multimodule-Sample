@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.shared_presentation.display
 
 import android.view.Display
 import androidx.annotation.StringRes
-import com.vladmarkovic.sample.shared_presentation.viewaction.ViewAction.DisplayAction
+import com.vladmarkovic.sample.common.view.action.DisplayAction
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 
 
