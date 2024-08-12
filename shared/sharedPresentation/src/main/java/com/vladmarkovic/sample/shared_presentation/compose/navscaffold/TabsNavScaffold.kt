@@ -31,10 +31,10 @@ import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.briefaction.BriefAction
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
-import com.vladmarkovic.sample.shared_presentation.compose.animation.slideEnterTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.slideExitTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.slidePopEnterTransition
-import com.vladmarkovic.sample.shared_presentation.compose.animation.slidePopExitTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.popEnterTransition
+import com.vladmarkovic.sample.shared_presentation.compose.animation.popExitTransition
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.di.tabNavViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultBottomBar
@@ -85,10 +85,10 @@ fun DefaultTabsNavScaffold(
         bottomBar = remember {{ DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) }},
         drawerContent = remember(drawerData) { drawerData?.drawerItems?.let {{ DefaultDrawer(it) }} },
         bubbleUp = scaffoldChangesHandler,
-        enterTransition = { slideEnterTransition() },
-        exitTransition = { slideExitTransition() },
-        popEnterTransition = { slidePopEnterTransition() },
-        popExitTransition = { slidePopExitTransition() },
+        enterTransition = { enterTransition() },
+        exitTransition = { exitTransition() },
+        popEnterTransition = { popEnterTransition() },
+        popExitTransition = { popExitTransition() },
         routeDataMap = data
     )
 }

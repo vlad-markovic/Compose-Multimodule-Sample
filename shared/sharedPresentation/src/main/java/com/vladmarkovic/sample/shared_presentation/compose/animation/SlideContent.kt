@@ -1,7 +1,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose.animation
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
@@ -10,23 +9,12 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
-import androidx.navigation.NavBackStackEntry
-import com.vladmarkovic.sample.shared_presentation.tab.TabArgsNames
 
-object DefaultScreenTransition {
-    val enterDirection = SlideDirection.Start
-    const val duration = 200
-    val easing = LinearEasing
-    val animationSpec: FiniteAnimationSpec<IntOffset> = tween(duration, easing = easing)
-    val transition = SlideTransition(animationSpec)
-}
 
 data class SlideTransition(
     val animationSpec: FiniteAnimationSpec<IntOffset>,
@@ -146,48 +134,3 @@ internal fun <T> AnimatedContentTransitionScope<T>.slideOut(
 
 private fun offset(length: Int, offsetMultiplier: Float, offsetExtra: Int) =
     (length * offsetMultiplier).toInt() + offsetExtra
-
-// region slide transition
-fun AnimatedContentTransitionScope<NavBackStackEntry>.slideEnterTransition(
-    direction: SlideDirection = slideDirection
-): EnterTransition =
-    slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-
-fun AnimatedContentTransitionScope<NavBackStackEntry>.slideExitTransition(
-    direction: SlideDirection = slideDirection
-): ExitTransition =
-    slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-
-fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopEnterTransition(
-    direction: SlideDirection = slidePopDirection
-): EnterTransition =
-    slideIntoContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-
-fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopExitTransition(
-    direction: SlideDirection = slidePopDirection
-): ExitTransition =
-    slideOutOfContainer(animationSpec = DefaultScreenTransition.animationSpec, towards = direction)
-
-private val AnimatedContentTransitionScope<NavBackStackEntry>.slideDirection
-    get() = if (inSameStack) SlideDirection.Down else interStackSlideDirection
-
-private val AnimatedContentTransitionScope<NavBackStackEntry>.interStackSlideDirection
-    get() =
-        if (initialState.stackOrdinal < targetState.stackOrdinal) SlideDirection.Start
-        else SlideDirection.End
-
-private val AnimatedContentTransitionScope<NavBackStackEntry>.slidePopDirection
-    get() = if (inSameStack) SlideDirection.Up else SlideDirection.End
-
-private val AnimatedContentTransitionScope<NavBackStackEntry>.inSameStack
-    get() = initialState.destination.parent?.route == targetState.destination.parent?.route
-
-private val AnimatedContentTransitionScope<NavBackStackEntry>.isFirstScreen
-    get() = targetState.destination.route == targetState.destination.parent?.route
-
-private val NavBackStackEntry.stackOrdinal: Int
-    get() = Uri.parse(destination.parent?.route)
-        .getQueryParameter(TabArgsNames.STACK_ORDINAL.name)
-        ?.toIntOrNull()
-        ?: 0
-// endregion slide transition
