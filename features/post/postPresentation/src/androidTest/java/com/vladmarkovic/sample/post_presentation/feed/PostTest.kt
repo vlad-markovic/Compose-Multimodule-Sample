@@ -4,13 +4,13 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_android_test.TestCompose
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
-import com.vladmarkovic.sample.shared_presentation.compose.collectAsStateLifecycleAware
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
@@ -59,7 +59,7 @@ class PostTest {
                 tab = MainBottomTab.POSTS_TAB,
                 viewModel = viewModel
             ) { navController, modifier, bubbleUp ->
-                val authorResult = viewModel.authorResult.collectAsStateLifecycleAware()
+                val authorResult = viewModel.authorResult.collectAsStateWithLifecycle()
 
                 PostScreen(fakePost, authorResult.value, viewModel::getDetails, viewModel::deletePost)
             }

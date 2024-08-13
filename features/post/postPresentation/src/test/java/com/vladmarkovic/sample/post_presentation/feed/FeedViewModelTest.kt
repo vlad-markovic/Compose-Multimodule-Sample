@@ -24,7 +24,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -39,7 +39,7 @@ import kotlin.test.assertTrue
 class FeedViewModelTest {
 
     companion object {
-        private val testDispatcher = UnconfinedTestDispatcher()
+        private val testDispatcher = StandardTestDispatcher()
         private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
@@ -172,6 +172,9 @@ class FeedViewModelTest {
         )
 
         assertFalse(testNetworkConnectivity.isConnected)
+
+        testDispatcher.scheduler.runCurrent()
+
         // One initial call
         coVerify(exactly = 1) { mockPostRepository.fetchAllPosts() }
         // First fallback to cache on error

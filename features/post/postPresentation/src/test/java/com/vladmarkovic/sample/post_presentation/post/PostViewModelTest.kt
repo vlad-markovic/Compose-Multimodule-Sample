@@ -3,18 +3,35 @@
 package com.vladmarkovic.sample.post_presentation.post
 
 import androidx.lifecycle.SavedStateHandle
-import com.vladmarkovic.sample.post_presentation.*
-import com.vladmarkovic.sample.post_presentation.FakeAuthorRepository.Companion.FAKE_FETCH_DELAY
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.common.view.action.navigate
+import com.vladmarkovic.sample.post_presentation.FakeAuthorRepository
+import com.vladmarkovic.sample.post_presentation.FakeAuthorRepository.Companion.FAKE_FETCH_DELAY
+import com.vladmarkovic.sample.post_presentation.FakePostRepository
+import com.vladmarkovic.sample.post_presentation.fakeAuthorSuccessResult
+import com.vladmarkovic.sample.post_presentation.fakeInitialPosts
+import com.vladmarkovic.sample.post_presentation.fakePost
+import com.vladmarkovic.sample.post_presentation.fakePostContent
+import com.vladmarkovic.sample.post_presentation.fakePostId
+import com.vladmarkovic.sample.post_presentation.fakePostTitle
+import com.vladmarkovic.sample.post_presentation.fakePostUserId
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
-import com.vladmarkovic.sample.shared_test.*
-import io.mockk.*
+import com.vladmarkovic.sample.shared_test.CustomizableAllTestSetupExtension
+import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
+import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
+import com.vladmarkovic.sample.shared_test.assertValueEquals
+import com.vladmarkovic.sample.shared_test.setupCoroutines
+import com.vladmarkovic.sample.shared_test.setupLogger
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -27,7 +44,7 @@ import kotlin.test.assertFalse
 class PostViewModelTest {
 
     companion object {
-        private val testDispatcher = UnconfinedTestDispatcher()
+        private val testDispatcher = StandardTestDispatcher()
         private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
@@ -87,7 +104,7 @@ class PostViewModelTest {
     )
     fun testFailureAuthorResult() {
         val exception = IOException()
-        val fakeAuthorRepository = FakeAuthorRepository(exception)
+        fakeAuthorRepository = FakeAuthorRepository(exception)
 
         val viewModel = PostViewModel(
             fakePostRepository,
@@ -120,6 +137,9 @@ class PostViewModelTest {
         )
 
         assertFalse(testNetworkConnectivity.isConnected)
+
+        testDispatcher.scheduler.runCurrent()
+
         // One initial call
         coVerify(exactly = 1) { mockAuthorRepository.fetchAuthor(any()) }
 
@@ -144,17 +164,17 @@ class PostViewModelTest {
             testNetworkConnectivity
         )
 
-        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
+        val spyViewModel = spyk(viewModel)
 
         val post = fakeInitialPosts.first()
 
-        val spyViewModel = spyk(viewModel)
-
         spyViewModel.deletePost(post)
+
+        testDispatcher.scheduler.runCurrent()
 
         val postSlot = slot<Post>()
         coVerify(exactly = 1) { mockPostRepository.deletePost(capture(postSlot)) }
         assertEquals(post, postSlot.captured)
-        coVerify(exactly = 1) { spyViewModel.navigate(Back) }
+        coVerify(exactly = 1) { spyViewModel.emitAction(Back) }
     }
 }

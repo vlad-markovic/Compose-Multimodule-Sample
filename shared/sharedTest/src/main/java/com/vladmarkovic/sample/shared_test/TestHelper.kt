@@ -11,9 +11,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.extension.AfterAllCallback
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
  */
 @ExperimentalCoroutinesApi
 class EachTestSetupExtension : BeforeEachCallback, AfterEachCallback {
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
 
     override fun beforeEach(context: ExtensionContext?) {
         Dispatchers.setMain(testDispatcher)
@@ -63,7 +63,7 @@ class EachTestSetupExtension : BeforeEachCallback, AfterEachCallback {
  */
 @ExperimentalCoroutinesApi
 class AllTestSetupExtension : BeforeAllCallback, AfterAllCallback {
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
 
     override fun beforeAll(context: ExtensionContext?) {
         // Because beforeAll/afterAll are called for each @Nested inner test class, we need to first resetAll().
@@ -108,8 +108,8 @@ sealed class BaseCustomizableTestSetupExtension(
 
     protected fun tearDown() {
         dispatcher?.let {
+            testDispatcher?.scheduler?.advanceUntilIdle()
             Dispatchers.resetMain()
-            testDispatcher?.scheduler?.runCurrent()
         }
     }
 }
@@ -167,7 +167,7 @@ data class CustomizableEachTestSetupExtension(
 
 // region BeforeAllTestSetupExtension builder functions.
 @ExperimentalCoroutinesApi
-fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = UnconfinedTestDispatcher())
+fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = StandardTestDispatcher())
         : CustomizableAllTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
@@ -199,7 +199,7 @@ fun CustomizableAllTestSetupExtension.setupLogger(): CustomizableAllTestSetupExt
 
 // region BeforeEachTestSetupExtension builder functions.
 @ExperimentalCoroutinesApi
-fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = UnconfinedTestDispatcher())
+fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = StandardTestDispatcher())
         : CustomizableEachTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi

@@ -11,7 +11,7 @@ import io.mockk.coVerify
 import io.mockk.slot
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -29,7 +29,7 @@ import kotlin.test.assertTrue
 class PostDataRepositoryTest {
 
     companion object {
-        private val testDispatcher = UnconfinedTestDispatcher()
+        private val testDispatcher = StandardTestDispatcher()
 
         @JvmField
         @RegisterExtension

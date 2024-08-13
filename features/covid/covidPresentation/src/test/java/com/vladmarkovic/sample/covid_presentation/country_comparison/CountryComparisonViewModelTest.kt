@@ -7,7 +7,7 @@ import com.vladmarkovic.sample.shared_test.*
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class CountryComparisonViewModelTest {
         @ExperimentalCoroutinesApi
         @Suppress("Unused")
         val testSetupExtension: CustomizableEachTestSetupExtension =
-            CustomizableEachTestSetupExtension(UnconfinedTestDispatcher())
+            CustomizableEachTestSetupExtension(StandardTestDispatcher())
                 .setupCoroutines()
                 .setupLogger()
     }
@@ -41,6 +41,7 @@ class CountryComparisonViewModelTest {
     @Test
     @DisplayName("Given landing on covid country list screen, when data is fetched, it shows fetched data")
     fun testInitialState() {
+        testSetupExtension.testDispatcher!!.scheduler.runCurrent()
         viewModel.showLoading.assertValueEquals(false)
         viewModel.sortBy.assertValueEquals(CountryComparisonSort.COUNTRY_NAME)
         viewModel.sortAscending.assertValueEquals(true)
