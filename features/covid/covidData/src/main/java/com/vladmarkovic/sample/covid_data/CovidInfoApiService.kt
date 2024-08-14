@@ -7,6 +7,8 @@ import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.shared_data.util.unpack
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /** [CovidInfoRepo] implementation for fetching a list of [CountryCovidInfo] from the api using ktor. */
@@ -17,5 +19,7 @@ class CovidInfoApiService @Inject constructor(private val httpClient: HttpClient
     }
 
     override suspend fun getAffectedCountries(): List<CountryCovidInfo> =
-        httpClient.get(URL_COVID_INFO).unpack()
+        withContext(Dispatchers.IO) {
+            httpClient.get(URL_COVID_INFO).unpack()
+        }
 }

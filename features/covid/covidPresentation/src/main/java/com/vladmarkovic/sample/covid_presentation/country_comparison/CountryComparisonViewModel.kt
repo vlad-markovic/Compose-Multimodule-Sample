@@ -3,19 +3,17 @@
 package com.vladmarkovic.sample.covid_presentation.country_comparison
 
 import androidx.lifecycle.viewModelScope
+import com.vladmarkovic.sample.common.logging.Lumber
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
 import com.vladmarkovic.sample.covid_domain.CovidInfoRepo
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
 import com.vladmarkovic.sample.covid_presentation.country_info.mapToItems
-import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,11 +66,9 @@ class CountryComparisonViewModel @Inject constructor(private val covidInfoRepo: 
 
             val items = getResortedItems(covidInfoList)
 
-            withContext(Dispatchers.Main) {
-                _showLoading.value = false
-                _covidInfo.value = covidInfoList
-                _items.value = items
-            }
+            _showLoading.value = false
+            _covidInfo.value = covidInfoList
+            _items.value = items
         }
     }
 

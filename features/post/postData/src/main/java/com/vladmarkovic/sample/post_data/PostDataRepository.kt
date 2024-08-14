@@ -10,7 +10,9 @@ import com.vladmarkovic.sample.shared_data.model.LastSaved
 import com.vladmarkovic.sample.shared_domain.AppSystem
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @ViewModelScoped
@@ -21,16 +23,18 @@ class PostDataRepository @Inject constructor(
 ) : BasePostDataRepository(postDao, system), PostRepository {
 
     override suspend fun fetchAllPosts(forceFetch: DataSource): List<Post> =
-        when (forceFetch) {
-            DataSource.REMOTE -> fetchAllPostsFromRemote()
-            DataSource.CACHE -> fetchAllPostsFromCache()
-            DataSource.UNSPECIFIED -> {
-                if (cacheExpired(POSTS_TABLE)) fetchAllPostsFromRemote()
-                else fetchAllPostsFromCache()
+        withContext(Dispatchers.IO) {
+            when (forceFetch) {
+                DataSource.REMOTE -> fetchAllPostsFromRemote()
+                DataSource.CACHE -> fetchAllPostsFromCache()
+                DataSource.UNSPECIFIED -> {
+                    if (cacheExpired(POSTS_TABLE)) fetchAllPostsFromRemote()
+                    else fetchAllPostsFromCache()
+                }
             }
         }
 
-    override suspend fun deletePost(post: Post) {
+    override suspend fun deletePost(post: Post) = withContext(Dispatchers.IO) {
         postDao.deletePost(post.id)
     }
 

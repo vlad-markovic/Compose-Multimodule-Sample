@@ -8,6 +8,8 @@ import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.shared_data.model.LastSaved
 import com.vladmarkovic.sample.shared_domain.AppSystem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthorDataRepository @Inject constructor(
@@ -16,9 +18,10 @@ class AuthorDataRepository @Inject constructor(
     override val system: AppSystem,
 ) : BasePostDataRepository(postDao, system), AuthorRepository {
 
-    override suspend fun fetchAuthor(id: Int): Author =
+    override suspend fun fetchAuthor(id: Int): Author = withContext(Dispatchers.IO) {
         if (cacheExpired(AUTHORS_TABLE)) fetchAuthorFromApi(id)
         else postDao.getAuthor(id) ?: fetchAuthorFromApi(id)
+    }
 
     private suspend fun fetchAuthorFromApi(id: Int): DataAuthor =
         postApi.fetchAuthor(id).also { author ->

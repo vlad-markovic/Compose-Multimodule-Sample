@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting.Companion.PROTECTED
 import com.vladmarkovic.sample.shared_domain.AppSystem
 import java.util.concurrent.TimeUnit
 
-abstract class BasePostDataRepository constructor(
+abstract class BasePostDataRepository(
     protected open val postDao: PostDao,
     protected open val system: AppSystem,
 ) {

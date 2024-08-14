@@ -13,7 +13,6 @@ import com.vladmarkovic.sample.post_presentation.fakeRefreshedPosts
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import com.vladmarkovic.sample.shared_test.CustomizableAllTestSetupExtension
-import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
 import com.vladmarkovic.sample.shared_test.assertValueEquals
 import com.vladmarkovic.sample.shared_test.setupCoroutines
@@ -40,7 +39,6 @@ class FeedViewModelTest {
 
     companion object {
         private val testDispatcher = StandardTestDispatcher()
-        private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
         @RegisterExtension
@@ -65,11 +63,7 @@ class FeedViewModelTest {
 
         every { mockSavedStateHandle.set<Post>(ScreenArgNames.POST.name, fakePost) }.answers { }
 
-        viewModel = FeedViewModel(
-            fakePostRepository,
-            testDispatchers,
-            testNetworkConnectivity
-        )
+        viewModel = FeedViewModel(fakePostRepository, testNetworkConnectivity)
     }
 
     @Test
@@ -140,11 +134,7 @@ class FeedViewModelTest {
         coEvery { mockPostRepository.fetchAllPosts(DataSource.CACHE) }.returns(emptyList())
         coEvery { mockPostRepository.observePostsCache() }.returns(flowOf(emptyList()))
 
-        val viewModel = FeedViewModel(
-            mockPostRepository,
-            testDispatchers,
-            testNetworkConnectivity
-        )
+        val viewModel = FeedViewModel(mockPostRepository, testNetworkConnectivity)
 
         viewModel.refreshPosts(DataSource.REMOTE)
 
@@ -165,11 +155,7 @@ class FeedViewModelTest {
         coEvery { mockPostRepository.fetchAllPosts(DataSource.CACHE) }.returns(emptyList())
         every { mockPostRepository.observePostsCache() }.returns(flowOf(emptyList()))
 
-        FeedViewModel(
-            mockPostRepository,
-            testDispatchers,
-            testNetworkConnectivity
-        )
+        FeedViewModel(mockPostRepository, testNetworkConnectivity)
 
         assertFalse(testNetworkConnectivity.isConnected)
 

@@ -3,20 +3,18 @@
 package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.lifecycle.viewModelScope
+import com.vladmarkovic.sample.common.logging.Lumber
+import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.core.coroutines.collectIn
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post
-import com.vladmarkovic.sample.shared_domain.DispatcherProvider
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
-import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.shared_domain.model.DataSource
-import com.vladmarkovic.sample.shared_domain.util.doOnMainOnConnectionChange
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.nio.channels.UnresolvedAddressException
 import javax.inject.Inject
@@ -24,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val postRepository: PostRepository,
-    private val dispatchers: DispatcherProvider,
     connection: NetworkConnectivity
 ): ActionViewModel() {
 
@@ -38,31 +35,27 @@ class FeedViewModel @Inject constructor(
     val posts: StateFlow<List<Post>> = _posts.asStateFlow()
 
     init {
-        connection.doOnMainOnConnectionChange(viewModelScope, dispatchers) { connected ->
+        connection.connectionState.collectIn(viewModelScope) { connected ->
             if (connected && _error.value) {
                 refreshPosts(DataSource.REMOTE)
             }
         }
 
-        refreshPosts()
-
-        viewModelScope.launch(dispatchers.io) {
-            postRepository.observePostsCache().collect { posts ->
-                withContext(dispatchers.main) {
-                    _posts.value = posts
-                }
-            }
+        postRepository.observePostsCache().collectIn(viewModelScope) { posts ->
+            _posts.value = posts
         }
+
+        refreshPosts()
     }
 
     fun refreshPosts(forceFetch: DataSource = DataSource.UNSPECIFIED) {
-        _error.value = false
-        _loading.value = true
-        if (forceFetch == DataSource.CACHE) {
-            _posts.value = emptyList()
-        }
+        viewModelScope.launch {
+            _error.value = false
+            _loading.value = true
+            if (forceFetch == DataSource.CACHE) {
+                _posts.value = emptyList()
+            }
 
-        viewModelScope.launch(dispatchers.io) {
             val (posts, error) = try {
                 Pair(postRepository.fetchAllPosts(forceFetch), null)
             } catch (exception: Exception) {
@@ -79,11 +72,9 @@ class FeedViewModel @Inject constructor(
                 }
             }
 
-            withContext(dispatchers.main) {
-                _loading.value = false
-                posts?.let { _posts.value = it }
-                error?.let { _error.value = it }
-            }
+            _loading.value = false
+            posts?.let { _posts.value = it }
+            error?.let { _error.value = it }
         }
     }
 }

@@ -19,7 +19,6 @@ import com.vladmarkovic.sample.post_presentation.fakePostUserId
 import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import com.vladmarkovic.sample.shared_test.CustomizableAllTestSetupExtension
-import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
 import com.vladmarkovic.sample.shared_test.assertValueEquals
 import com.vladmarkovic.sample.shared_test.setupCoroutines
@@ -45,7 +44,6 @@ class PostViewModelTest {
 
     companion object {
         private val testDispatcher = StandardTestDispatcher()
-        private val testDispatchers = TestDispatcherProvider(testDispatcher)
 
         @JvmField
         @RegisterExtension
@@ -77,7 +75,6 @@ class PostViewModelTest {
         viewModel = PostViewModel(
             fakePostRepository,
             fakeAuthorRepository,
-            testDispatchers,
             mockSavedStateHandle,
             testNetworkConnectivity
         )
@@ -109,7 +106,6 @@ class PostViewModelTest {
         val viewModel = PostViewModel(
             fakePostRepository,
             fakeAuthorRepository,
-            testDispatchers,
             mockSavedStateHandle,
             testNetworkConnectivity
         )
@@ -131,7 +127,6 @@ class PostViewModelTest {
         PostViewModel(
             fakePostRepository,
             mockAuthorRepository,
-            testDispatchers,
             mockSavedStateHandle,
             testNetworkConnectivity
         )
@@ -159,7 +154,6 @@ class PostViewModelTest {
         val viewModel = PostViewModel(
             mockPostRepository,
             fakeAuthorRepository,
-            testDispatchers,
             mockSavedStateHandle,
             testNetworkConnectivity
         )

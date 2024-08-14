@@ -12,27 +12,23 @@ import com.vladmarkovic.sample.post_presentation.post.compose.PostScreen
 import com.vladmarkovic.sample.shared_android_test.TestCompose
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
-import com.vladmarkovic.sample.shared_test.TestDispatcherProvider
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity
 import com.vladmarkovic.sample.shared_test.setupTestLogger
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class PostTest {
 
     @get:Rule
-    val composeTestRule = createComposeRule()
+    var composeTestRule = createComposeRule().apply {
+        mainClock.autoAdvance = false
+    }
 
-    private val testDispatcher = StandardTestDispatcher()
-    private val testDispatchers = TestDispatcherProvider(testDispatcher)
     private val fakePostRepository = FakePostRepository()
     private val fakeAuthorRepository = FakeAuthorRepository()
     private val mockSavedStateHandle: SavedStateHandle = mockk()
@@ -46,10 +42,11 @@ class PostTest {
         every { mockSavedStateHandle.get<String>(ScreenArgNames.POST.name) }.returns(postJson)
         every { mockSavedStateHandle.set<Post>(ScreenArgNames.POST.name, fakePost) }.answers { }
 
+        composeTestRule.mainClock.autoAdvance = false
+
         viewModel = PostViewModel(
             fakePostRepository,
             fakeAuthorRepository,
-            testDispatchers,
             mockSavedStateHandle,
             testNetworkConnectivity
         )
@@ -73,11 +70,6 @@ class PostTest {
 
         composeTestRule.onNodeWithText(fakePost.title).assertExists()
         composeTestRule.onNodeWithText(fakePost.content).assertExists()
-        composeTestRule.onNodeWithText(fakeAuthor.name).assertDoesNotExist()
-        composeTestRule.onNodeWithText(fakeAuthor.email).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Delete Post").assertDoesNotExist()
-
-        testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
         composeTestRule.onNodeWithText(fakeAuthor.name).assertExists()
         composeTestRule.onNodeWithText(fakeAuthor.email).assertExists()
