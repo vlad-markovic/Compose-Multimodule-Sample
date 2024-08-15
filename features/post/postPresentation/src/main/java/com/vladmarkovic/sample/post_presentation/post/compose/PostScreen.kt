@@ -15,23 +15,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.compose.util.padding
+import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
+import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.delete_post_button_label
 import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
+import com.vladmarkovic.sample.shared_presentation.compose.components.Error
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
+import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
-import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.compose.components.Error
-import com.vladmarkovic.sample.common.compose.util.padding
-import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
-import com.vladmarkovic.sample.common.view.action.ViewAction
 import java.io.IOException
 
 @Composable
@@ -79,6 +79,7 @@ internal fun PostScreen(
                         onFetchAuthor()
                     }
                 }
+
                 authorResult.isSuccess -> {
                     AuthorInfo(authorResult.getOrNull()!!)
                 }
@@ -141,7 +142,7 @@ private val successAuthorResult
     )
 
 private val post
-    get() = object: Post {
+    get() = object : Post {
         override val id: Int = 1
         override val userId: Int = 2
         override val title: String = "Title"

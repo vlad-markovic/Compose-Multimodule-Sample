@@ -33,6 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.logging.Lumber
+import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
+import com.vladmarkovic.sample.common.view.action.ViewAction
+import com.vladmarkovic.sample.common.view.action.navigate
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.R
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.CountryDetails
@@ -40,16 +45,11 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.GroupHeader
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
-import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.common.view.action.navigate
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
-import com.vladmarkovic.sample.shared_presentation.compose.di.actionViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
-import com.vladmarkovic.sample.common.view.action.ViewAction
+import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
 @Composable
@@ -125,6 +125,7 @@ fun CountryList(
                             .padding(12.dp)
                     )
                 }
+
                 is CountryDetails -> {
                     Row(modifier = Modifier
                         .fillMaxWidth()
@@ -146,10 +147,12 @@ fun CountryList(
                                     .width(40.dp)
                                     .padding(end = 12.dp)
                             )
-                            Text(item.sortField,
+                            Text(
+                                item.sortField,
                                 Modifier
                                     .width(90.dp)
-                                    .padding(end = 12.dp))
+                                    .padding(end = 12.dp)
+                            )
                         }
                         Text(item.info.country, Modifier.padding(end = 12.dp))
                     }

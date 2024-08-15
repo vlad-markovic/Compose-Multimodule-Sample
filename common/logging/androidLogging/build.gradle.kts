@@ -5,7 +5,7 @@ configureAndroidModule()
 androidLibrary {
     namespace = "com.vladmarkovic.sample.common.logger"
     dependencies {
-        implementationProject(Project.Common.Di.Abstract)
+        implementationProject(Project.Common.Di.Model)
         implementationProject(Project.Common.Logging)
         implementation(Dependencies.timber)
     }

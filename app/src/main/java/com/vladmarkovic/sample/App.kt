@@ -4,10 +4,10 @@ package com.vladmarkovic.sample
 
 import android.app.Activity
 import android.app.Application
-import com.vladmarkovic.sample.common.di.EntryPointAccessor
+import com.vladmarkovic.sample.common.di.model.EntryPointAccessor
 import com.vladmarkovic.sample.di.AndroidAppEntryPointAccessor
-import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
+import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject

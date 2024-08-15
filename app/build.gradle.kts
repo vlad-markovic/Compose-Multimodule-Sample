@@ -67,10 +67,10 @@ dependencies {
     implementationProject(Project.Feature.Settings)
     implementationProject(Project.Feature.Post)
     implementationProject(Project.Feature.Covid)
-    implementationProject(Project.Common.Di.Abstract)
+    implementationProject(Project.Common.Di.Model)
     implementationProject(Project.Common.Logging)
     implementationProject(Project.Common.Logging.Android)
-    implementationProject(Project.Common.View.Action)
+    implementationProject(Project.Common.Mv.Action)
 
     // Kotlin
     implementation(Dependencies.kotlin.reflect)

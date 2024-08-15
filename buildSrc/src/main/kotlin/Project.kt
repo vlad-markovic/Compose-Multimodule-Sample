@@ -68,6 +68,8 @@ sealed interface Project: Named {
         object Kotlin : Core("kotlin")
 
         object Coroutines : Core("coroutines")
+
+        object Android : Core("android")
     }
 
     sealed class Common(override val shortName: String) : Organised {
@@ -76,9 +78,9 @@ sealed interface Project: Named {
         sealed class Di(override val shortName: String) : Common(shortName) {
             override val dirs: List<String> = super.dirs + "di"
 
-            object Abstract : Di("di")
-            object ViewModel : Common("viewModel")
-            object Hilt : Common("hilt")
+            object Model : Di("model")
+            object ViewModel : Di("viewmodel")
+            object Compose : Di("compose")
         }
 
         object Logging : Common("logging"), NameOrganised {
@@ -89,10 +91,12 @@ sealed interface Project: Named {
 
         object Compose : Common("compose")
 
-        sealed class View(override val shortName: String) : Common(shortName) {
-            override val dirs: List<String> = super.dirs + "view"
+        sealed class Mv(override val shortName: String) : Common(shortName) {
+            override val dirs: List<String> = super.dirs + "mv"
 
-            object Action : View("action")
+            object Action : Mv("action")
+
+            object ActionCompose : Mv("actionCompose")
         }
     }
 

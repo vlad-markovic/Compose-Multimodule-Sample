@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.vladmarkovic.sample.core.android.asActivity
 import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.tab.route

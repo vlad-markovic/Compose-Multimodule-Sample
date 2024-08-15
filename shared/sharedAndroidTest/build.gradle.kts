@@ -10,7 +10,8 @@ androidLibrary {
 }
 
 dependencies {
-    implementationProject(Project.Common.View.Action)
+    implementationProject(Project.Common.Mv.Action)
+    implementationProject(Project.Common.Mv.ActionCompose)
     implementationProject(Project.Shared.domain)
     implementationProject(Project.Shared.presentation)
 

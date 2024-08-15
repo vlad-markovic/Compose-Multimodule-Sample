@@ -2,7 +2,7 @@
 
 package com.vladmarkovic.sample.common.logging
 
-import com.vladmarkovic.sample.common.di.EntryPointAccessor
+import com.vladmarkovic.sample.common.di.model.EntryPointAccessor
 
 /** Logger wrapper object, enabling static logging, as [Lumber.v]. */
 object Lumber : Logger {

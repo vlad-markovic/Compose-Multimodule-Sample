@@ -6,7 +6,15 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 
 internal fun DependencyHandler.implementationPresentationBase() {
     implementationProject(Project.Core.Kotlin)
+    implementationProject(Project.Core.Coroutines)
+    implementationProject(Project.Core.Android)
     implementationProject(Project.Common.Logging)
+    implementationProject(Project.Common.Di.Model)
+    implementationProject(Project.Common.Di.ViewModel)
+    implementationProject(Project.Common.Di.Compose)
+    implementationProject(Project.Common.Compose)
+    implementationProject(Project.Common.Mv.Action)
+    implementationProject(Project.Common.Mv.ActionCompose)
 
     // Kotlin
     implementation(Dependencies.kotlin.x.serializationCore)

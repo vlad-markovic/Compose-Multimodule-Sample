@@ -2,9 +2,9 @@
 
 package com.vladmarkovic.sample.shared_test
 
-import com.vladmarkovic.sample.common.di.AppEntryPointAccessor
-import com.vladmarkovic.sample.common.di.EntryPoint
-import com.vladmarkovic.sample.common.di.EntryPointAccessor
+import com.vladmarkovic.sample.common.di.model.AppEntryPointAccessor
+import com.vladmarkovic.sample.common.di.model.EntryPoint
+import com.vladmarkovic.sample.common.di.model.EntryPointAccessor
 import com.vladmarkovic.sample.common.logging.Logger
 import com.vladmarkovic.sample.common.logging.LoggerEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
@@ -168,7 +168,7 @@ data class CustomizableEachTestSetupExtension(
 // region BeforeAllTestSetupExtension builder functions.
 @ExperimentalCoroutinesApi
 fun CustomizableAllTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = StandardTestDispatcher())
-        : CustomizableAllTestSetupExtension = copy(dispatcher = dispatcher)
+    : CustomizableAllTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
 fun CustomizableAllTestSetupExtension.setupOnceForAllNested(): CustomizableAllTestSetupExtension =
@@ -200,7 +200,7 @@ fun CustomizableAllTestSetupExtension.setupLogger(): CustomizableAllTestSetupExt
 // region BeforeEachTestSetupExtension builder functions.
 @ExperimentalCoroutinesApi
 fun CustomizableEachTestSetupExtension.setupCoroutines(dispatcher: CoroutineDispatcher = StandardTestDispatcher())
-        : CustomizableEachTestSetupExtension = copy(dispatcher = dispatcher)
+    : CustomizableEachTestSetupExtension = copy(dispatcher = dispatcher)
 
 @ExperimentalCoroutinesApi
 fun CustomizableEachTestSetupExtension.setupLogger(): CustomizableEachTestSetupExtension {
