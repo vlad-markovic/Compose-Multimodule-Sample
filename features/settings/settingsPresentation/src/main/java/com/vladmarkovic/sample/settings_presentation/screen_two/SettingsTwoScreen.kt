@@ -13,7 +13,7 @@ import com.vladmarkovic.sample.common.view.action.ActionViewModel
 import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
-import com.vladmarkovic.sample.shared_presentation.util.str
+import com.vladmarkovic.sample.common.android.model.str
 
 
 @Composable

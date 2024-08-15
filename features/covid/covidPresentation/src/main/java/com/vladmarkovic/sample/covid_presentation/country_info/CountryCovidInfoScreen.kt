@@ -20,7 +20,7 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.component
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
-import com.vladmarkovic.sample.shared_presentation.util.str
+import com.vladmarkovic.sample.common.android.model.str
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 

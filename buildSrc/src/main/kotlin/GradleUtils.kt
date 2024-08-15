@@ -99,6 +99,7 @@ fun GradleProject.configureAndroidModule() {
         configureAndroidSdkVersions()
 
         dependencies {
+            implementationProject(Project.Common.Android)
             implementation(Dependencies.androidxCoreExtensions)
             implementation(Dependencies.hilt.dagger.android)
             kapt(Dependencies.hilt.dagger.androidCompiler)

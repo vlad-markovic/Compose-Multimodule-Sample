@@ -1,6 +1,6 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components
 
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
+import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 

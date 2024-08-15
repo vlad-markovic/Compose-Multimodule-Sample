@@ -1,9 +1,9 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
+import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.view.action.DisplayAction
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.model.StrOrRes
 import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
 import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
 

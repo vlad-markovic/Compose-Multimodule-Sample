@@ -89,6 +89,8 @@ sealed interface Project: Named {
             }
         }
 
+        object Android : Common("android")
+
         object Compose : Common("compose")
 
         sealed class Mv(override val shortName: String) : Common(shortName) {

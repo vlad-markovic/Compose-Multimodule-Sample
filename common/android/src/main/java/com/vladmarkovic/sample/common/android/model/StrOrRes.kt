@@ -1,6 +1,6 @@
 /** Copyright (C) 2022 Vladimir Markovic - All Rights Reserved */
 
-package com.vladmarkovic.sample.shared_presentation.model
+package com.vladmarkovic.sample.common.android.model
 
 import android.content.Context
 import androidx.annotation.StringRes
@@ -20,3 +20,5 @@ value class StrOrRes private constructor(
 
     override fun toString(): String = if (value is String) value else "Resource($value)"
 }
+
+val String.str: StrOrRes get() = StrOrRes.str(this)
