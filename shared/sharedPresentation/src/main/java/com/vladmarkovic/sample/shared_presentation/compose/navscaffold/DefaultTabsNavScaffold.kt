@@ -2,9 +2,11 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
+import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.rememberComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.model.Screen
@@ -24,15 +26,17 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.rememberTopActionHandler
 
 @Composable
-fun DefaultTabsNavScaffold(
-    allTabs: List<Tab>,
-    initialTab: Tab = allTabs.first(),
+fun <S : Screen, T : Tab<S>> DefaultTabsNavScaffold(
+    allTabs: List<T>,
+    initialTab: T = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
     bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
-    routeDataResolver: (Screen) -> ScreenRouteData
+    routeDataResolver: (S) -> ScreenRouteData,
+    tabDataResolver: (T) -> Pair<ImageVector, Int>,
+    contentResolver: ComposeScreenContentResolver<S>,
 ) {
-    val (scaffoldData, topHandler)  = rememberTopActionHandler(initialTab.initialScreen, bubbleUp)
+    val (scaffoldData, topHandler) = rememberTopActionHandler(initialTab.initialScreen, bubbleUp)
 
     val data = remember(allTabs) {
         allTabs.associateWith { tab ->
@@ -56,13 +60,18 @@ fun DefaultTabsNavScaffold(
                 val drawerData = scaffoldData.drawerData.lifecycleAwareValue
                 drawerData?.drawerItems?.let { DefaultDrawer(it) }
             },
-            bottomBar = remember { { DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate) } },
+            bottomBar = remember {
+                {
+                    DefaultBottomBar(allTabs, tabNav.tabs, tabNav::navigate, tabDataResolver)
+                }
+            },
             bubbleUp = topHandler,
             enterTransition = { enterTransition() },
             exitTransition = { exitTransition() },
             popEnterTransition = { popEnterTransition() },
             popExitTransition = { popExitTransition() },
-            routeDataMap = data
+            routeDataMap = data,
+            contentResolver = contentResolver,
         )
     }
 }

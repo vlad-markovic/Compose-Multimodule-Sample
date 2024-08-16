@@ -11,8 +11,8 @@ import com.vladmarkovic.sample.common.navigation.tab.navcomponent.TabNavViewMode
 
 
 @Composable
-fun tabNavViewModel(initialTab: Tab, navController: NavController, key: String? = null): TabNavViewModel =
-    assistedViewModel<TabNavViewModel, Tab, TabNavViewModelFactory>(
+fun tabNavViewModel(initialTab: Tab<*>, navController: NavController, key: String? = null): TabNavViewModel =
+    assistedViewModel<TabNavViewModel, Tab<*>, TabNavViewModelFactory>(
         assistedInput = initialTab,
         navBackStackEntry = navController.currentBackStackEntry,
         key = key

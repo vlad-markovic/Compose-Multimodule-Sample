@@ -24,7 +24,7 @@ sealed class FeedChange {
 sealed class FeedEvent {
     data class OnRefreshPosts(val forceFetch: DataSource = DataSource.UNSPECIFIED) : FeedEvent()
     data class OnPostTapped(val post: Post) : FeedEvent()
-    data class OnTabTapped(val tab: Tab) : FeedEvent()
+    data class OnTabTapped(val tab: Tab<*>) : FeedEvent()
     data class OnShowToast(val message: String) : FeedEvent()
     data object OnOpenDrawer : FeedEvent()
     data object OnCloseDrawer : FeedEvent()

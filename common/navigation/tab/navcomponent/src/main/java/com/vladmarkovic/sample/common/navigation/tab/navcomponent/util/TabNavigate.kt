@@ -8,7 +8,7 @@ import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 
 
 /** Enables separate back stack navigation per tab. */
-fun NavController.navigate(tab: Tab) {
+fun NavController.navigate(tab: Tab<*>) {
     navigate(tab.route) {
         // Separate stacks per tab.
         popUpTo(graph.findStartDestination().id) {

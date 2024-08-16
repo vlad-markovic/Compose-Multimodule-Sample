@@ -24,20 +24,21 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
-import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
+import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.compose.navgraph.composeNavGraph
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.rememberComposeNavArgs
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
-import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 
 
 @Composable
-fun ScreensNavScaffold(
-    allScreens: List<Screen>,
+fun <S : Screen> ScreensNavScaffold(
+    allScreens: List<S>,
     modifier: Modifier = Modifier,
-    initialScreen: Screen = allScreens.first(),
+    initialScreen: S = allScreens.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     topBar: @Composable () -> Unit = {},
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
@@ -62,7 +63,8 @@ fun ScreensNavScaffold(
         enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         exitTransition,
-    routeDataResolver: (Screen) -> ScreenRouteData,
+    routeDataResolver: (S) -> ScreenRouteData,
+    contentResolver: ComposeScreenContentResolver<S>,
 ) {
     NavScaffold(
         modifier = modifier,
@@ -98,7 +100,7 @@ fun ScreensNavScaffold(
             popEnterTransition = popEnterTransition,
             popExitTransition = popExitTransition,
         ) {
-            composeNavGraph(allScreens, actionHandler, data)
+            composeNavGraph(allScreens, actionHandler, data, contentResolver)
         }
     }
 }

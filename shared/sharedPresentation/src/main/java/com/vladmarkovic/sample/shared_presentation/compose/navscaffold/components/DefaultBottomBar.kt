@@ -9,18 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.tab.model.Tab
-import com.vladmarkovic.sample.shared_presentation.tab.icon
-import com.vladmarkovic.sample.shared_presentation.tab.textRes
 import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
-fun DefaultBottomBar(
-    allTabs: List<Tab>,
-    currentTabFlow: StateFlow<Tab>,
-    onTabSelected: (Tab) -> Unit,
+fun <S : Screen, T : Tab<S>> DefaultBottomBar(
+    allTabs: List<T>,
+    currentTabFlow: StateFlow<Tab<*>>,
+    onTabSelected: (T) -> Unit,
+    resolver: (T) -> Pair<ImageVector, Int>,
     modifier: Modifier = Modifier,
 ) {
     // Don't show tabs if there is none or only one.
@@ -31,9 +32,10 @@ fun DefaultBottomBar(
     BottomAppBar(modifier) {
         BottomNavigation {
             allTabs.forEach { tab ->
+                val (icon, textRes) = resolver(tab)
                 BottomNavigationItem(
-                    icon = { Icon(tab.icon, contentDescription = null) },
-                    label = { Text(stringResource(tab.textRes)) },
+                    icon = { Icon(icon, contentDescription = null) },
+                    label = { Text(stringResource(textRes)) },
                     alwaysShowLabel = false,
                     selected = currentTab == tab,
                     onClick = { onTabSelected(tab) }

@@ -6,4 +6,4 @@ import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.mv.action.NavigationAction
 
 /** For typing and scoping tab navigation actions for navigating to [Tab]. */
-data class ToTab(val tab: Tab) : NavigationAction
+data class ToTab(val tab: Tab<*>) : NavigationAction

@@ -16,14 +16,14 @@ import kotlinx.coroutines.flow.asStateFlow
 /** ViewModel for managing navigation between tabs. */
 @HiltViewModel(assistedFactory = TabNavViewModelFactory::class)
 class TabNavViewModel @AssistedInject constructor(
-    @Assisted initialTab: Tab
+    @Assisted initialTab: Tab<*>
 ) : ViewModel() {
 
     private val _tab = MutableStateFlow(initialTab)
 
-    val tabs: StateFlow<Tab> get() = _tab.asStateFlow()
+    val tabs: StateFlow<Tab<*>> get() = _tab.asStateFlow()
 
-    fun navigate(tab: Tab) {
+    fun navigate(tab: Tab<*>) {
         if (_tab.value != tab) {
             _tab.value = tab
         }
@@ -31,6 +31,6 @@ class TabNavViewModel @AssistedInject constructor(
 }
 
 @AssistedFactory
-interface TabNavViewModelFactory : AssistedViewModelFactory<TabNavViewModel, Tab> {
-    override fun create(assistedInput: Tab): TabNavViewModel
+interface TabNavViewModelFactory : AssistedViewModelFactory<TabNavViewModel, Tab<*>> {
+    override fun create(assistedInput: Tab<*>): TabNavViewModel
 }

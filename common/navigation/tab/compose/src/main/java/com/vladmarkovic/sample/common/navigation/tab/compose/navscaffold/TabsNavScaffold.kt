@@ -26,29 +26,30 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
-import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
-import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.NavScaffold
-import com.vladmarkovic.sample.common.navigation.screen.model.Screen
-import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.mv.action.ViewAction
-import com.vladmarkovic.sample.core.coroutines.collectIn
+import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
+import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.compose.navgraph.composeNavGraph
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.NavScaffold
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.rememberComposeNavArgs
-import com.vladmarkovic.sample.common.navigation.tab.navcomponent.TabNavViewModel
-import com.vladmarkovic.sample.common.navigation.tab.compose.tabNavViewModel
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
 import com.vladmarkovic.sample.common.navigation.tab.compose.rememberTabNavHandler
-import com.vladmarkovic.sample.common.navigation.tab.navcomponent.util.route
+import com.vladmarkovic.sample.common.navigation.tab.compose.tabNavViewModel
+import com.vladmarkovic.sample.common.navigation.tab.model.Tab
+import com.vladmarkovic.sample.common.navigation.tab.navcomponent.TabNavViewModel
 import com.vladmarkovic.sample.common.navigation.tab.navcomponent.util.navigate
+import com.vladmarkovic.sample.common.navigation.tab.navcomponent.util.route
+import com.vladmarkovic.sample.core.coroutines.collectIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 
 @Composable
-fun TabsNavScaffold(
-    allTabs: List<Tab>,
+fun <S : Screen, T : Tab<S>> TabsNavScaffold(
+    allTabs: List<T>,
     modifier: Modifier = Modifier,
-    initialTab: Tab = allTabs.first(),
+    initialTab: T = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
     topBar: @Composable () -> Unit = {},
@@ -75,7 +76,8 @@ fun TabsNavScaffold(
         enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         exitTransition,
-    routeDataMap: Map<Tab, Map<Screen, ScreenRouteData>>,
+    routeDataMap: Map<T, Map<S, ScreenRouteData>>,
+    contentResolver: ComposeScreenContentResolver<S>,
 ) {
     val tabNavHandler: (ViewAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(
@@ -113,7 +115,7 @@ fun TabsNavScaffold(
                     startDestination = data[tab.initialScreen]!!.routeWithPlaceholders,
                     route = tab.route
                 ) {
-                    composeNavGraph(tab.screens, actionHandler, data)
+                    composeNavGraph(tab.screens, actionHandler, data, contentResolver)
                 }
             }
         }
@@ -122,7 +124,7 @@ fun TabsNavScaffold(
 }
 
 @Composable
-fun SetupTabsNavigation(tabs: Flow<Tab>, navController: NavController) {
+fun SetupTabsNavigation(tabs: Flow<Tab<*>>, navController: NavController) {
     LaunchedEffect(Unit) {
         tabs.drop(1).collectIn(this) { tab ->
             navController.navigate(tab)

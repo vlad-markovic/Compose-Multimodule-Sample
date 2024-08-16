@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
+import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.ScreensNavScaffold
 import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
@@ -17,13 +18,14 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.util.rememberTopActionHandler
 
 @Composable
-fun DefaultScreensNavScaffold(
-    allScreens: List<Screen>,
-    initialScreen: Screen = allScreens.first(),
+fun <S : Screen> DefaultScreensNavScaffold(
+    allScreens: List<S>,
+    initialScreen: S = allScreens.first(),
     bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
-    routeDataResolver: (Screen) -> ScreenRouteData
+    routeDataResolver: (S) -> ScreenRouteData,
+    contentResolver: ComposeScreenContentResolver<S>,
 ) {
-    val (scaffoldData, topHandler)  = rememberTopActionHandler(initialScreen, bubbleUp)
+    val (scaffoldData, topHandler) = rememberTopActionHandler(initialScreen, bubbleUp)
 
     AppTheme {
         ScreensNavScaffold(
@@ -42,7 +44,8 @@ fun DefaultScreensNavScaffold(
             exitTransition = { exitTransition() },
             popEnterTransition = { popEnterTransition() },
             popExitTransition = { popExitTransition() },
-            routeDataResolver = routeDataResolver
+            routeDataResolver = routeDataResolver,
+            contentResolver = contentResolver,
         )
     }
 }

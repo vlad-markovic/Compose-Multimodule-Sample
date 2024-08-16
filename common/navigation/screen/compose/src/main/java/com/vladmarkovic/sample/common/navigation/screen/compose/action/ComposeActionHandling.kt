@@ -5,31 +5,16 @@ package com.vladmarkovic.sample.common.navigation.screen.compose.action
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.common.logging.Lumber
+import com.vladmarkovic.sample.common.mv.action.NavigationAction
+import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
-import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.ScaffoldDataManager
-import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.onBack
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.openDrawer
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.CommonNavigationAction
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ToNavGraphScreen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.util.routeWithArgs
-import com.vladmarkovic.sample.common.mv.action.NavigationAction
-import com.vladmarkovic.sample.common.mv.action.ViewAction
 import kotlinx.coroutines.CoroutineScope
 
-
-@Composable
-fun rememberScaffoldChangesHandler(
-    scaffoldData: ScaffoldDataManager,
-    bubbleUp: (ViewAction) -> Unit,
-    key: String? = null
-)  : (ViewAction) -> Unit =
-    remember(key) {{ action ->
-        when (action) {
-            is ScaffoldData -> scaffoldData.update(action)
-            else -> bubbleUp(action)
-        }
-    }}
 
 @Composable
 fun rememberCommonActionsHandler(
