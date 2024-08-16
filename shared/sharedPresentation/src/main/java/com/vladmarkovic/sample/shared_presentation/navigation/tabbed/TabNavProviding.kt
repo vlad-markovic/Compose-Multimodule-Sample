@@ -5,7 +5,7 @@ package com.vladmarkovic.sample.shared_presentation.navigation.tabbed
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.vladmarkovic.sample.common.di.compose.assistedViewModel
-import com.vladmarkovic.sample.shared_domain.tab.Tab
+import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 
 
 @Composable

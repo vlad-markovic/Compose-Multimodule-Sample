@@ -26,10 +26,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.core.coroutines.collectIn
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.composeNavGraph
 import com.vladmarkovic.sample.shared_presentation.compose.rememberComposeNavArgs

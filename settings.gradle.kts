@@ -22,7 +22,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Sample"
 
-val maxDirLevelToTraverse = 3
+val maxDirLevelToTraverse = 4
 
 val excludeDirs = arrayOf(
     rootDir.name,

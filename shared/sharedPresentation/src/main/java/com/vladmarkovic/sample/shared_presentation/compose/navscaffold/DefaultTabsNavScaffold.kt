@@ -3,9 +3,9 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
-import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition

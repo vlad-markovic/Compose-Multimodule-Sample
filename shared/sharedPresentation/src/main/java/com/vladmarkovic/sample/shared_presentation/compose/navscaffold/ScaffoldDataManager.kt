@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.common.di.compose.activityFactoryProvider
 import com.vladmarkovic.sample.common.di.model.BaseAssistedFactory
+import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
 import com.vladmarkovic.sample.core.coroutines.updateNullable
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

@@ -8,9 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.vladmarkovic.sample.common.logging.Lumber
+import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.view.action.NavigationAction
 import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.shared_domain.tab.Tab
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeNavArgs
 import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
 import com.vladmarkovic.sample.shared_presentation.compose.onBack

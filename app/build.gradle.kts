@@ -71,6 +71,7 @@ dependencies {
     implementationProject(Project.Common.Logging)
     implementationProject(Project.Common.Logging.Android)
     implementationProject(Project.Common.Mv.Action)
+    implementationProject(Project.Common.Navigation.Screen.Model)
 
     // Kotlin
     implementation(Dependencies.kotlin.reflect)

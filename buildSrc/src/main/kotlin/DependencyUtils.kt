@@ -15,6 +15,8 @@ internal fun DependencyHandler.implementationPresentationBase() {
     implementationProject(Project.Common.Compose)
     implementationProject(Project.Common.Mv.Action)
     implementationProject(Project.Common.Mv.ActionCompose)
+    implementationProject(Project.Common.Navigation.Screen.Model)
+    implementationProject(Project.Common.Navigation.Tab.Model)
 
     // Kotlin
     implementation(Dependencies.kotlin.x.serializationCore)

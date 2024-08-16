@@ -1,12 +1,12 @@
 package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.runtime.Composable
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.popEnterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.popExitTransition
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
+import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
 import com.vladmarkovic.sample.common.view.action.ViewAction
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultDrawer
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar

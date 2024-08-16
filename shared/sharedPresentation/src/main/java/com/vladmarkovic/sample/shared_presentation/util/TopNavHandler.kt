@@ -8,7 +8,8 @@ import com.vladmarkovic.sample.shared_presentation.navigation.ToScreenGroup
 import com.vladmarkovic.sample.shared_presentation.navigation.TopNavigationActionHandler
 
 
-val Context.asTopNavHandler: TopNavigationActionHandler get() = applicationContext as TopNavigationActionHandler
+val Context.asTopNavHandler: TopNavigationActionHandler get() =
+    applicationContext as TopNavigationActionHandler
 
 fun Context.handleTopScreenNavigationAction(action: ToScreenGroup) {
     asTopNavHandler.handleTopScreenNavigationAction(asActivity, action)

@@ -12,6 +12,8 @@ androidLibrary {
 dependencies {
     implementationProject(Project.Common.Mv.Action)
     implementationProject(Project.Common.Mv.ActionCompose)
+    implementationProject(Project.Common.Navigation.Screen.Model)
+    implementationProject(Project.Common.Navigation.Tab.Model)
     implementationProject(Project.Shared.domain)
     implementationProject(Project.Shared.presentation)
 

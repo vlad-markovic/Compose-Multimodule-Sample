@@ -60,8 +60,6 @@ sealed interface Project: Named {
         is Top -> listOf(module)
     }
 
-    // region specific project modules
-
     sealed class Core(override val shortName: String) : Organised {
         override val dirs: List<String> = listOf("core")
 
@@ -100,8 +98,25 @@ sealed interface Project: Named {
 
             object ActionCompose : Mv("actionCompose")
         }
+
+        sealed class Navigation(override val shortName: String) : Common(shortName) {
+            override val dirs: List<String> = super.dirs + "navigation"
+
+            sealed class Screen(override val shortName: String) : Navigation(shortName) {
+                override val dirs: List<String> = super.dirs + "screen"
+
+                object Model : Screen("model")
+            }
+
+            sealed class Tab(override val shortName: String) : Navigation(shortName) {
+                override val dirs: List<String> = super.dirs + "tab"
+
+                object Model : Tab("model")
+            }
+        }
     }
 
+    // region specific project modules
     /** Included into all other projects (modules), per required layer. */
     object Shared : TopNameOrganised("shared"), Layered
     /** Included into all other data and presentation projects (with testImplementation). */

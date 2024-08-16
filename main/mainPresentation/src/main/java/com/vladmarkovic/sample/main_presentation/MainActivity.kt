@@ -5,10 +5,10 @@ package com.vladmarkovic.sample.main_presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.DefaultTabsNavScaffold
 import com.vladmarkovic.sample.common.compose.util.setComposeContentView
+import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.project.extraArgsNames
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
 import com.vladmarkovic.sample.shared_presentation.screen.routeData

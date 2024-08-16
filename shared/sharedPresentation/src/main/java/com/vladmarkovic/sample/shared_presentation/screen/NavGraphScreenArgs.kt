@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.shared_presentation.screen
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
-import com.vladmarkovic.sample.shared_domain.screen.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.navigation.ToNavGraphScreen
 
 val ToNavGraphScreen.routeWithArgs: String get() = screen.name + routeArgs(args)
