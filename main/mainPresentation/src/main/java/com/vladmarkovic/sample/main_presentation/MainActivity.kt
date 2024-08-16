@@ -10,8 +10,8 @@ import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.DefaultTa
 import com.vladmarkovic.sample.common.compose.util.setComposeContentView
 import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
 import com.vladmarkovic.sample.shared_presentation.project.extraArgsNames
-import com.vladmarkovic.sample.shared_presentation.screen.ScreenRouteData
-import com.vladmarkovic.sample.shared_presentation.screen.routeData
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.util.routeData
 import dagger.hilt.android.AndroidEntryPoint
 
 /** Main holder activity, holding composers for Composable-s. */

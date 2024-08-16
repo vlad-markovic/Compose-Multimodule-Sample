@@ -9,7 +9,7 @@ import com.vladmarkovic.sample.post_data.AuthorDataRepository
 import com.vladmarkovic.sample.post_data.PostDataRepository
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
+import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

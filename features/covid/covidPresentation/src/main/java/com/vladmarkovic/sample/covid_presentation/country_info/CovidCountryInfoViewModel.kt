@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.covid_presentation.country_info
 
 import androidx.lifecycle.SavedStateHandle
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.serialization.json.Json

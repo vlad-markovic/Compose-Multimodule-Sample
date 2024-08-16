@@ -9,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
 import com.vladmarkovic.sample.common.android.model.str
 
 

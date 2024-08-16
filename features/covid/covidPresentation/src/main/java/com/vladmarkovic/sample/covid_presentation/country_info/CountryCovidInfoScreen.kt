@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.common.compose.util.padding
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import com.vladmarkovic.sample.common.android.model.str
 import java.text.SimpleDateFormat

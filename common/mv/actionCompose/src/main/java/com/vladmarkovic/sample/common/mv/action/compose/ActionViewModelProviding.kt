@@ -21,9 +21,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.common.di.viewmodel.AssistedViewModelFactory
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.common.view.action.ViewActionMonitorable
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.ViewActionMonitorable
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

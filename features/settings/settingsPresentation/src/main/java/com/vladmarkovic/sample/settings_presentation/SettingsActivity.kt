@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.DefaultScreensNavScaffold
 import com.vladmarkovic.sample.common.compose.util.setComposeContentView
-import com.vladmarkovic.sample.shared_presentation.screen.routeData
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.util.routeData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

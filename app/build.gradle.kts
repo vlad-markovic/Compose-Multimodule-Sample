@@ -72,6 +72,11 @@ dependencies {
     implementationProject(Project.Common.Logging.Android)
     implementationProject(Project.Common.Mv.Action)
     implementationProject(Project.Common.Navigation.Screen.Model)
+    implementationProject(Project.Common.Navigation.Screen.NavComponent)
+    implementationProject(Project.Common.Navigation.Screen.Compose)
+    implementationProject(Project.Common.Navigation.Tab.Model)
+    implementationProject(Project.Common.Navigation.Tab.NavComponent)
+    implementationProject(Project.Common.Navigation.Tab.Compose)
 
     // Kotlin
     implementation(Dependencies.kotlin.reflect)

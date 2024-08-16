@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.DrawerItem
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 
 

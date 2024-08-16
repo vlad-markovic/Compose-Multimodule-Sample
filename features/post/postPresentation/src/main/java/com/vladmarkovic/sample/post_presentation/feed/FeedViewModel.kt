@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.post_presentation.feed
 
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
 import com.vladmarkovic.sample.core.coroutines.collectIn
 import com.vladmarkovic.sample.post_domain.PostRepository
 import com.vladmarkovic.sample.post_domain.model.Post

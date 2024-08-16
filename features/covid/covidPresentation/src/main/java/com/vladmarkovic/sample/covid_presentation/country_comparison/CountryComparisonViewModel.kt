@@ -4,7 +4,7 @@ package com.vladmarkovic.sample.covid_presentation.country_comparison
 
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
 import com.vladmarkovic.sample.covid_domain.CovidInfoRepo
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME

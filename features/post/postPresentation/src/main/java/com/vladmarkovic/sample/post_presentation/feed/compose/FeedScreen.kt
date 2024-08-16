@@ -21,8 +21,8 @@ import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.compose.util.padding
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.common.view.action.navigate
+import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.error_on_posts_fetch
@@ -30,10 +30,10 @@ import com.vladmarkovic.sample.post_presentation.feed.FeedViewModel
 import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource
 import com.vladmarkovic.sample.shared_presentation.compose.components.Error
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens

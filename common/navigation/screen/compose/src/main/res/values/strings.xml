@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button_back_label">Back</string>
+    <string name="button_open_drawer_label">Open Drawer</string>
+</resources>

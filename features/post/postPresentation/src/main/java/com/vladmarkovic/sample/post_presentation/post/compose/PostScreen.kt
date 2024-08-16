@@ -19,7 +19,7 @@ import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.compose.util.padding
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
@@ -28,8 +28,8 @@ import com.vladmarkovic.sample.post_presentation.R.string.error_on_author_fetch
 import com.vladmarkovic.sample.post_presentation.post.PostViewModel
 import com.vladmarkovic.sample.shared_presentation.compose.components.Error
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 import java.io.IOException

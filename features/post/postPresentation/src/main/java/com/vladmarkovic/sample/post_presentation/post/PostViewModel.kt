@@ -5,8 +5,8 @@ package com.vladmarkovic.sample.post_presentation.post
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.common.logging.Lumber
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
-import com.vladmarkovic.sample.common.view.action.navigate
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.core.coroutines.collectIn
 import com.vladmarkovic.sample.post_domain.AuthorRepository
 import com.vladmarkovic.sample.post_domain.PostRepository
@@ -14,7 +14,7 @@ import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.model.PostArg
 import com.vladmarkovic.sample.shared_domain.connectivity.NetworkConnectivity
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

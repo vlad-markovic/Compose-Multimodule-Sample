@@ -2,7 +2,7 @@ package com.vladmarkovic.sample.compose
 
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
-import com.vladmarkovic.sample.common.view.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonScreen
 import com.vladmarkovic.sample.covid_presentation.country_info.CountryCovidInfoScreen
 import com.vladmarkovic.sample.post_presentation.feed.compose.FeedScreen
@@ -11,7 +11,7 @@ import com.vladmarkovic.sample.settings_presentation.main.SettingsMainScreen
 import com.vladmarkovic.sample.settings_presentation.screen_two.SettingsTwoScreen
 import com.vladmarkovic.sample.shared_domain.screen.MainScreen
 import com.vladmarkovic.sample.shared_domain.screen.SettingsScreen
-import com.vladmarkovic.sample.shared_presentation.compose.ComposeScreenContentResolver
+import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 

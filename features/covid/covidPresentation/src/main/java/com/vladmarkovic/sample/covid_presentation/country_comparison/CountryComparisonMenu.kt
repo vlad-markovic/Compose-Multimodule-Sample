@@ -3,7 +3,7 @@
 package com.vladmarkovic.sample.covid_presentation.country_comparison
 
 import com.vladmarkovic.sample.covid_presentation.R.string
-import com.vladmarkovic.sample.shared_presentation.ui.model.MenuItem
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.MenuItem
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class CountryComparisonMenu {

@@ -11,9 +11,9 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.common.mv.action.compose.SetupWith
 import com.vladmarkovic.sample.common.navigation.tab.model.Tab
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.shared_presentation.tab.route
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.navigation.tab.navcomponent.util.route
 
 @Composable
 fun TestCompose(

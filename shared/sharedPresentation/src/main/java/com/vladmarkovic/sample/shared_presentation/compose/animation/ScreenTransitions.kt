@@ -1,6 +1,5 @@
 package com.vladmarkovic.sample.shared_presentation.compose.animation
 
-import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.EnterTransition
@@ -15,7 +14,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavBackStackEntry
 import com.vladmarkovic.sample.common.compose.animation.inSameStack
-import com.vladmarkovic.sample.shared_presentation.tab.TabArgs
+import com.vladmarkovic.sample.common.navigation.tab.navcomponent.util.tabOrdinal
 
 
 object DefaultScreenTransition {
@@ -64,19 +63,13 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.slidePopExitTransition(
     slideOutOfContainer(animationSpec = DefaultScreenTransition.intTween, towards = direction)
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.slideDirection
-    get() = if (inSameStack) SlideDirection.Down else interStackSlideDirection
+    get() = if (inSameStack) SlideDirection.Down else crossTabSlideDirection
 
-private val AnimatedContentTransitionScope<NavBackStackEntry>.interStackSlideDirection
+private val AnimatedContentTransitionScope<NavBackStackEntry>.crossTabSlideDirection
     get() =
-        if (initialState.stackOrdinal < targetState.stackOrdinal) SlideDirection.Start
+        if (initialState.tabOrdinal < targetState.tabOrdinal) SlideDirection.Start
         else SlideDirection.End
 
 private val AnimatedContentTransitionScope<NavBackStackEntry>.slidePopDirection
     get() = if (inSameStack) SlideDirection.Up else SlideDirection.End
-
-val NavBackStackEntry.stackOrdinal: Int
-    get() = Uri.parse(destination.parent?.route)
-        .getQueryParameter(TabArgs.TAB_ORDINAL.name)
-        ?.toIntOrNull()
-        ?: 0
 // endregion slide transition

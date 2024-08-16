@@ -16,7 +16,7 @@ import com.vladmarkovic.sample.post_presentation.fakePostContent
 import com.vladmarkovic.sample.post_presentation.fakePostId
 import com.vladmarkovic.sample.post_presentation.fakePostTitle
 import com.vladmarkovic.sample.post_presentation.fakePostUserId
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction.Back
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.CommonNavigationAction.Back
 import com.vladmarkovic.sample.shared_presentation.screen.ScreenArgNames
 import com.vladmarkovic.sample.shared_test.CustomizableAllTestSetupExtension
 import com.vladmarkovic.sample.shared_test.TestNetworkConnectivity

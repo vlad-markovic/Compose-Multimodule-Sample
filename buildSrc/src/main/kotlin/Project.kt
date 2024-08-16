@@ -106,12 +106,20 @@ sealed interface Project: Named {
                 override val dirs: List<String> = super.dirs + "screen"
 
                 object Model : Screen("model")
+
+                object NavComponent : Screen("navcomponent")
+
+                object Compose : Screen("compose")
             }
 
             sealed class Tab(override val shortName: String) : Navigation(shortName) {
                 override val dirs: List<String> = super.dirs + "tab"
 
                 object Model : Tab("model")
+
+                object NavComponent : Tab("navcomponent")
+
+                object Compose : Tab("compose")
             }
         }
     }

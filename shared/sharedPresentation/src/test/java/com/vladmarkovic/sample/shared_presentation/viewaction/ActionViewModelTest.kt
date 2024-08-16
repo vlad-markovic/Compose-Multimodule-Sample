@@ -1,11 +1,11 @@
 package com.vladmarkovic.sample.shared_presentation.viewaction
 
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
-import com.vladmarkovic.sample.common.view.action.NavigationAction
-import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.common.view.action.action
-import com.vladmarkovic.sample.common.view.action.navigate
-import com.vladmarkovic.sample.shared_presentation.navigation.CommonNavigationAction
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.NavigationAction
+import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.action
+import com.vladmarkovic.sample.common.mv.action.navigate
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.CommonNavigationAction
 import com.vladmarkovic.sample.shared_test.AllTestSetupExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName

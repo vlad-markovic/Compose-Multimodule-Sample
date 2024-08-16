@@ -37,8 +37,8 @@ import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.view.action.ViewAction
-import com.vladmarkovic.sample.common.view.action.navigate
+import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.R
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.CountryDetails
@@ -46,10 +46,10 @@ import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComp
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonItem.GroupHeader
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonSort.COUNTRY_NAME
 import com.vladmarkovic.sample.covid_presentation.navigation.ToCountryInfoScreen
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.ScaffoldData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.TopBarData
-import com.vladmarkovic.sample.shared_presentation.ui.model.UpButton
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
 import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
 @Composable

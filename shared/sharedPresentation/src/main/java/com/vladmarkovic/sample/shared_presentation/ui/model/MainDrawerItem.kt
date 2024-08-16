@@ -8,15 +8,15 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.shared_presentation.R
-import com.vladmarkovic.sample.common.view.action.ActionViewModel
-import com.vladmarkovic.sample.common.view.action.display
-import com.vladmarkovic.sample.common.view.action.navigate
+import com.vladmarkovic.sample.common.mv.action.ActionViewModel
+import com.vladmarkovic.sample.common.mv.action.display
+import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction.Toast
 import com.vladmarkovic.sample.shared_presentation.navigation.ToSettings
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
-import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DrawerItem
-import com.vladmarkovic.sample.shared_presentation.navigation.CloseDrawer
-import com.vladmarkovic.sample.shared_presentation.screen.ToTab
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.DrawerItem
+import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.CloseDrawer
+import com.vladmarkovic.sample.common.navigation.tab.navcomponent.model.ToTab
 
 sealed class MainDrawerItem(
     override val icon: ImageVector,
