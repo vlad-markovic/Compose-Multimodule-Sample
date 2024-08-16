@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.DefaultTabsNavScaffold
 import com.vladmarkovic.sample.common.compose.util.setComposeContentView
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.shared_presentation.project.extraArgsNames
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.util.routeData
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setComposeContentView {
-            val routeDataResolver: (NavGraphScreen) -> ScreenRouteData = remember {{ screen ->
+            val routeDataResolver: (Screen) -> ScreenRouteData = remember {{ screen ->
                 screen.routeData(screen.extraArgsNames)
             }}
             DefaultTabsNavScaffold(MainBottomTab.entries, routeDataResolver = routeDataResolver)

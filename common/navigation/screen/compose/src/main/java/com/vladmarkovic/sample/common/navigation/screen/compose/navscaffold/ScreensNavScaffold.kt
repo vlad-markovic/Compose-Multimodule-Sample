@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.compose.navgraph.composeNavGraph
@@ -35,9 +35,9 @@ import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberT
 
 @Composable
 fun ScreensNavScaffold(
-    allScreens: List<NavGraphScreen>,
+    allScreens: List<Screen>,
     modifier: Modifier = Modifier,
-    initialScreen: NavGraphScreen = allScreens.first(),
+    initialScreen: Screen = allScreens.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     topBar: @Composable () -> Unit = {},
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
@@ -62,7 +62,7 @@ fun ScreensNavScaffold(
         enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         exitTransition,
-    routeDataResolver: (NavGraphScreen) -> ScreenRouteData,
+    routeDataResolver: (Screen) -> ScreenRouteData,
 ) {
     NavScaffold(
         modifier = modifier,

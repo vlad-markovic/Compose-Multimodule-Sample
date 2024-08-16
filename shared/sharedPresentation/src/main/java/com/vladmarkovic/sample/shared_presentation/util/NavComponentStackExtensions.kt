@@ -6,14 +6,14 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.util.isFirstScreen
 
 
-fun NavController.isInitialStackFirstScreen(initialScreen: NavGraphScreen): Boolean =
+fun NavController.isInitialStackFirstScreen(initialScreen: Screen): Boolean =
     currentBackStackEntry?.isInitialStackFirstScreen(initialScreen) == true
 
-fun NavBackStackEntry.isInitialStackFirstScreen(initialScreen: NavGraphScreen): Boolean =
+fun NavBackStackEntry.isInitialStackFirstScreen(initialScreen: Screen): Boolean =
     isFirstScreen && destination.parent?.startDestinationRoute?.startsWith(initialScreen.name) == true
 
 

@@ -7,7 +7,7 @@ import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.rememberComposeNavArgs
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
 import com.vladmarkovic.sample.common.navigation.tab.compose.navscaffold.TabsNavScaffold
 import com.vladmarkovic.sample.common.navigation.tab.compose.tabNavViewModel
@@ -30,7 +30,7 @@ fun DefaultTabsNavScaffold(
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
     bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
-    routeDataResolver: (NavGraphScreen) -> ScreenRouteData
+    routeDataResolver: (Screen) -> ScreenRouteData
 ) {
     val (scaffoldData, topHandler)  = rememberTopActionHandler(initialTab.initialScreen, bubbleUp)
 

@@ -3,16 +3,16 @@ package com.vladmarkovic.sample.common.navigation.screen.compose.navgraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.content.injectScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
 
 /** Composes screens and a "navigation branch" with "composable" function for each screen. */
 fun NavGraphBuilder.composeNavGraph(
-    allScreens: List<NavGraphScreen>,
+    allScreens: List<Screen>,
     bubbleUp: (ViewAction) -> Unit,
-    routeDataMap: Map<NavGraphScreen, ScreenRouteData>,
+    routeDataMap: Map<Screen, ScreenRouteData>,
 ) {
     allScreens.forEach { screen ->
         val routeData = routeDataMap[screen]!!

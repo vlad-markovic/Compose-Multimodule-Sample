@@ -11,13 +11,13 @@ import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.ScaffoldDataManager
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.rememberScaffoldDataManager
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 
 
 @Composable
 fun rememberTopActionHandler(
-    initialScreen: NavGraphScreen,
+    initialScreen: Screen,
     bubbleUp: (ViewAction) -> Unit
 ): Pair<ScaffoldDataManager, (ViewAction) -> Unit> {
     val context = LocalContext.current

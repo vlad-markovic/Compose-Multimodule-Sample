@@ -1,7 +1,7 @@
 package com.vladmarkovic.sample.compose
 
 import androidx.compose.runtime.Composable
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.covid_presentation.country_comparison.CountryComparisonScreen
 import com.vladmarkovic.sample.covid_presentation.country_info.CountryCovidInfoScreen
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class ComposeScreenContentResolverImpl @Inject constructor(): ComposeScreenContentResolver {
     @Composable
-    override fun NavGraphScreen.Content(bubbleUp: (ViewAction) -> Unit) = when (this) {
+    override fun Screen.Content(bubbleUp: (ViewAction) -> Unit) = when (this) {
         MainScreen.PostsScreen.FEED_SCREEN -> FeedScreen(bubbleUp)
         MainScreen.PostsScreen.POST_SCREEN -> PostScreen(bubbleUp)
         MainScreen.CovidScreen.COVID_COUNTRY_COMPARISON -> CountryComparisonScreen(bubbleUp)

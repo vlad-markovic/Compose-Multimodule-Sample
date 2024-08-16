@@ -4,13 +4,13 @@ package com.vladmarkovic.sample.common.navigation.screen.navcomponent.util
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavDeepLink
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ToNavGraphScreen
 
 val ToNavGraphScreen.routeWithArgs: String get() = screen.name + routeArgs(args)
 
-fun NavGraphScreen.routeData(
+fun Screen.routeData(
     extraArgsNames: Collection<String> = emptySet(),
     deepLinks: Collection<NavDeepLink> = emptySet(),
 ) = ScreenRouteData(
@@ -20,7 +20,7 @@ fun NavGraphScreen.routeData(
 )
 
 /** i.e. POST?POST=[post-json] */
-private fun NavGraphScreen.routeWithPlaceholders(extraArgsNames: Collection<String>): String =
+private fun Screen.routeWithPlaceholders(extraArgsNames: Collection<String>): String =
     name + routePlaceholderArgs(extraArgsNames)
 
 /** i.e. ?POST={POST} */

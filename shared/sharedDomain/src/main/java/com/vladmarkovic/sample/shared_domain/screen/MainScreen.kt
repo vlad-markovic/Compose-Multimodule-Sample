@@ -1,8 +1,8 @@
 package com.vladmarkovic.sample.shared_domain.screen
 
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 
-sealed interface MainScreen : NavGraphScreen {
+sealed interface MainScreen : Screen {
 
     enum class PostsScreen : MainScreen {
         FEED_SCREEN,

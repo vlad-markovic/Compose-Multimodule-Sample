@@ -28,7 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.NavScaffold
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.core.coroutines.collectIn
@@ -75,7 +75,7 @@ fun TabsNavScaffold(
         enterTransition,
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
         exitTransition,
-    routeDataMap: Map<Tab, Map<NavGraphScreen, ScreenRouteData>>,
+    routeDataMap: Map<Tab, Map<Screen, ScreenRouteData>>,
 ) {
     val tabNavHandler: (ViewAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(

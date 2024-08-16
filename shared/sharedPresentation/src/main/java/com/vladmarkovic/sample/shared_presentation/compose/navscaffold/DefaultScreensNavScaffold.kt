@@ -5,7 +5,7 @@ import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.mv.action.ViewAction
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.ScreensNavScaffold
-import com.vladmarkovic.sample.common.navigation.screen.model.NavGraphScreen
+import com.vladmarkovic.sample.common.navigation.screen.model.Screen
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ScreenRouteData
 import com.vladmarkovic.sample.shared_presentation.compose.animation.enterTransition
 import com.vladmarkovic.sample.shared_presentation.compose.animation.exitTransition
@@ -18,10 +18,10 @@ import com.vladmarkovic.sample.shared_presentation.util.rememberTopActionHandler
 
 @Composable
 fun DefaultScreensNavScaffold(
-    allScreens: List<NavGraphScreen>,
-    initialScreen: NavGraphScreen = allScreens.first(),
+    allScreens: List<Screen>,
+    initialScreen: Screen = allScreens.first(),
     bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
-    routeDataResolver: (NavGraphScreen) -> ScreenRouteData
+    routeDataResolver: (Screen) -> ScreenRouteData
 ) {
     val (scaffoldData, topHandler)  = rememberTopActionHandler(initialScreen, bubbleUp)
 
