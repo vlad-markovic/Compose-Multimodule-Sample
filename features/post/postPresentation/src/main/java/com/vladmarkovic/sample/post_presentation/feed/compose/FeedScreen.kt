@@ -20,21 +20,23 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.compose.util.padding
-import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
 import com.vladmarkovic.sample.common.mv.action.ViewAction
-import com.vladmarkovic.sample.common.mv.action.navigate
+import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
+import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
+import com.vladmarkovic.sample.core.kotlin.doNothing
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
 import com.vladmarkovic.sample.post_presentation.R.string.error_on_posts_fetch
+import com.vladmarkovic.sample.post_presentation.feed.FeedEvent
+import com.vladmarkovic.sample.post_presentation.feed.FeedState
 import com.vladmarkovic.sample.post_presentation.feed.FeedViewModel
-import com.vladmarkovic.sample.post_presentation.navigation.ToPostScreen
 import com.vladmarkovic.sample.shared_domain.model.DataSource
+import com.vladmarkovic.sample.shared_domain.tab.MainBottomTab
 import com.vladmarkovic.sample.shared_presentation.compose.components.Error
-import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.shared_presentation.compose.navscaffold.components.DefaultTopBar
-import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
-import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
-import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
+import com.vladmarkovic.sample.shared_presentation.ui.model.MainDrawerItem
 import com.vladmarkovic.sample.shared_presentation.ui.theme.AppTheme
 import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 
@@ -50,34 +52,36 @@ fun FeedScreen(
 
     Column(Modifier.fillMaxSize()) {
         DefaultTopBar(
-            TopBarData(StrOrRes.res(R.string.feed_screen_title), UpButton.DrawerButton(viewModel))
+            TopBarData(
+                StrOrRes.res(R.string.feed_screen_title),
+                UpButton.DrawerButton { viewModel.onEvent(FeedEvent.OnOpenDrawer) }
+            )
         )
 
         FeedScreen(
-            loading = viewModel.loading.lifecycleAwareValue,
-            posts = viewModel.posts.lifecycleAwareValue,
-            error = viewModel.error.lifecycleAwareValue,
-            onRefresh = { viewModel.refreshPosts(DataSource.REMOTE) },
-            onPostClick = { viewModel.navigate(ToPostScreen(it)) }
+            state = viewModel.state.lifecycleAwareValue,
+            onRefresh = { viewModel.onEvent(FeedEvent.OnRefreshPosts(DataSource.REMOTE)) },
+            onPostClick = { viewModel.onEvent(FeedEvent.OnPostTapped(it)) }
         )
     }
 }
 
 @Composable
 private fun FeedScreen(
-    loading: Boolean,
-    posts: List<Post>,
-    error: Boolean,
+    state: FeedState,
     onRefresh: () -> Unit,
     onPostClick: (Post) -> Unit
 ) {
     SwipeRefresh(
-        state = rememberSwipeRefreshState(loading),
+        state = rememberSwipeRefreshState(state == FeedState.Loading),
         onRefresh = onRefresh,
         modifier = Modifier.fillMaxSize()
     ) {
-        if (error) Error(stringResource(error_on_posts_fetch), onRefresh)
-        else PostList(posts, onPostClick)
+        when(state) {
+            is FeedState.Error -> Error(stringResource(error_on_posts_fetch), onRefresh)
+            is FeedState.Posts -> PostList(state.posts, onPostClick)
+            is FeedState.Loading -> doNothing()
+        }
     }
 }
 
@@ -117,3 +121,22 @@ private fun PostList(posts: List<Post>, onPostClick: (Post) -> Unit) {
         }
     }
 }
+
+fun defaultDrawerItems(viewModel: FeedViewModel) = listOf(
+    MainDrawerItem.ItemPostsTab {
+        viewModel.onEvent(FeedEvent.OnCloseDrawer)
+        viewModel.onEvent(FeedEvent.OnTabTapped(MainBottomTab.POSTS_TAB))
+    },
+    MainDrawerItem.ItemCovidTab {
+        viewModel.onEvent(FeedEvent.OnCloseDrawer)
+        viewModel.onEvent(FeedEvent.OnTabTapped(MainBottomTab.COVID_TAB))
+    },
+    MainDrawerItem.ItemToast {
+        viewModel.onEvent(FeedEvent.OnCloseDrawer)
+        viewModel.onEvent(FeedEvent.OnShowToast("A Toast"))
+    },
+    MainDrawerItem.ItemSettings {
+        viewModel.onEvent(FeedEvent.OnCloseDrawer)
+        viewModel.onEvent(FeedEvent.OnSettingsTapped)
+    }
+)

@@ -97,6 +97,10 @@ sealed interface Project: Named {
             object Action : Mv("action")
 
             object ActionCompose : Mv("actionCompose")
+
+            object State : Mv("state")
+
+            object Mvi : Mv("mvi")
         }
 
         sealed class Navigation(override val shortName: String) : Common(shortName) {

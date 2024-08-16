@@ -26,6 +26,8 @@ androidLibrary {
 }
 
 dependencies {
+    implementationProject(Project.Common.Mv.State)
+    implementationProject(Project.Common.Mv.Mvi)
     implementationProject(Project.Feature.Post.domain)
     androidTestImplementationProject(Project.Feature.Post.data)
     androidTestImplementationProject(Project.Main)

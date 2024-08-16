@@ -72,15 +72,11 @@ class FeedViewModelTest {
                 "It shows loading while fetching and shows posts after fetched"
     )
     fun testInitialState() {
-        viewModel.loading.assertValueEquals(true)
-        viewModel.error.assertValueEquals(false)
-        runTest { assertEquals(fakeInitialPosts.size, viewModel.posts.value.count()) }
+        viewModel.state.assertValueEquals(FeedState.Loading)
 
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
-        viewModel.loading.assertValueEquals(false)
-        viewModel.error.assertValueEquals(false)
-        runTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        viewModel.state.assertValueEquals(FeedState.Posts(fakeInitialPosts))
     }
 
     @Test
@@ -91,17 +87,13 @@ class FeedViewModelTest {
     fun testRefreshingPosts() {
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
-        viewModel.refreshPosts(DataSource.REMOTE)
+        viewModel.state.assertValueEquals(FeedState.Posts(fakeInitialPosts))
 
-        viewModel.loading.assertValueEquals(true)
-        viewModel.error.assertValueEquals(false)
-        runTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        viewModel.onEvent(FeedEvent.OnRefreshPosts(DataSource.REMOTE))
 
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
-        viewModel.loading.assertValueEquals(false)
-        viewModel.error.assertValueEquals(false)
-        runTest { assertEquals(fakeRefreshedPosts, viewModel.posts.value) }
+        viewModel.state.assertValueEquals(FeedState.Posts(fakeRefreshedPosts))
     }
 
     @Test
@@ -112,17 +104,13 @@ class FeedViewModelTest {
     fun testReFetchingPosts() {
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
-        viewModel.refreshPosts(DataSource.CACHE)
+        viewModel.state.assertValueEquals(FeedState.Posts(fakeInitialPosts))
 
-        viewModel.loading.assertValueEquals(true)
-        viewModel.error.assertValueEquals(false)
-        runTest { assertEquals(emptyList(), viewModel.posts.value) }
+        viewModel.onEvent(FeedEvent.OnRefreshPosts(DataSource.CACHE))
 
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
-        viewModel.loading.assertValueEquals(false)
-        viewModel.error.assertValueEquals(false)
-        runTest { assertEquals(fakeInitialPosts, viewModel.posts.value) }
+        viewModel.state.assertValueEquals(FeedState.Posts(fakeInitialPosts))
     }
 
     @Test
@@ -136,11 +124,11 @@ class FeedViewModelTest {
 
         val viewModel = FeedViewModel(mockPostRepository, testNetworkConnectivity)
 
-        viewModel.refreshPosts(DataSource.REMOTE)
+        viewModel.onEvent(FeedEvent.OnRefreshPosts(DataSource.REMOTE))
 
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 
-        assertTrue(viewModel.error.value)
+        viewModel.state.assertValueEquals(FeedState.Error)
     }
 
     @Test
@@ -167,6 +155,7 @@ class FeedViewModelTest {
         coVerify(exactly = 1) { mockPostRepository.fetchAllPosts(DataSource.CACHE) }
 
         testNetworkConnectivity.state.value = true
+        assertTrue(testNetworkConnectivity.isConnected)
 
         testDispatcher.scheduler.advanceTimeBy(FAKE_FETCH_DELAY)
 

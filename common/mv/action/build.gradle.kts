@@ -3,7 +3,7 @@
 configureAndroidModule()
 
 androidLibrary {
-    namespace = "com.vladmarkovic.sample.common.viewaction"
+    namespace = "com.vladmarkovic.sample.common.mv.action"
 }
 
 dependencies {

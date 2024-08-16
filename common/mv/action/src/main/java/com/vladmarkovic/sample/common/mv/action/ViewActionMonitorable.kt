@@ -2,6 +2,6 @@ package com.vladmarkovic.sample.common.mv.action
 
 import kotlinx.coroutines.flow.SharedFlow
 
-interface ViewActionMonitorable<ViewAction> {
+interface ViewActionMonitorable<A: ViewAction> {
     val actions: SharedFlow<ViewAction>
 }
