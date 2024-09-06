@@ -19,7 +19,7 @@ import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.compose.util.padding
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.post_domain.model.Author
 import com.vladmarkovic.sample.post_domain.model.Post
 import com.vladmarkovic.sample.post_presentation.R
@@ -36,7 +36,7 @@ import java.io.IOException
 
 @Composable
 fun PostScreen(
-    bubbleUp: (ViewAction) -> Unit,
+    bubbleUp: (Action) -> Unit,
     viewModel: PostViewModel = actionViewModel<PostViewModel>(bubbleUp)
 ) {
     Column(Modifier.fillMaxSize()) {

@@ -26,7 +26,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
@@ -67,7 +67,7 @@ fun <S : Screen, T : Tab<S>> TabsNavScaffold(
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
-    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (Action) -> Unit = rememberThrowingNoHandler(),
     enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
         { fadeIn(animationSpec = tween(700)) },
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
@@ -79,7 +79,7 @@ fun <S : Screen, T : Tab<S>> TabsNavScaffold(
     routeDataMap: Map<T, Map<S, ScreenRouteData>>,
     contentResolver: ComposeScreenContentResolver<S>,
 ) {
-    val tabNavHandler: (ViewAction) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
+    val tabNavHandler: (Action) -> Unit = rememberTabNavHandler(tabNav, bubbleUp)
     NavScaffold(
         modifier = modifier,
         navArgs = navArgs,

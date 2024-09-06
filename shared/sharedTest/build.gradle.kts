@@ -10,7 +10,7 @@ androidLibrary {
 dependencies {
     implementationProject(Project.Common.Di.Model)
     implementationProject(Project.Common.Logging)
-    implementationProject(Project.Shared.domain)
+    implementationProject(Project.Shared.Layers.domain)
     implementation(Dependencies.junitJupiterApi)
     implementation(Dependencies.androidxArchCoreCommon)
     implementation(Dependencies.archCoreTesting)

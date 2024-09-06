@@ -37,7 +37,7 @@ import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.covid_domain.model.CountryCovidInfo
 import com.vladmarkovic.sample.covid_presentation.R
@@ -54,7 +54,7 @@ import com.vladmarkovic.sample.shared_presentation.ui.model.defaultDrawerItems
 
 @Composable
 fun CountryComparisonScreen(
-    bubbleUp: (ViewAction) -> Unit,
+    bubbleUp: (Action) -> Unit,
     viewModel: CountryComparisonViewModel = actionViewModel<CountryComparisonViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {

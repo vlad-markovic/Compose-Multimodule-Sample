@@ -10,24 +10,24 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/** Base [ViewModel] which can send [ViewAction]s. */
+/** Base [ViewModel] which can send [Action]s. */
 @HiltViewModel
 open class ActionViewModel @Inject constructor() : ViewModel(),
-    ViewActionMonitorable<ViewAction>, ViewActionable<ViewAction> {
+    ActionMonitorable<Action>, Actionable<Action> {
 
-    private val actioner: ViewActioner<ViewAction> = ViewActioner()
+    private val actioner: Actioner<Action> = Actioner()
 
-    override val actions: SharedFlow<ViewAction> get() = actioner.actions
+    override val actions: SharedFlow<Action> get() = actioner.actions
 
-    override suspend fun emitAction(action: ViewAction) = actioner.emitAction(action)
+    override suspend fun emitAction(action: Action) = actioner.emitAction(action)
 }
 
 
-fun <T> T.navigate(action: NavigationAction): Job where T : ViewModel, T : ViewActionable<ViewAction> =
+fun <T> T.navigate(action: NavigationAction): Job where T : ViewModel, T : Actionable<Action> =
     viewModelScope.launch { emitAction(action) }
 
-fun <T> T.display(action: DisplayAction): Job where T : ViewModel, T : ViewActionable<ViewAction> =
+fun <T> T.display(action: DisplayAction): Job where T : ViewModel, T : Actionable<Action> =
     viewModelScope.launch { emitAction(action) }
 
-fun <T> T.action(action: ViewAction): Job where T : ViewModel, T : ViewActionable<ViewAction> =
+fun <T> T.action(action: Action): Job where T : ViewModel, T : Actionable<Action> =
     viewModelScope.launch { emitAction(action) }

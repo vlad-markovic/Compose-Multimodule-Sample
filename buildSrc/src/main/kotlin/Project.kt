@@ -115,27 +115,33 @@ sealed interface Project {
     }
 
     // region specific project modules
-    /** Included into all other projects (modules), per required layer. */
-    object Shared : TopNameOrganised("shared"), Layered
-    /** Included into all other data and presentation projects (with testImplementation). */
-    object SharedTest : TopNameOrganised("shared") {
-        override val fullName: String = "${shortName}Test"
-    }
-    object SharedAndroidTest : TopNameOrganised("shared") {
-        override val fullName: String = "${shortName}AndroidTest"
-    }
-
     object Main : TopNameOrganised("main"), Presentation
 
     sealed class Feature(override val shortName: String) : NameOrganised {
         override val dirs: List<String> = listOf("features")
 
         object Settings : Feature("settings"), Presentation
-
         object Post : Feature("post"), Layered
         object Covid : Feature("covid"), Layered
     }
     // endregion specific project modules
+
+    // region shared project modules
+    /** Included into all other projects (modules), per required layer. */
+    sealed class Shared : TopNameOrganised("shared") {
+
+        object Layers : Shared(), Layered
+
+        /** Included into all other data and presentation projects (with testImplementation). */
+        object Test : Shared() {
+            override val fullName: String = "${shortName}Test"
+        }
+
+        object AndroidTest : Shared() {
+            override val fullName: String = "${shortName}AndroidTest"
+        }
+    }
+    // region shared project modules
 
     // region common modules
     sealed class Common(override val shortName: String) : Organised {
@@ -239,7 +245,7 @@ sealed interface Project {
      * such as base or shared (base:baseData, shared:sharedDomain, etc.)
      */
     sealed class TopNameOrganised(override val shortName: String): NameOrganised {
-        override val dirs: List<String> get() = listOf()
+        override val dirs: List<String> get() = emptyList()
     }
 
     // region project organising decorator interfaces

@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.common.navigation.tab.navcomponent.TabNavViewModel
 import com.vladmarkovic.sample.common.navigation.tab.navcomponent.model.ToTab
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 
 @Composable
 fun rememberTabNavHandler(
     tabNav: TabNavViewModel,
-    bubbleUp: (ViewAction) -> Unit,
+    bubbleUp: (Action) -> Unit,
     key: String? = null
-)  : (ViewAction) -> Unit =
+)  : (Action) -> Unit =
     remember(key) {
         { action ->
             when (action) {

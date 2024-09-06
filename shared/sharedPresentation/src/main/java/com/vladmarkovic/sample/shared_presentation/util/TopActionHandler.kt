@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.vladmarkovic.sample.common.android.util.toast
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.ToScreenGroup
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.ScaffoldDataManager
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.rememberScaffoldDataManager
@@ -18,8 +18,8 @@ import com.vladmarkovic.sample.shared_presentation.display.CommonDisplayAction
 @Composable
 fun rememberTopActionHandler(
     initialScreen: Screen,
-    bubbleUp: (ViewAction) -> Unit
-): Pair<ScaffoldDataManager, (ViewAction) -> Unit> {
+    bubbleUp: (Action) -> Unit
+): Pair<ScaffoldDataManager, (Action) -> Unit> {
     val context = LocalContext.current
     val scaffoldDataManager: ScaffoldDataManager = rememberScaffoldDataManager(initialScreen)
     return scaffoldDataManager to remember {{ action ->

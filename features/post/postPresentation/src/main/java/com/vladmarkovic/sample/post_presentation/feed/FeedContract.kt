@@ -1,6 +1,6 @@
 package com.vladmarkovic.sample.post_presentation.feed
 
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.mv.state.StateReducer
 import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.post_domain.model.Post
@@ -31,7 +31,7 @@ sealed class FeedEvent {
     data object OnSettingsTapped : FeedEvent()
 }
 
-sealed class FeedAction : ViewAction {
+sealed class FeedAction : Action {
 
 }
 

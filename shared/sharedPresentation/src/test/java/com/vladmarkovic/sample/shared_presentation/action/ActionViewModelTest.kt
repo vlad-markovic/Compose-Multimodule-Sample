@@ -1,8 +1,8 @@
-package com.vladmarkovic.sample.shared_presentation.viewaction
+package com.vladmarkovic.sample.shared_presentation.action
 
 import com.vladmarkovic.sample.common.mv.action.ActionViewModel
 import com.vladmarkovic.sample.common.mv.action.NavigationAction
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.mv.action.action
 import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.common.navigation.screen.navcomponent.model.CommonNavigationAction
@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
-/** Test actioning [ViewAction]s like [NavigationAction]s via [ActionViewModel] */
+/** Test actioning [Action]s like [NavigationAction]s via [ActionViewModel] */
 @ExperimentalCoroutinesApi
 @ExtendWith(AllTestSetupExtension::class)
 class ActionViewModelTest {
@@ -39,7 +39,7 @@ class ActionViewModelTest {
     @MethodSource("actionArgs")
     @DisplayName("Given actioning via ActionViewModel")
     @ParameterizedTest(name = "When ''{0}'' action is sent, Then ''{0}'' action is received")
-    fun testActionViewModelActions(action: ViewAction) {
+    fun testActionViewModelActions(action: Action) {
         viewModel.action(action)
 
         // FIXME test viewModel.actioner.action.assertValueEquals(action)

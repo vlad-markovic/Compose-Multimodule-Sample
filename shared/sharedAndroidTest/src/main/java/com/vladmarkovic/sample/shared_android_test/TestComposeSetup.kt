@@ -12,14 +12,14 @@ import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.common.mv.action.compose.SetupWith
 import com.vladmarkovic.sample.common.navigation.tab.model.Tab
 import com.vladmarkovic.sample.common.mv.action.ActionViewModel
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.navigation.tab.navcomponent.util.route
 
 @Composable
 fun TestCompose(
-    tab: Tab,
+    tab: Tab<*>,
     viewModel: ActionViewModel,
-    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (ViewAction) -> Unit) -> Unit
+    scaffoldContent: @Composable (navController: NavHostController, modifier: Modifier, bubbleUp: (Action) -> Unit) -> Unit
 ) {
     val navController: NavHostController = rememberNavController()
     NavHost(
@@ -35,7 +35,7 @@ fun TestCompose(
                 route = tab.initialScreen.name,
                 arguments = emptyList(),
             ) {
-                val actionHandler: (ViewAction) -> Unit = {
+                val actionHandler: (Action) -> Unit = {
                     println("Bubbled up action: $it")
                 }
 

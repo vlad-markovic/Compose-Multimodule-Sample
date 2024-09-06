@@ -4,7 +4,7 @@ import com.vladmarkovic.sample.core.coroutines.withMissedReplayed
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
-class ViewActioner<A: ViewAction> : ViewActionMonitorable<A>, ViewActionable<A> {
+class Actioner<A: Action> : ActionMonitorable<A>, Actionable<A> {
 
     private val _actions: MutableSharedFlow<A> = MutableSharedFlow()
 

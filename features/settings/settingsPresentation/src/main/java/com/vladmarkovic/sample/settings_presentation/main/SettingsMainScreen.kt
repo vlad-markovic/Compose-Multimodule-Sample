@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
 import com.vladmarkovic.sample.common.mv.action.ActionViewModel
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.mv.action.navigate
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.UpButton
@@ -21,7 +21,7 @@ import com.vladmarkovic.sample.common.android.model.str
 
 @Composable
 fun SettingsMainScreen(
-    bubbleUp: (ViewAction) -> Unit,
+    bubbleUp: (Action) -> Unit,
     viewModel: ActionViewModel = actionViewModel<ActionViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {

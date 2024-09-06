@@ -4,23 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vladmarkovic.sample.common.mv.action.DisplayAction
 import com.vladmarkovic.sample.common.mv.action.NavigationAction
-import com.vladmarkovic.sample.common.mv.action.ViewAction
-import com.vladmarkovic.sample.common.mv.action.ViewActionMonitorable
-import com.vladmarkovic.sample.common.mv.action.ViewActioner
+import com.vladmarkovic.sample.common.mv.action.ActionMonitorable
+import com.vladmarkovic.sample.common.mv.action.Actioner
 import com.vladmarkovic.sample.common.mv.state.StateManager
 import com.vladmarkovic.sample.common.mv.state.StateMonitorable
 import com.vladmarkovic.sample.common.mv.state.StateReducer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-abstract class MviViewModel<out State, in Change, Action : ViewAction, in Event>(
+abstract class MviViewModel<out State, in Change, Action : com.vladmarkovic.sample.common.mv.action.Action, in Event>(
     initialState: State,
     stateReducer: StateReducer<State, Change>,
     private val stateManager: StateManager<State, Change> = StateManager(initialState, stateReducer),
-    private val actioner: ViewActioner<ViewAction> = ViewActioner()
+    private val actioner: Actioner<com.vladmarkovic.sample.common.mv.action.Action> = Actioner()
 ) : ViewModel(),
     StateMonitorable<State> by stateManager,
-    ViewActionMonitorable<ViewAction> by actioner,
+    ActionMonitorable<com.vladmarkovic.sample.common.mv.action.Action> by actioner,
     ViewEventEmittable<Event> {
 
     protected fun changeState(change: Change) {

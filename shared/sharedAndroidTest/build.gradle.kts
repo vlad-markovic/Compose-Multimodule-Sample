@@ -15,8 +15,8 @@ dependencies {
     implementationProject(Project.Common.Navigation.Screen.Model)
     implementationProject(Project.Common.Navigation.Tab.Model)
     implementationProject(Project.Common.Navigation.Tab.NavComponent)
-    implementationProject(Project.Shared.domain)
-    implementationProject(Project.Shared.presentation)
+    implementationProject(Project.Shared.Layers.domain)
+    implementationProject(Project.Shared.Layers.presentation)
 
     implementation(Dependencies.junitJupiterApi)
     implementation(Dependencies.androidxArchCoreCommon)

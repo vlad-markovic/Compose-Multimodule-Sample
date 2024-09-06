@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
@@ -31,7 +31,7 @@ fun <S : Screen, T : Tab<S>> DefaultTabsNavScaffold(
     initialTab: T = allTabs.first(),
     navArgs: ComposeNavArgs = rememberComposeNavArgs(),
     tabNav: TabNavViewModel = tabNavViewModel(initialTab, navArgs.navController),
-    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (Action) -> Unit = rememberThrowingNoHandler(),
     routeDataResolver: (S) -> ScreenRouteData,
     tabDataResolver: (T) -> Pair<ImageVector, Int>,
     contentResolver: ComposeScreenContentResolver<S>,

@@ -20,7 +20,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.vladmarkovic.sample.common.android.model.StrOrRes
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
 import com.vladmarkovic.sample.common.compose.util.padding
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.mv.action.compose.actionViewModel
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.ScaffoldData
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.model.TopBarData
@@ -43,7 +43,7 @@ import com.vladmarkovic.sample.shared_presentation.ui.theme.Dimens
 
 @Composable
 fun FeedScreen(
-    bubbleUp: (ViewAction) -> Unit,
+    bubbleUp: (Action) -> Unit,
     viewModel: FeedViewModel = actionViewModel<FeedViewModel>(bubbleUp)
 ) {
     LaunchedEffect(Unit) {

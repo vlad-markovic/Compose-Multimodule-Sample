@@ -1,5 +1,5 @@
 package com.vladmarkovic.sample.common.mv.action
 
-interface ViewActionable<A: ViewAction> {
+interface Actionable<A: Action> {
     suspend fun emitAction(action: A)
 }

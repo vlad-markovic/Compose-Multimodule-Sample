@@ -22,8 +22,8 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.rememberNavController
 import com.vladmarkovic.sample.common.di.viewmodel.AssistedViewModelFactory
 import com.vladmarkovic.sample.common.mv.action.ActionViewModel
-import com.vladmarkovic.sample.common.mv.action.ViewAction
-import com.vladmarkovic.sample.common.mv.action.ViewActionMonitorable
+import com.vladmarkovic.sample.common.mv.action.Action
+import com.vladmarkovic.sample.common.mv.action.ActionMonitorable
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -35,20 +35,20 @@ import kotlin.coroutines.EmptyCoroutineContext
 @Composable
 inline fun <reified VM> actionViewModel(
     key: String?,
-    noinline actionHandler: (ViewAction) -> Unit,
-): VM where VM : ViewModel, VM : ViewActionMonitorable<ViewAction> =
+    noinline actionHandler: (Action) -> Unit,
+): VM where VM : ViewModel, VM : ActionMonitorable<Action> =
     hiltViewModel<VM>(key = key).apply { SetupWith(actionHandler) }
 
 @Composable
 inline fun <reified VM> actionViewModel(
-    noinline actionHandler: (ViewAction) -> Unit,
-): VM where VM : ViewModel, VM : ViewActionMonitorable<ViewAction> =
+    noinline actionHandler: (Action) -> Unit,
+): VM where VM : ViewModel, VM : ActionMonitorable<Action> =
     hiltViewModel<VM>().apply { SetupWith(actionHandler) }
 
 @Composable
 inline fun <reified VM, I, VMF : AssistedViewModelFactory<VM, I>> assistedActionViewModel(
     assistedInput: I,
-    noinline actionHandler: (ViewAction) -> Unit,
+    noinline actionHandler: (Action) -> Unit,
     navBackStackEntry: NavBackStackEntry? = rememberNavController().currentBackStackEntry,
     viewModelStoreOwner: ViewModelStoreOwner = navBackStackEntry ?: checkNotNull(LocalViewModelStoreOwner.current) {
         "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
@@ -62,19 +62,19 @@ inline fun <reified VM, I, VMF : AssistedViewModelFactory<VM, I>> assistedAction
         assistedFactory.create(assistedInput)
     },
     key: String? = null,
-): VM where VM : ViewModel, VM : ViewActionMonitorable<ViewAction> =
+): VM where VM : ViewModel, VM : ActionMonitorable<Action> =
     viewModel<VM>(viewModelStoreOwner, key, factory, extras).apply { SetupWith(actionHandler) }
 
 // region setup action handling
-/** Setup observing of [ViewAction]s for a [ActionViewModel]. */
+/** Setup observing of [Action]s for a [ActionViewModel]. */
 @Composable
-fun ViewActionMonitorable<ViewAction>.SetupWith(actionHandler: (ViewAction) -> Unit) {
+fun ActionMonitorable<Action>.SetupWith(actionHandler: (Action) -> Unit) {
     ActionsHandler(this.actions, actionHandler)
 }
 
 
 @Composable
-fun <T : ViewAction> ActionsHandler(actions: Flow<T>, handler: (T) -> Unit) {
+fun <T : Action> ActionsHandler(actions: Flow<T>, handler: (T) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleAwareActions = remember(actions, lifecycleOwner) {
         actions.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)

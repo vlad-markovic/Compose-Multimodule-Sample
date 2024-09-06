@@ -2,7 +2,7 @@ package com.vladmarkovic.sample.shared_presentation.compose.navscaffold
 
 import androidx.compose.runtime.Composable
 import com.vladmarkovic.sample.common.compose.util.lifecycleAwareValue
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.navigation.screen.compose.action.rememberThrowingNoHandler
 import com.vladmarkovic.sample.common.navigation.screen.compose.content.ComposeScreenContentResolver
 import com.vladmarkovic.sample.common.navigation.screen.compose.navscaffold.ScreensNavScaffold
@@ -21,7 +21,7 @@ import com.vladmarkovic.sample.shared_presentation.util.rememberTopActionHandler
 fun <S : Screen> DefaultScreensNavScaffold(
     allScreens: List<S>,
     initialScreen: S = allScreens.first(),
-    bubbleUp: (ViewAction) -> Unit = rememberThrowingNoHandler(),
+    bubbleUp: (Action) -> Unit = rememberThrowingNoHandler(),
     routeDataResolver: (S) -> ScreenRouteData,
     contentResolver: ComposeScreenContentResolver<S>,
 ) {

@@ -16,7 +16,7 @@ fun GradleProject.configureDomainModule(includeSharedDomain: Boolean = true) {
         implementationProject(Project.Common.Logging)
 
         if (includeSharedDomain) {
-            implementationProject(Project.Shared.domain)
+            implementationProject(Project.Shared.Layers.domain)
         }
 
         configureUnitTests()
@@ -42,10 +42,10 @@ fun GradleProject.configureDataModule(includeSharedData: Boolean = true) {
 
     dependencies {
         if (includeSharedData) {
-            implementationProject(Project.Shared.data)
+            implementationProject(Project.Shared.Layers.data)
         }
-        implementationProject(Project.Shared.domain)
-        testImplementationProject(Project.SharedTest)
+        implementationProject(Project.Shared.Layers.domain)
+        testImplementationProject(Project.Shared.Test)
 
         implementationDataBase()
 
@@ -60,12 +60,12 @@ fun GradleProject.configurePresentationModule(includeSharedPresentation: Boolean
 
     dependencies {
         if (includeSharedPresentation) {
-            implementationProject(Project.Shared.presentation)
+            implementationProject(Project.Shared.Layers.presentation)
         }
-        implementationProject(Project.Shared.domain)
-        testImplementationProject(Project.SharedTest)
-        androidTestImplementationProject(Project.SharedTest)
-        androidTestImplementationProject(Project.SharedAndroidTest)
+        implementationProject(Project.Shared.Layers.domain)
+        testImplementationProject(Project.Shared.Test)
+        androidTestImplementationProject(Project.Shared.Test)
+        androidTestImplementationProject(Project.Shared.AndroidTest)
 
         implementationPresentationBase()
 

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.vladmarkovic.sample.common.logging.Lumber
 import com.vladmarkovic.sample.common.mv.action.NavigationAction
-import com.vladmarkovic.sample.common.mv.action.ViewAction
+import com.vladmarkovic.sample.common.mv.action.Action
 import com.vladmarkovic.sample.common.navigation.screen.compose.model.ComposeNavArgs
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.onBack
 import com.vladmarkovic.sample.common.navigation.screen.compose.util.openDrawer
@@ -20,9 +20,9 @@ import kotlinx.coroutines.CoroutineScope
 fun rememberCommonActionsHandler(
     navArgs: ComposeNavArgs,
     scope: CoroutineScope,
-    bubbleUp: (ViewAction) -> Unit,
+    bubbleUp: (Action) -> Unit,
     key: String? = null
-)  : (ViewAction) -> Unit = remember(key) {{ action ->
+)  : (Action) -> Unit = remember(key) {{ action ->
     when(action) {
         is CommonNavigationAction.Back -> navArgs.onBack(scope)
         is CommonNavigationAction.OpenDrawer -> navArgs.openDrawer(scope)
@@ -31,10 +31,10 @@ fun rememberCommonActionsHandler(
 }}
 
 @Composable
-fun rememberThrowingNoHandler(key: String? = null): (ViewAction) -> Unit =
+fun rememberThrowingNoHandler(key: String? = null): (Action) -> Unit =
     remember(key) {{ throw IllegalStateException("Unhandled action: $it") }}
 
-internal fun ComposeNavArgs.handleAction(action: ViewAction, bubbleUp: (ViewAction) -> Unit) {
+internal fun ComposeNavArgs.handleAction(action: Action, bubbleUp: (Action) -> Unit) {
     Lumber.i("action: ${action.javaClass.simpleName}")
     return when (action) {
         is NavigationAction -> navigate(action, bubbleUp)
@@ -42,8 +42,8 @@ internal fun ComposeNavArgs.handleAction(action: ViewAction, bubbleUp: (ViewActi
     }
 }
 
-/** Branch out handling of different types of [ViewAction.NavigationAction]s. */
-private fun ComposeNavArgs.navigate(action: NavigationAction, bubbleUp: (ViewAction) -> Unit) = when(action) {
+/** Branch out handling of different types of [Action.NavigationAction]s. */
+private fun ComposeNavArgs.navigate(action: NavigationAction, bubbleUp: (Action) -> Unit) = when(action) {
     is ToNavGraphScreen -> navController.navigate(action.routeWithArgs)
     else -> bubbleUp(action)
 }
