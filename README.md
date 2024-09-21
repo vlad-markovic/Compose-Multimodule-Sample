@@ -10,11 +10,16 @@ For details about the project modularisation structure, see [Project](https://gi
 
 Modules are organised by "type", which are:
 
-- `app` glue module, having access (dependency) to all other modules. It defines the `App` Application class and is responsible for dependency injection for "cross-module" classes: if an interface has an implementation in another module, the module to provide/bind it can be specified in the `app` module, since the modules have no "visibility" (access) to each other.
-- `core` - core helpers / extensions (extractible - could be shared with other projects)
-- `common` - common functionality (extractible - could be shared with other projects)
-- `shared` - shared between feature module of this project (not extractible). Sparate shared modules for domain, data and presentation.
+- `app` glue module, having access (dependency) to all other modules. 
+   It defines the `App` Application class and is responsible for dependency injection for "cross-module" classes: 
+   if an interface has an implementation in another module, the module to provide/bind it can be specified in the `app` module, 
+   since the modules have no "visibility" (access) to each other.
+- `core` - core helpers / extensions (extractable - could be shared with other projects)
+- `common` - common functionality (extractable - could be shared with other projects)
+- `shared` - shared between feature module of this project (not extractable). Separate shared modules for domain, data and presentation.
 - `feature` modules - self contained and layered to domain, data and presentation layers
+
+![modules onion structure](https://github.com/vlad-markovic/Compose-Multimodule-Sample/blob/main/assets/modules_onion.png)
 
 ### Layers
 
