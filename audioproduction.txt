@@ -1,0 +1,64 @@
+ BA/BSC (HONS) AUDIO PRODUCTION
+Stage 1: Foundations
+Develop the essential technical audio skills and the knowledge required to collaborate with other creative media students and professionals.
+Principles of Audio - 4FSC0AE001
+The aims of this module are to introduce students to the concept of sound as a physical phenomenon and to enable them to predict its behaviour in different situations. Students will also be introduced to the fundamental concepts of audio production (recording and editing), signal routing, microphones and loudspeakers.
+Module outcomes are achieved through a portfolio of artefacts, including macro and micro edits to a series of audio files, using basic audio editing tools with a DAW; and the setup and operation of a simple sound reinforcement system.
+A typical topic list for this module includes the following:
+Sound Theory and Psychoacoustics
+Introduction to Digital Audio
+Cabling and Connections
+Basic Microphones and Loudspeakers
+Live Sound Setups
+Basic Audio Editing and Basic Digital Audio Workstation Operation
+Soldering and Electronics Time Management
+Desktop Music Production - 4FSC0AE002
+  
+The aims of this module are to enable students to create computer-based music productions, through the introduction of the key tools and workflows used. Students will learn the concepts and application of synthesis, sampling, arrangement, effects processing and mixing.
+In ‘Desktop Music Production,’ students will learn to design sounds with synthesis and sampling techniques within a Digital Audio Workstation (DAW). They will compile and arrange music production(s), taking into account a basic understanding of music theory and of intellectual property. They will also apply EQ and Dynamics processing to a creative production, work with effects in-the-box, apply DAW-based mixing techniques to their productions, and effectivelypresent their work.
+Recording Techniques - 4FSC0AE003
+The aims of this module are to enable students to work in a studio-based recording environment. They will build the theoretical knowledge and practical skills that are necessary to operate modern professional studio environments so they can arrange and engineer recording sessions.
+Recording Techniques introduces students to a studio-based recording environment. They will build the theoretical knowledge and practical skills that are necessary to operate modern professional studio environments and demonstrate this through arranging and engineering recording sessions.
+A typical topic list for this module includes the following: Applied Microphones and Stereo Microphone Techniques Console Layouts
+Control Room / Live Room Layouts
+Recording and Mixing Signal Flow for Small Studios
+DAW Recording Workflow for Small Studios
+Basic Studio Acoustics o Instrumental Recording Techniques Location Recording
+Studio Etiquette
+Integration of Hardware Effects
+Basic Project Management
+Audio Production Industries - 4FSC0AE004
+The aims of this module are to enable students to focus on production workflows and techniques that are common across various audio fields, such as music and multimedia. Students will be introduced to the music and multimedia industries and explore the roles within them.
+  
+The ‘Audio Production Industries’ module focuses on production workflows and techniques that are common across various audio fields, such as music and multimedia. Students will be introduced to the music and multimedia industries and explore the roles within them. Students will enhance their skill set in audio editing by investigating sound restoration, pitch & time correction and multitrack drum editing. They will also look at mixing techniques for both multimedia and music applications, within a studio environment. Finally, they will research and write about a relevant area of the audio industries.
+A typical topic list for this module includes the following:
+Introduction to the music industry, production and roles
+Introduction to multimedia industries and the role of sound
+Production planning o Listening analysis (songs / film soundtracks)
+Advanced editing (sound restoration / drum editing / pitch and timing correction) Media formats (sound formats / synchronisation / frame rates / design)
+Studio mixing techniques Research
+Academic writing
+Stage 2: Advanced: Refine & Expand
+Broaden your scope to work on complex multidisciplinary projects in accordance with industry- standard practices.
+AUDIO: Creative Studio 1: Industry Workflows - 5FSC0XE101
+The aims of this module are to enable students to utilise complex and industry-relevant workflows for producing media projects in a simulated workplace setting. They will explore best-practice project planning, production techniques and project execution methods as they complete studio work. Throughout this module students will be encouraged to engage in self-reflective processes to improve their creative and collaborative work practices and to build the core skills necessary for a successful career in the creative industries. With the guidance of studio facilitators, students will complete set project briefs designed to build on the foundation skills acquired in Level 4 and to further enhance their competencies within their discipline area.
+AUDIO: Creative Studio 2: Collaboration and Business - 5FSC0XE102
+The aims of this module are to enable students to develop their knowledge and skills in creative media business practices. They will begin to build expertise in the tools needed to work effectively on creative business projects, to undertake marketing roles within the sector and to apply an entrepreneurial mindset. The module will introduce key differences between production strategies
+  
+for the arts or sciences, preparing students to develop their own specialization at Level 6. With an understanding of the interdependency between members of a creative project team, students will contribute their specialised knowledge in an assigned role to collaborate on a project with their peers. An essential aspect of Creative Studio 2 is the teamwork required to assign tasks based on the strengths of individual team members, to plan and manage the project from a business perspective, and to work collaboratively to complete the project on time and to specification.
+AUDIO: Research and Professional Development in Creative Media - 6FSC0XE001
+The aims of this module are to enable students to identify an area of professional interest and undertake research to develop a deep and sound knowledge in that area. This research will inform their final Major Project and their stated professional development goals. The module will also establish key differences between methodologies in the arts and sciences, to enable students to consciously position their work within either the arts of sciences.
+AUDIO: Advanced Specialised Project - 6FSC0XE002
+The aims of this module are to enable students to develop their professional practice through the planning and development of an independent activity, which may have a practical or theoretical focus, and may be individual or collaborative. Students will develop a stronger awareness of their professional interests through focus on an area of specialization
+Module outcomes are achieved through the development of a learning contract, the production of an advanced, specialized project, and a presentation and reflection on the work undertaken. Students may undertake industry-based ‘live projects’ as a part of their learning, and should seek advice from the module leader.
+A typical list of topics for the module will include: Project planning and management
+Resource allocation
+Self-assessment and reflection
+Workplace engagement and integration Communication and networking
+Time management
+Reporting and presentation Communication and networking
+  Stage 3: Showcase
+
+Execute a project of your own design which is of a high quality and externally published, with the knowledge to commercialise if you choose. You'll also apply your skills through industry work placement.
+Audio Production Major Project BA/ BSc - 6FSC0AE101(2)
+The aims of this module are to enable students pursuing the Audio Production award to demonstrate their skills in a large scale, advanced level project. There are two options for the Major Project: a practice-based project (realisation of a creative art project- BA), or a research- based project (BSc). The module will lead to the final award of a Bachelor of Arts.
